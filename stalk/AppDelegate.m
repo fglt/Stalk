@@ -7,8 +7,11 @@
 //
 
 #import "AppDelegate.h"
+#import "constant.h"
+#import "WeiBoTabBarController.h"
+#import "LoginViewcontroller.h"
 
-@interface AppDelegate ()
+@interface AppDelegate ()<WeiboSDKDelegate>
 
 @end
 
@@ -17,6 +20,23 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
+    [WeiboSDK enableDebugMode:YES];
+    [WeiboSDK registerApp:SINA_APP_KEY];
+    UIStoryboard *storyBoard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+    
+    if([AppDelegate isAuthorized]){
+        self.wbAuthorizeResponse = [[WBAuthorizeResponse alloc] init];
+        self.wbAuthorizeResponse.accessToken = [[NSUserDefaults standardUserDefaults] objectForKey:SINA_ACCESS_TOKEN_KEY];
+        self.wbAuthorizeResponse.userID = [[NSUserDefaults standardUserDefaults] objectForKey:SINA_USER_ID_KEY];
+        self.wbAuthorizeResponse.refreshToken = [[NSUserDefaults standardUserDefaults] objectForKey:SINA_REFRESH_TOKEN_KEY];
+        self.wbAuthorizeResponse.expirationDate = [[NSUserDefaults standardUserDefaults] objectForKey:SINA_EXPIRATION_DATE_KEY];
+        WeiBoTabBarController *tabBarController = [storyBoard instantiateViewControllerWithIdentifier:@"TabBarController"];
+        self.window.rootViewController = tabBarController;
+    }else{
+        LoginViewController *controller = [storyBoard instantiateViewControllerWithIdentifier:@"LoginViewController"];
+        self.window.rootViewController = controller;
+    }
+    [self.window makeKeyAndVisible];
     return YES;
 }
 
@@ -48,4 +68,34 @@
 }
 
 
+- (void)didReceiveWeiboRequest:(WBBaseRequest *)request{ //向微博发送请求
+    
+    NSLog(@"request: %@",request.class);
+}
+
+- (void)didReceiveWeiboResponse:(WBBaseResponse *)response{
+    if ([response isKindOfClass:WBAuthorizeResponse.class])  //用户登录的回调
+    {
+        if ([_weiBoDelegate respondsToSelector:@selector(weiboLoginByResponse:)]) {
+            [_weiBoDelegate weiboLoginByResponse:response];
+        }
+    }
+}
+
+- (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation
+{
+    return [WeiboSDK handleOpenURL:url delegate:self];
+}
+
++ (BOOL)isAuthorized
+{
+    NSString *accessToken = [[NSUserDefaults standardUserDefaults] objectForKey:SINA_ACCESS_TOKEN_KEY];
+    NSDate *expiresDate = [[NSUserDefaults standardUserDefaults] objectForKey:SINA_EXPIRATION_DATE_KEY];
+    
+    if (expiresDate)
+    {
+        return  ( NSOrderedDescending == [expiresDate compare:[NSDate date]] && accessToken);
+    }
+    return NO;
+}
 @end

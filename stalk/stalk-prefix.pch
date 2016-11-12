@@ -1,0 +1,22 @@
+//
+//  stalk-prefix.pch
+//  stalk
+//
+//  Created by Coding on 10/11/2016.
+//  Copyright © 2016 Coding. All rights reserved.
+//
+
+#ifndef stalk_prefix_pch
+#define stalk_prefix_pch
+
+// Include any system framework and library headers here that should be included in all compilation units.
+// You will also need to set the Prefix Header build setting of one or more of your targets to reference this file.
+#import <UIKit/UIKit.h>
+#import <Foundation/Foundation.h>
+
+#import "WeiboSDK.h"
+#define SINA_APP_KEY       @"1367587717"
+#define SINA_APP_SECRET    @"51e113e7c0ea1ee716aee582c6e3489b"
+#define SINA_REDIRECT_URI  @"https://api.weibo.com/oauth2/default.html"
+
+#endif /* stalk_prefix_pch */
