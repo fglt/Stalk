@@ -10,6 +10,7 @@
 #import "FGLTUser.h"
 #import "FGLTStatus.h"
 #import "AppDelegate.h"
+#import "StatusTableViewCell.h"
 
 @interface UserWeiBoTableViewController ()
 @property (nonatomic, strong) NSArray *statuesList;
@@ -19,6 +20,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     
     AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
     NSURLSession *session = [NSURLSession sharedSession];
@@ -28,7 +30,7 @@
     NSURLSessionTask *task = [session dataTaskWithURL:url completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
         id jsonObject = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil];
         NSDictionary *dict = [jsonObject objectForKey:@"statuses"];
-        self.statuesList = [FGLTStatus statuesWithDict:dict];
+        self.statuesList = [StatusInfo statusInfosWithStatuses:[FGLTStatus statuesWithDict:dict]];
         dispatch_async(dispatch_get_main_queue(), ^{
             [self.tableView reloadData];
         });
@@ -41,6 +43,14 @@
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
+
+//- (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
+//{
+//    for(StatusInfo *statusInfo in self.statuesList){
+//        [statusInfo resetFrame];
+//    }
+//    [self.tableView reloadData];
+//}
 
 #pragma mark - Table view data source
 
@@ -56,13 +66,16 @@
 
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"UserStatuesCellID" forIndexPath:indexPath];
-    FGLTStatus *status = self.statuesList[indexPath.row];
-    cell.textLabel.text = status.text;
-    cell.detailTextLabel.text = status.user.name;
+    StatusTableViewCell * cell = [[StatusTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"ALLStatusesCellID"];
+    cell.statusInfo = _statuesList[indexPath.row];
     return cell;
 }
 
+-(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
+    
+    StatusInfo *info = _statuesList[indexPath.row];
+    return info.cellHeight;
+}
 
 /*
 // Override to support conditional editing of the table view.

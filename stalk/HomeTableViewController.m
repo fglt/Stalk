@@ -10,15 +10,23 @@
 #import "FGLTUser.h"
 #import "FGLTStatus.h"
 #import "AppDelegate.h"
+#import "StatusTableViewCell.h"
+#import "StatusInfo.h"
 
 @interface HomeTableViewController ()
 @property (nonatomic, strong) NSArray *statuesList;
 @end
 
-@implementation HomeTableViewController
+@implementation HomeTableViewController{
+    NSMutableArray *needLoadArr;
+    BOOL scrollToToping;
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    [self.tableView setSeparatorInset:UIEdgeInsetsZero];
+    [self.tableView setLayoutMargins:UIEdgeInsetsZero];
+    //self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
     NSURLSession *session = [NSURLSession sharedSession];
     NSString *urlstr = [NSString stringWithFormat:@"https://api.weibo.com/2/statuses/friends_timeline.json?access_token=%@",appDelegate.wbAuthorizeResponse.accessToken];
@@ -27,7 +35,8 @@
     NSURLSessionTask *task = [session dataTaskWithURL:url completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
         id jsonObject = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil];
         NSDictionary *dict = [jsonObject objectForKey:@"statuses"];
-        self.statuesList = [FGLTStatus statuesWithDict:dict];
+        
+        self.statuesList = [StatusInfo statusInfosWithStatuses:[FGLTStatus statuesWithDict:dict]];
         dispatch_async(dispatch_get_main_queue(), ^{
             [self.tableView reloadData];
         });
@@ -40,6 +49,14 @@
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
+
+//- (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
+//{
+//    for(StatusInfo *statusInfo in self.statuesList){
+//        [statusInfo resetFrame];
+//    }
+//    [self.tableView reloadData];
+//}
 
 #pragma mark - Table view data source
 
@@ -55,14 +72,17 @@
 
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"ALLStatusesCellID" forIndexPath:indexPath];
-    FGLTStatus *status = self.statuesList[indexPath.row];
-    cell.textLabel.text = status.text;
-    cell.detailTextLabel.text = status.user.name;
+
+    StatusTableViewCell * cell = [[StatusTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"ALLStatusesCellID"];
+    cell.statusInfo = _statuesList[indexPath.row];
     return cell;
 }
 
-
+-(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
+    
+    StatusInfo *info = _statuesList[indexPath.row];
+    return info.cellHeight;
+}
 /*
 // Override to support conditional editing of the table view.
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
