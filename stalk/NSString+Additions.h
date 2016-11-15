@@ -30,5 +30,7 @@
 - (CGSize)sizeWithConstrainedToSize:(CGSize)size fromFont:(UIFont *)font1 lineSpace:(float)lineSpace;
 - (void)drawInContext:(CGContextRef)context withPosition:(CGPoint)p andFont:(UIFont *)font andTextColor:(UIColor *)color andHeight:(float)height andWidth:(float)width;
 - (void)drawInContext:(CGContextRef)context withPosition:(CGPoint)p andFont:(UIFont *)font andTextColor:(UIColor *)color andHeight:(float)height;
+- (NSTextCheckingResult *)firstMacthWithPattern:(NSString *)pattern;
 
+- (NSArray <NSTextCheckingResult *> *)machesWithPattern:(NSString *)pattern;
 @end

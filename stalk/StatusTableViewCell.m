@@ -15,21 +15,38 @@
 #import "FGLTStatus.h"
 #import "FGLTUser.h"
 #import "StatusInfo.h"
+#import "STalkTextAttachment.h"
+#import "Emotion.h"
+#import "AppDelegate.h"
 
-@interface StatusTableViewCell ()
+#define kRegexHighlightViewTypeURL @"url"
+#define kRegexHighlightViewTypeAccount @"account"
+#define kRegexHighlightViewTypeTopic @"topic"
+#define kRegexHighlightViewTypeEmoji @"emoji"
+
+#define URLRegular @"(http|https)://(t.cn/|weibo.com/)+(([a-zA-Z0-9/])*)"
+#define EmojiRegular @"(\\[\\w+\\])"
+#define AccountRegular @"@[\u4e00-\u9fa5a-zA-Z0-9_-]{2,30}"
+#define TopicRegular @"#[^#]+#"
+
+
+@interface StatusTableViewCell ()<UITextViewDelegate>
 
 @property (nonatomic, weak) UIImageView *icon;
 @property (nonatomic, weak) UILabel *name;
 @property (nonatomic, weak) UILabel *from;
 @property (nonatomic, weak) UITextView *statusText;
 @property (nonatomic, weak) UIScrollView *pictureHolder;
-@property (nonatomic, weak) UITextView *retweetLabel;
+@property (nonatomic, weak) UITextView *retweetText;
+
 
 //@property (nonatomic, weak) UIView *seprator;
 
 @end
 
-@implementation StatusTableViewCell
+@implementation StatusTableViewCell{
+    UIColor *highlightColor;
+}
 
 + (instancetype)cellWIthTableView:(UITableView *)tableView identifier:(NSString *)identifier
 {
@@ -46,6 +63,7 @@
 //重写init方法构建cell内容
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
 {
+    highlightColor = [UIColor colorWithRed:106/255.0 green:140/255.0 blue:181/255.0 alpha:1];
     if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]) {
         //取消点击高亮状态
         self.selectionStyle = UITableViewCellSelectionStyleNone;
@@ -69,23 +87,23 @@
         from.font =[UIFont systemFontOfSize:SIZE_FONT_CONTENT-5];
         [self.contentView addSubview:from];
         self.from = from;
-        self.from.frame = CGRectMake(ICONWIDTH + PADDING *2, CGRectGetMaxY(self.name.frame) +PADDING, viewWidth-ICONWIDTH-PADDING *2,ICONWIDTH -  CGRectGetMaxY(self.name.frame));
+        self.from.frame = CGRectMake(self.name.frame.origin.x, CGRectGetMaxY(self.name.frame) +PADDING, viewWidth-ICONWIDTH-PADDING *2,ICONWIDTH -self.name.frame.size.height-PADDING);
         //内容
         UITextView *text = [[UITextView alloc] init];
-        //text.numberOfLines = 0;
         text.editable = NO;
         text.scrollEnabled = NO;
         text.font =[UIFont systemFontOfSize:SIZE_FONT_CONTENT];
+        text.delegate = self;
         [self.contentView addSubview:text];
         self.statusText = text;
         
-        UITextView *retweetLabel = [[UITextView alloc] init];
-        retweetLabel.editable = NO;
-        retweetLabel.scrollEnabled = NO;
-        retweetLabel.font = [UIFont systemFontOfSize:SIZE_FONT_CONTENT-1];
-        //retweetLabel.numberOfLines = 0;
-        self.retweetLabel = retweetLabel;
-        [self.contentView addSubview:retweetLabel];
+        UITextView *retweetText = [[UITextView alloc] init];
+        retweetText.editable = NO;
+        retweetText.scrollEnabled = NO;
+        retweetText.font = [UIFont systemFontOfSize:SIZE_FONT_CONTENT-1];
+        retweetText.delegate =self;
+        self.retweetText = retweetText;
+        [self.contentView addSubview:retweetText];
         
         
         UIScrollView *pictureHolder = [[UIScrollView alloc]init];
@@ -97,12 +115,7 @@
         pictureHolder.tag = NSIntegerMax;
         pictureHolder.hidden = YES;
         [self.contentView addSubview:pictureHolder];
-        
-        //        UIView *seprator = [[UIView alloc]init];
-        //        seprator.backgroundColor = [UIColor darkGrayColor];
-        //        self.seprator = seprator;
-        //        [self.contentView addSubview:self.seprator];
-        
+    
     }
     
     return self;
@@ -116,14 +129,28 @@
     
     self.name.text =_statusInfo.status.user.screenName;
 
+    
     self.from.text = [NSString stringWithFormat:@"%@ 来自%@", [_statusInfo.status.createdAt substringToIndex:11], [ self sourceWithString:_statusInfo.status.source]];
 
+    UIFont *font = [UIFont systemFontOfSize:SIZE_FONT_CONTENT];
+    NSDictionary* attributes =@{NSFontAttributeName:font};
     
-    self.statusText.text = _statusInfo.status.text;
+    //Create attributed string, with applied syntax highlighting
+    NSMutableAttributedString *attributedStr = [[NSMutableAttributedString alloc] initWithString:_statusInfo.status.text attributes:attributes];
+
+    attributedStr = [self addLink:attributedStr pattern:URLRegular scheme:@""];
+    attributedStr = [self addLink:attributedStr pattern:AccountRegular scheme:@"account://"];
+    attributedStr = [self addLink:attributedStr pattern:TopicRegular scheme:@"topic://"];
+    self.statusText.attributedText = attributedStr;
     self.statusText.frame = _statusInfo.textFrame;
     if(_statusInfo.status.retweetedStatus){
-        self.retweetLabel.text = _statusInfo.status.retweetedStatus.text;
-        self.retweetLabel.frame = _statusInfo.retweetStatusTextFrame;
+        NSMutableAttributedString *attributedStr = [[NSMutableAttributedString alloc] initWithString:_statusInfo.status.retweetedStatus.text attributes:attributes];
+        
+        attributedStr = [self addLink:attributedStr pattern:URLRegular scheme:@""];
+        attributedStr = [self addLink:attributedStr pattern:AccountRegular scheme:@"account://"];
+        attributedStr = [self addLink:attributedStr pattern:TopicRegular scheme:@"topic://"];
+        self.retweetText.attributedText = attributedStr;
+        self.retweetText.frame = _statusInfo.retweetStatusTextFrame;
     }
     
     NSArray *urls;
@@ -138,6 +165,7 @@
     if (urls.count>0) {
         self.pictureHolder.hidden = NO;
         self.pictureHolder.frame = _statusInfo.pictureFrame;
+        NSURL *baseURL = [NSURL URLWithString:[self imageFilePath:status.bmiddlePic]];
         for (NSInteger i=0; i<9; i++) {
             UIImageView *thumbView = [[UIImageView alloc] init];
             [self.pictureHolder addSubview:thumbView];
@@ -148,8 +176,9 @@
             if (i<urls.count) {
                 thumbView.frame = CGRectMake((SIZE_GAP_IMG+SIZE_IMAGE)*i, 0, SIZE_IMAGE, SIZE_IMAGE);
                 thumbView.hidden = NO;
-                NSString *path =[NSString stringWithFormat:@"%@%@",[self imageFilePath:status.bmiddlePic],[self imageName:urls[i]]];
-                [thumbView sd_setImageWithURL:[NSURL URLWithString:path]];
+                NSURL *url= [NSURL URLWithString:[self imageName:urls[i]] relativeToURL:baseURL];
+
+                [thumbView sd_setImageWithURL:url];
             } else {
                 thumbView.hidden = YES;
             }
@@ -162,6 +191,22 @@
     
     //    self.seprator.frame = _statusInfo.sepratorLineFrame;
     
+}
+
+- (NSMutableAttributedString *)addLink:(NSMutableAttributedString *)coloredString  pattern:(NSString *)pattern scheme:(NSString *)scheme {
+    NSString* string = coloredString.string;
+    NSRange range = NSMakeRange(0,[string length]);
+
+    NSArray* matches = [[NSRegularExpression regularExpressionWithPattern:pattern options:NSRegularExpressionDotMatchesLineSeparators error:nil] matchesInString:string options:0 range:range];
+    for(NSTextCheckingResult* match in matches) {
+
+        NSString *str = [string substringWithRange:match.range];
+        NSString *urlstr = [NSString stringWithFormat:@"%@%@", scheme, str];
+        [coloredString addAttribute:NSLinkAttributeName value:urlstr range:match.range];
+        [coloredString addAttribute:(NSString*)NSForegroundColorAttributeName value:highlightColor range:match.range];
+    }
+    
+    return coloredString;
 }
 
 - (NSString *)imageFilePath:(NSString *)urlstr{
@@ -189,7 +234,7 @@
     CGFloat startX = ( [UIScreen mainScreen].bounds.size.width-width)/2;
     frame.origin.x += startX;
     frame.size.width -= 2 * startX;
-    
+
     [super setFrame:frame];
     
 }
@@ -205,4 +250,16 @@
     }
     return [source substringWithRange:NSMakeRange(i+1, source.length-4 -i-1 )];
 }
+
+- (BOOL)textView:(UITextView *)textView shouldInteractWithURL:(NSURL *)URL inRange:(NSRange)characterRange interaction:(UITextItemInteraction)interaction NS_AVAILABLE_IOS(10_0){
+    NSString *string = textView.attributedText.string;
+    NSString *str = [string substringWithRange:characterRange];
+    NSLog(@"%@",str);
+    NSLog(@"%@", URL);
+    return NO;
+}
+
+//- (BOOL)textView:(UITextView *)textView shouldInteractWithTextAttachment:(NSTextAttachment *)textAttachment inRange:(NSRange)characterRange interaction:(UITextItemInteraction)interaction NS_AVAILABLE_IOS(10_0);
+//
+
 @end
