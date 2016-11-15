@@ -53,11 +53,15 @@
     //    self.fromFrame = CGRectMake(nameX, CGRectGetMaxY(self.nameFrame) +PADDING, width,ICONWIDTH -  CGRectGetMaxY(self.nameFrame) - PADDING);
     
     //文字内容
-    CGSize textSize = [self sizeWithText:_status.text font:[UIFont systemFontOfSize:SIZE_FONT_CONTENT] maxSize:CGSizeMake(viewWidth , MAXFLOAT)];
-    self.textFrame = CGRectMake(PADDING, ICONWIDTH + PADDING * 2, viewWidth, textSize.height);
+    CGSize textSize = [self sizeWithText:_status.text font:[UIFont systemFontOfSize:SIZE_FONT_CONTENT] maxSize:CGSizeMake(viewWidth-16 , MAXFLOAT)];
+
+    self.textFrame = CGRectMake(PADDING, ICONWIDTH + PADDING * 2, viewWidth, textSize.height+16);
+
     
-    CGSize retweetSize =[self sizeWithText:_status.retweetedStatus.text font:[UIFont systemFontOfSize:SIZE_FONT_CONTENT-1] maxSize:CGSizeMake(viewWidth, MAXFLOAT)];
-    self.retweetStatusTextFrame = CGRectMake(PADDING, CGRectGetMaxY(self.textFrame) + PADDING, viewWidth, retweetSize.height);
+    if(_status.retweetedStatus){
+        CGSize retweetSize =[self sizeWithText:_status.retweetedStatus.text font:[UIFont systemFontOfSize:SIZE_FONT_CONTENT-1] maxSize:CGSizeMake(viewWidth, MAXFLOAT)];
+        self.retweetStatusTextFrame = CGRectMake(PADDING, CGRectGetMaxY(self.textFrame) + PADDING, viewWidth-16, retweetSize.height+16);
+    }
     u_long count= _status.retweetedStatus.thumbnailPic.count>0 ? :_status.thumbnailPic.count;
     
     if(count>0 ){
@@ -68,8 +72,10 @@
             self.pictureFrame = CGRectMake(PADDING, CGRectGetMaxY( self.textFrame) + PADDING, viewWidth, SIZE_IMAGE);
         }
         _cellHeight = CGRectGetMaxY(self.pictureFrame) + PADDING;
-    }else{
+    }else if(_status.retweetedStatus){
         _cellHeight = CGRectGetMaxY(self.retweetStatusTextFrame) + PADDING;
+    }else{
+        _cellHeight = CGRectGetMaxY(self.textFrame) + PADDING;
     }
     //    self.sepratorLineFrame = CGRectMake(startX, _cellHeight, width, 1);
     //    _cellHeight++;

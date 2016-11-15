@@ -22,9 +22,9 @@
 @property (nonatomic, weak) UIImageView *icon;
 @property (nonatomic, weak) UILabel *name;
 @property (nonatomic, weak) UILabel *from;
-@property (nonatomic, weak) UILabel *statusText;
+@property (nonatomic, weak) UITextView *statusText;
 @property (nonatomic, weak) UIScrollView *pictureHolder;
-@property (nonatomic, weak) UILabel *retweetLabel;
+@property (nonatomic, weak) UITextView *retweetLabel;
 
 //@property (nonatomic, weak) UIView *seprator;
 
@@ -50,33 +50,41 @@
     if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]) {
         //取消点击高亮状态
         self.selectionStyle = UITableViewCellSelectionStyleNone;
-        
+        CGFloat cellWidth = MIN( [UIScreen mainScreen].bounds.size.width, MAX_SIZE_WIDTH);
+        CGFloat viewWidth = cellWidth - (PADDING<<1);
         //头像
         UIImageView *icon = [[UIImageView alloc] init];
         [self.contentView addSubview:icon];
         self.icon = icon;
-        
-        
+        self.icon.frame = CGRectMake(PADDING, PADDING, ICONWIDTH, ICONWIDTH);
+        self.icon.layer.cornerRadius = ICONWIDTH>>1;
+        self.icon.clipsToBounds = YES;
+
         //名字
         UILabel *name = [[UILabel alloc] init];
         name.font =[UIFont systemFontOfSize:SIZE_FONT_CONTENT];
         [self.contentView addSubview:name];
         self.name = name;
-        
+        self.name.frame = CGRectMake(ICONWIDTH + PADDING *2, PADDING, viewWidth-ICONWIDTH-PADDING *2, 20);
         UILabel *from = [[UILabel alloc] init];
         from.font =[UIFont systemFontOfSize:SIZE_FONT_CONTENT-5];
         [self.contentView addSubview:from];
         self.from = from;
+        self.from.frame = CGRectMake(ICONWIDTH + PADDING *2, CGRectGetMaxY(self.name.frame) +PADDING, viewWidth-ICONWIDTH-PADDING *2,ICONWIDTH -  CGRectGetMaxY(self.name.frame));
         //内容
-        UILabel *text = [[UILabel alloc] init];
-        text.numberOfLines = 0;
+        UITextView *text = [[UITextView alloc] init];
+        //text.numberOfLines = 0;
+        text.editable = NO;
+        text.scrollEnabled = NO;
         text.font =[UIFont systemFontOfSize:SIZE_FONT_CONTENT];
         [self.contentView addSubview:text];
         self.statusText = text;
         
-        UILabel *retweetLabel = [[UILabel alloc] init];
+        UITextView *retweetLabel = [[UITextView alloc] init];
+        retweetLabel.editable = NO;
+        retweetLabel.scrollEnabled = NO;
         retweetLabel.font = [UIFont systemFontOfSize:SIZE_FONT_CONTENT-1];
-        retweetLabel.numberOfLines = 0;
+        //retweetLabel.numberOfLines = 0;
         self.retweetLabel = retweetLabel;
         [self.contentView addSubview:retweetLabel];
         
@@ -107,20 +115,20 @@
     CGFloat cellWidth = MIN( [UIScreen mainScreen].bounds.size.width, MAX_SIZE_WIDTH);
     CGFloat viewWidth = cellWidth - (PADDING<<1);
     [self.icon sd_setImageWithURL:[NSURL URLWithString:_statusInfo.status.user.profileImageUrl]];
-    self.icon.frame = CGRectMake(PADDING, PADDING, ICONWIDTH, ICONWIDTH);
+//    self.icon.frame = CGRectMake(PADDING, PADDING, ICONWIDTH, ICONWIDTH);
+//    self.icon.layer.cornerRadius = ICONWIDTH>>1;
+//    self.icon.clipsToBounds = YES;
     
     self.name.text =_statusInfo.status.user.screenName;
-    self.name.frame = CGRectMake(ICONWIDTH + PADDING *2, PADDING, viewWidth-ICONWIDTH-PADDING *2, 20);;
+//    self.name.frame = CGRectMake(ICONWIDTH + PADDING *2, PADDING, viewWidth-ICONWIDTH-PADDING *2, 20);
     
     self.from.text = [NSString stringWithFormat:@"%@ 来自%@", [_statusInfo.status.createdAt substringToIndex:11], [ self sourceWithString:_statusInfo.status.source]];
+
     //    NSLog(@"%@", _statusInfo.status.source);
-    self.from.frame = CGRectMake(ICONWIDTH + PADDING *2, CGRectGetMaxY(self.name.frame) +PADDING, viewWidth-ICONWIDTH-PADDING *2,ICONWIDTH -  CGRectGetMaxY(self.name.frame));
+//    self.from.frame = CGRectMake(ICONWIDTH + PADDING *2, CGRectGetMaxY(self.name.frame) +PADDING, viewWidth-ICONWIDTH-PADDING *2,ICONWIDTH -  CGRectGetMaxY(self.name.frame));
     
     self.statusText.text = _statusInfo.status.text;
     self.statusText.frame = _statusInfo.textFrame;
-    
-    
-    
     if(_statusInfo.status.retweetedStatus){
         self.retweetLabel.text = _statusInfo.status.retweetedStatus.text;
         self.retweetLabel.frame = _statusInfo.retweetStatusTextFrame;
@@ -171,10 +179,13 @@
 }
 
 - (NSString *) sourceWithString:(NSString *)source{
-    int i=0;
-    for(; i<source.length; i++){
-        if([source characterAtIndex:i] == '>')
-            break;
+    u_long i = source.length-1;
+    char j=0;
+    for(; i>0; i--){
+        if([source characterAtIndex:i] == '>'){
+            if(j==1)break;
+            j++;
+        }
     }
     return [source substringWithRange:NSMakeRange(i+1, source.length-4 -i-1 )];
 }
