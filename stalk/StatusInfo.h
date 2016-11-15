@@ -15,7 +15,7 @@
 #define SIZE_IMAGE 120
 #define SIZE_FONT_CONTENT 19
 #define SIZE_FONT_SUBCONTENT (SIZE_FONT_CONTENT-1)
-#define MAX_SIZE_WIDTH 640
+#define MAX_SIZE_WIDTH 600
 
 @interface StatusInfo : NSObject
 

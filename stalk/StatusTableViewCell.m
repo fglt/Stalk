@@ -15,7 +15,6 @@
 #import "FGLTStatus.h"
 #import "FGLTUser.h"
 #import "StatusInfo.h"
-#import "UIImageView+WebCache.h"
 
 @interface StatusTableViewCell ()
 
@@ -112,20 +111,13 @@
 //重写set方法，模型传递
 - (void)setStatusInfo:(StatusInfo *)statusInfo{
     _statusInfo = statusInfo;
-    CGFloat cellWidth = MIN( [UIScreen mainScreen].bounds.size.width, MAX_SIZE_WIDTH);
-    CGFloat viewWidth = cellWidth - (PADDING<<1);
-    [self.icon sd_setImageWithURL:[NSURL URLWithString:_statusInfo.status.user.profileImageUrl]];
-//    self.icon.frame = CGRectMake(PADDING, PADDING, ICONWIDTH, ICONWIDTH);
-//    self.icon.layer.cornerRadius = ICONWIDTH>>1;
-//    self.icon.clipsToBounds = YES;
+
+    [self.icon sd_setImageWithURL:[NSURL URLWithString:_statusInfo.status.user.avatarLarge]];
     
     self.name.text =_statusInfo.status.user.screenName;
-//    self.name.frame = CGRectMake(ICONWIDTH + PADDING *2, PADDING, viewWidth-ICONWIDTH-PADDING *2, 20);
-    
+
     self.from.text = [NSString stringWithFormat:@"%@ 来自%@", [_statusInfo.status.createdAt substringToIndex:11], [ self sourceWithString:_statusInfo.status.source]];
 
-    //    NSLog(@"%@", _statusInfo.status.source);
-//    self.from.frame = CGRectMake(ICONWIDTH + PADDING *2, CGRectGetMaxY(self.name.frame) +PADDING, viewWidth-ICONWIDTH-PADDING *2,ICONWIDTH -  CGRectGetMaxY(self.name.frame));
     
     self.statusText.text = _statusInfo.status.text;
     self.statusText.frame = _statusInfo.textFrame;
@@ -135,9 +127,12 @@
     }
     
     NSArray *urls;
+    FGLTStatus *status;
     if (_statusInfo.status.retweetedStatus) {
+        status = _statusInfo.status.retweetedStatus;
         urls = _statusInfo.status.retweetedStatus.thumbnailPic;
     } else {
+        status = _statusInfo.status;
         urls = _statusInfo.status.thumbnailPic;
     }
     if (urls.count>0) {
@@ -153,7 +148,8 @@
             if (i<urls.count) {
                 thumbView.frame = CGRectMake((SIZE_GAP_IMG+SIZE_IMAGE)*i, 0, SIZE_IMAGE, SIZE_IMAGE);
                 thumbView.hidden = NO;
-                [thumbView sd_setImageWithURL:[NSURL URLWithString:urls[i]]];
+                NSString *path =[NSString stringWithFormat:@"%@%@",[self imageFilePath:status.bmiddlePic],[self imageName:urls[i]]];
+                [thumbView sd_setImageWithURL:[NSURL URLWithString:path]];
             } else {
                 thumbView.hidden = YES;
             }
@@ -166,6 +162,26 @@
     
     //    self.seprator.frame = _statusInfo.sepratorLineFrame;
     
+}
+
+- (NSString *)imageFilePath:(NSString *)urlstr{
+    u_long i = urlstr.length-1;
+    for(; i>0; i--){
+        if([urlstr characterAtIndex:i] == '/'){
+            break;
+        }
+    }
+    return [urlstr substringToIndex:i+1];
+}
+
+- (NSString *)imageName:(NSString *)urlstr{
+    u_long i = urlstr.length-1;
+    for(; i>0; i--){
+        if([urlstr characterAtIndex:i] == '/'){
+            break;
+        }
+    }
+    return [urlstr substringFromIndex:i+1];
 }
 
 - (void)setFrame:(CGRect)frame {

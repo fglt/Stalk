@@ -30,6 +30,7 @@
             [aStatus.thumbnailPic addObject:[imageDic objectForKey:@"thumbnail_pic"]];
         }
     }
+    
     if ([dict objectForKey:@"bmiddle_pic"] != nil ) {
         aStatus.bmiddlePic = [dict objectForKey:@"bmiddle_pic"];
     }
