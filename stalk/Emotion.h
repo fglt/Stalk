@@ -27,5 +27,6 @@
 
 @property (nonatomic, copy)NSString *value;
 
-+ (Emotion *)getEmotionFromJsonDic:(NSDictionary *)dic;
++ (Emotion *)emotionFromDict:(NSDictionary *)dict;
+- (NSDictionary *)dictionary;
 @end

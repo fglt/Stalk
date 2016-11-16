@@ -32,6 +32,7 @@
         self.wbAuthorizeResponse.expirationDate = [[NSUserDefaults standardUserDefaults] objectForKey:SINA_EXPIRATION_DATE_KEY];
         WeiBoTabBarController *tabBarController = [storyBoard instantiateViewControllerWithIdentifier:@"TabBarController"];
         self.window.rootViewController = tabBarController;
+        _emotionHelper = [EmotionHelper sharedEmotionHelper];
     }else{
         LoginViewController *controller = [storyBoard instantiateViewControllerWithIdentifier:@"LoginViewController"];
         self.window.rootViewController = controller;
@@ -78,6 +79,7 @@
     {
         if ([_weiBoDelegate respondsToSelector:@selector(weiboLoginByResponse:)]) {
             [_weiBoDelegate weiboLoginByResponse:response];
+            _emotionHelper = [EmotionHelper sharedEmotionHelper];
         }
     }
 }

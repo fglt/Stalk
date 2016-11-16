@@ -34,11 +34,15 @@
 		171BCD0C1DD7025A009FF89E /* NSString+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = 171BCD011DD7025A009FF89E /* NSString+Additions.m */; };
 		171BCD0D1DD7025A009FF89E /* UIScreen+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = 171BCD031DD7025A009FF89E /* UIScreen+Additions.m */; };
 		171BCD0E1DD7025A009FF89E /* UIView+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = 171BCD051DD7025A009FF89E /* UIView+Additions.m */; };
-		171BCD171DD72D8B009FF89E /* FGLTStatusTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 171BCD161DD72D8B009FF89E /* FGLTStatusTableView.m */; };
 		171BCD1A1DD7347D009FF89E /* StatusTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 171BCD191DD7347D009FF89E /* StatusTableViewCell.m */; };
 		171BCD1D1DD7F666009FF89E /* StatusInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 171BCD1C1DD7F666009FF89E /* StatusInfo.m */; };
 		171BCD291DDAD6A5009FF89E /* STalkTextAttachment.m in Sources */ = {isa = PBXBuildFile; fileRef = 171BCD281DDAD6A5009FF89E /* STalkTextAttachment.m */; };
 		171BCD2C1DDADA38009FF89E /* Emotion.m in Sources */ = {isa = PBXBuildFile; fileRef = 171BCD2B1DDADA38009FF89E /* Emotion.m */; };
+		171BCD521DDB4D5E009FF89E /* STalkTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 171BCD511DDB4D5E009FF89E /* STalkTextView.m */; };
+		171BCD551DDBD9F8009FF89E /* WBHttpRequest+FGLTWeiboStatus.m in Sources */ = {isa = PBXBuildFile; fileRef = 171BCD541DDBD9F8009FF89E /* WBHttpRequest+FGLTWeiboStatus.m */; };
+		171BCD571DDBFA33009FF89E /* image.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 171BCD561DDBFA33009FF89E /* image.jpg */; };
+		171BCD5A1DDBFC1F009FF89E /* EmotionHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 171BCD591DDBFC1F009FF89E /* EmotionHelper.m */; };
+		171BCD5D1DDBFCCA009FF89E /* WBHttpRequest+WeiboEmotion.m in Sources */ = {isa = PBXBuildFile; fileRef = 171BCD5C1DDBFCCA009FF89E /* WBHttpRequest+WeiboEmotion.m */; };
 		94EB5C9CEFE6D90560C4BBA6 /* libPods-stalk.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A428582C3D25FA0ACB23CE58 /* libPods-stalk.a */; };
 /* End PBXBuildFile section */
 
@@ -85,8 +89,6 @@
 		171BCD031DD7025A009FF89E /* UIScreen+Additions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIScreen+Additions.m"; sourceTree = "<group>"; };
 		171BCD041DD7025A009FF89E /* UIView+Additions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+Additions.h"; sourceTree = "<group>"; };
 		171BCD051DD7025A009FF89E /* UIView+Additions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+Additions.m"; sourceTree = "<group>"; };
-		171BCD151DD72D8B009FF89E /* FGLTStatusTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FGLTStatusTableView.h; sourceTree = "<group>"; };
-		171BCD161DD72D8B009FF89E /* FGLTStatusTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FGLTStatusTableView.m; sourceTree = "<group>"; };
 		171BCD181DD7347D009FF89E /* StatusTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StatusTableViewCell.h; sourceTree = "<group>"; };
 		171BCD191DD7347D009FF89E /* StatusTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StatusTableViewCell.m; sourceTree = "<group>"; };
 		171BCD1B1DD7F666009FF89E /* StatusInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StatusInfo.h; sourceTree = "<group>"; };
@@ -95,6 +97,15 @@
 		171BCD281DDAD6A5009FF89E /* STalkTextAttachment.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STalkTextAttachment.m; sourceTree = "<group>"; };
 		171BCD2A1DDADA38009FF89E /* Emotion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Emotion.h; sourceTree = "<group>"; };
 		171BCD2B1DDADA38009FF89E /* Emotion.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Emotion.m; sourceTree = "<group>"; };
+		171BCD501DDB4D5E009FF89E /* STalkTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STalkTextView.h; sourceTree = "<group>"; };
+		171BCD511DDB4D5E009FF89E /* STalkTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STalkTextView.m; sourceTree = "<group>"; };
+		171BCD531DDBD9F7009FF89E /* WBHttpRequest+FGLTWeiboStatus.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "WBHttpRequest+FGLTWeiboStatus.h"; sourceTree = "<group>"; };
+		171BCD541DDBD9F8009FF89E /* WBHttpRequest+FGLTWeiboStatus.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "WBHttpRequest+FGLTWeiboStatus.m"; sourceTree = "<group>"; };
+		171BCD561DDBFA33009FF89E /* image.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = image.jpg; path = stalk/image.jpg; sourceTree = "<group>"; };
+		171BCD581DDBFC1F009FF89E /* EmotionHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EmotionHelper.h; sourceTree = "<group>"; };
+		171BCD591DDBFC1F009FF89E /* EmotionHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EmotionHelper.m; sourceTree = "<group>"; };
+		171BCD5B1DDBFCCA009FF89E /* WBHttpRequest+WeiboEmotion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "WBHttpRequest+WeiboEmotion.h"; sourceTree = "<group>"; };
+		171BCD5C1DDBFCCA009FF89E /* WBHttpRequest+WeiboEmotion.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "WBHttpRequest+WeiboEmotion.m"; sourceTree = "<group>"; };
 		87E2433D0244AA4FB3BC3E1D /* Pods-stalk.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-stalk.debug.xcconfig"; path = "Pods/Target Support Files/Pods-stalk/Pods-stalk.debug.xcconfig"; sourceTree = "<group>"; };
 		A428582C3D25FA0ACB23CE58 /* libPods-stalk.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-stalk.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		DD42CF7E439995A5093D552A /* Pods-stalk.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-stalk.release.xcconfig"; path = "Pods/Target Support Files/Pods-stalk/Pods-stalk.release.xcconfig"; sourceTree = "<group>"; };
@@ -126,6 +137,7 @@
 		171BCC971DD4B6FF009FF89E = {
 			isa = PBXGroup;
 			children = (
+				171BCD561DDBFA33009FF89E /* image.jpg */,
 				171BCCA21DD4B6FF009FF89E /* stalk */,
 				171BCCA11DD4B6FF009FF89E /* Products */,
 				171BCCCA1DD4B858009FF89E /* Frameworks */,
@@ -159,10 +171,6 @@
 				171BCCAA1DD4B6FF009FF89E /* LoginViewController.m */,
 				171BCCAC1DD4B6FF009FF89E /* Main.storyboard */,
 				171BCCA31DD4B6FF009FF89E /* Supporting Files */,
-				171BCCFC1DD6C110009FF89E /* UserWeiBoTableViewController.h */,
-				171BCCFD1DD6C110009FF89E /* UserWeiBoTableViewController.m */,
-				171BCD271DDAD6A5009FF89E /* STalkTextAttachment.h */,
-				171BCD281DDAD6A5009FF89E /* STalkTextAttachment.m */,
 			);
 			path = stalk;
 			sourceTree = "<group>";
@@ -201,10 +209,10 @@
 		171BCD121DD7026D009FF89E /* view */ = {
 			isa = PBXGroup;
 			children = (
-				171BCD151DD72D8B009FF89E /* FGLTStatusTableView.h */,
-				171BCD161DD72D8B009FF89E /* FGLTStatusTableView.m */,
 				171BCD181DD7347D009FF89E /* StatusTableViewCell.h */,
 				171BCD191DD7347D009FF89E /* StatusTableViewCell.m */,
+				171BCD501DDB4D5E009FF89E /* STalkTextView.h */,
+				171BCD511DDB4D5E009FF89E /* STalkTextView.m */,
 			);
 			name = view;
 			sourceTree = "<group>";
@@ -220,6 +228,16 @@
 				171BCD1C1DD7F666009FF89E /* StatusInfo.m */,
 				171BCD2A1DDADA38009FF89E /* Emotion.h */,
 				171BCD2B1DDADA38009FF89E /* Emotion.m */,
+				171BCCFC1DD6C110009FF89E /* UserWeiBoTableViewController.h */,
+				171BCCFD1DD6C110009FF89E /* UserWeiBoTableViewController.m */,
+				171BCD271DDAD6A5009FF89E /* STalkTextAttachment.h */,
+				171BCD281DDAD6A5009FF89E /* STalkTextAttachment.m */,
+				171BCD531DDBD9F7009FF89E /* WBHttpRequest+FGLTWeiboStatus.h */,
+				171BCD541DDBD9F8009FF89E /* WBHttpRequest+FGLTWeiboStatus.m */,
+				171BCD581DDBFC1F009FF89E /* EmotionHelper.h */,
+				171BCD591DDBFC1F009FF89E /* EmotionHelper.m */,
+				171BCD5B1DDBFCCA009FF89E /* WBHttpRequest+WeiboEmotion.h */,
+				171BCD5C1DDBFCCA009FF89E /* WBHttpRequest+WeiboEmotion.m */,
 			);
 			name = modal;
 			sourceTree = "<group>";
@@ -313,6 +331,7 @@
 				171BCCB31DD4B6FF009FF89E /* LaunchScreen.storyboard in Resources */,
 				171BCCB01DD4B6FF009FF89E /* Assets.xcassets in Resources */,
 				171BCCAE1DD4B6FF009FF89E /* Main.storyboard in Resources */,
+				171BCD571DDBFA33009FF89E /* image.jpg in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -373,11 +392,12 @@
 			files = (
 				171BCCE71DD60245009FF89E /* FGLTStatus.m in Sources */,
 				171BCCFB1DD69BE3009FF89E /* WeiBoTabBarController.m in Sources */,
-				171BCD171DD72D8B009FF89E /* FGLTStatusTableView.m in Sources */,
 				171BCD2C1DDADA38009FF89E /* Emotion.m in Sources */,
 				171BCCAB1DD4B6FF009FF89E /* LoginViewController.m in Sources */,
 				171BCD0C1DD7025A009FF89E /* NSString+Additions.m in Sources */,
 				171BCCE41DD60210009FF89E /* FGLTUser.m in Sources */,
+				171BCD521DDB4D5E009FF89E /* STalkTextView.m in Sources */,
+				171BCD5D1DDBFCCA009FF89E /* WBHttpRequest+WeiboEmotion.m in Sources */,
 				171BCCA81DD4B6FF009FF89E /* AppDelegate.m in Sources */,
 				171BCCF01DD61C57009FF89E /* WBAuthorizeResponse+copy.m in Sources */,
 				171BCD0D1DD7025A009FF89E /* UIScreen+Additions.m in Sources */,
@@ -386,7 +406,9 @@
 				171BCCA51DD4B6FF009FF89E /* main.m in Sources */,
 				171BCD1A1DD7347D009FF89E /* StatusTableViewCell.m in Sources */,
 				171BCCF81DD698F3009FF89E /* constant.m in Sources */,
+				171BCD551DDBD9F8009FF89E /* WBHttpRequest+FGLTWeiboStatus.m in Sources */,
 				171BCD1D1DD7F666009FF89E /* StatusInfo.m in Sources */,
+				171BCD5A1DDBFC1F009FF89E /* EmotionHelper.m in Sources */,
 				171BCD291DDAD6A5009FF89E /* STalkTextAttachment.m in Sources */,
 				171BCD0E1DD7025A009FF89E /* UIView+Additions.m in Sources */,
 			);
@@ -432,6 +454,7 @@
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_SUSPICIOUS_MOVES = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
@@ -481,6 +504,7 @@
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_SUSPICIOUS_MOVES = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;

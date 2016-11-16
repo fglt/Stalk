@@ -18,13 +18,14 @@
 #import "STalkTextAttachment.h"
 #import "Emotion.h"
 #import "AppDelegate.h"
+#import "EmotionHelper.h"
 
 #define kRegexHighlightViewTypeURL @"url"
 #define kRegexHighlightViewTypeAccount @"account"
 #define kRegexHighlightViewTypeTopic @"topic"
 #define kRegexHighlightViewTypeEmoji @"emoji"
 
-#define URLRegular @"(http|https)://(t.cn/|weibo.com/)+(([a-zA-Z0-9/])*)"
+#define URLRegular @"(http|https)://(t.cn/|weibo.com/|m.weibo.cn/)+(([a-zA-Z0-9/])*)"
 #define EmojiRegular @"(\\[\\w+\\])"
 #define AccountRegular @"@[\u4e00-\u9fa5a-zA-Z0-9_-]{2,30}"
 #define TopicRegular @"#[^#]+#"
@@ -35,11 +36,10 @@
 @property (nonatomic, weak) UIImageView *icon;
 @property (nonatomic, weak) UILabel *name;
 @property (nonatomic, weak) UILabel *from;
-@property (nonatomic, weak) UITextView *statusText;
+@property (nonatomic, weak) STalkTextView *statusText;
 @property (nonatomic, weak) UIScrollView *pictureHolder;
-@property (nonatomic, weak) UITextView *retweetText;
-
-
+@property (nonatomic, weak) STalkTextView *retweetText;
+@property (nonatomic, strong) EmotionHelper *emotionHelper;
 //@property (nonatomic, weak) UIView *seprator;
 
 @end
@@ -63,6 +63,7 @@
 //重写init方法构建cell内容
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
 {
+    _emotionHelper = [EmotionHelper sharedEmotionHelper];
     highlightColor = [UIColor colorWithRed:106/255.0 green:140/255.0 blue:181/255.0 alpha:1];
     if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]) {
         //取消点击高亮状态
@@ -89,7 +90,7 @@
         self.from = from;
         self.from.frame = CGRectMake(self.name.frame.origin.x, CGRectGetMaxY(self.name.frame) +PADDING, viewWidth-ICONWIDTH-PADDING *2,ICONWIDTH -self.name.frame.size.height-PADDING);
         //内容
-        UITextView *text = [[UITextView alloc] init];
+        STalkTextView *text = [[STalkTextView alloc] init];
         text.editable = NO;
         text.scrollEnabled = NO;
         text.font =[UIFont systemFontOfSize:SIZE_FONT_CONTENT];
@@ -97,7 +98,7 @@
         [self.contentView addSubview:text];
         self.statusText = text;
         
-        UITextView *retweetText = [[UITextView alloc] init];
+        STalkTextView *retweetText = [[STalkTextView alloc] init];
         retweetText.editable = NO;
         retweetText.scrollEnabled = NO;
         retweetText.font = [UIFont systemFontOfSize:SIZE_FONT_CONTENT-1];
@@ -133,6 +134,12 @@
     self.from.text = [NSString stringWithFormat:@"%@ 来自%@", [_statusInfo.status.createdAt substringToIndex:11], [ self sourceWithString:_statusInfo.status.source]];
 
     UIFont *font = [UIFont systemFontOfSize:SIZE_FONT_CONTENT];
+//    NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
+//    style.alignment = NSTextAlignmentLeft;
+//    style.minimumLineHeight = font.pointSize;
+//    style.maximumLineHeight = font.pointSize;
+//    style.lineBreakMode = NSLineBreakByWordWrapping;
+//    style.lineSpacing = 5;
     NSDictionary* attributes =@{NSFontAttributeName:font};
     
     //Create attributed string, with applied syntax highlighting
@@ -141,10 +148,19 @@
     attributedStr = [self addLink:attributedStr pattern:URLRegular scheme:@""];
     attributedStr = [self addLink:attributedStr pattern:AccountRegular scheme:@"account://"];
     attributedStr = [self addLink:attributedStr pattern:TopicRegular scheme:@"topic://"];
+    attributedStr = [self replaceEmotion:attributedStr];
     self.statusText.attributedText = attributedStr;
     self.statusText.frame = _statusInfo.textFrame;
     if(_statusInfo.status.retweetedStatus){
-        NSMutableAttributedString *attributedStr = [[NSMutableAttributedString alloc] initWithString:_statusInfo.status.retweetedStatus.text attributes:attributes];
+        UIFont *font = [UIFont systemFontOfSize:SIZE_FONT_CONTENT-1];
+        NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
+        style.alignment = NSTextAlignmentLeft;
+        style.minimumLineHeight = font.pointSize;
+        style.maximumLineHeight = font.pointSize;
+        style.lineBreakMode = NSLineBreakByWordWrapping;
+        style.lineSpacing = 5;
+
+        NSMutableAttributedString *attributedStr = [[NSMutableAttributedString alloc] initWithString:_statusInfo.status.retweetedStatus.text attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:SIZE_FONT_CONTENT-1]}];
         
         attributedStr = [self addLink:attributedStr pattern:URLRegular scheme:@""];
         attributedStr = [self addLink:attributedStr pattern:AccountRegular scheme:@"account://"];
@@ -191,6 +207,34 @@
     
     //    self.seprator.frame = _statusInfo.sepratorLineFrame;
     
+}
+
+- (NSMutableAttributedString *)replaceEmotion:(NSMutableAttributedString *)coloredString{
+
+    NSUInteger lengthDetail = 0;
+    NSRange newRange;
+    
+    NSArray* matches = [[NSRegularExpression regularExpressionWithPattern:EmojiRegular options:NSRegularExpressionDotMatchesLineSeparators error:nil] matchesInString:coloredString.string options:0 range:NSMakeRange(0,coloredString.string.length)];
+    for(NSTextCheckingResult* match in matches) {
+        newRange = NSMakeRange(match.range.location - lengthDetail, match.range.length);
+        NSString *emotionstr = [coloredString.string substringWithRange:newRange];
+        STalkTextAttachment *attachment = [[STalkTextAttachment alloc] init];
+        Emotion *emotion = [_emotionHelper emotionWithValue:emotionstr];
+        [[SDWebImageManager sharedManager] downloadImageWithURL:[NSURL URLWithString:emotion.url] options:SDWebImageRetryFailed progress:nil completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, BOOL finished, NSURL *imageURL) {
+            if(image){
+                attachment.image = image;
+            }
+        }];
+        //UIFont *font = [UIFont systemFontOfSize:19];
+        //attachment.bounds = CGRectMake(0, -font.pointSize*0.2, font.pointSize, font.pointSize);
+        NSAttributedString * attachStr = [NSAttributedString attributedStringWithAttachment:attachment];
+        NSUInteger prelength = coloredString.length;
+        [coloredString replaceCharactersInRange:newRange withAttributedString:attachStr];
+//        [coloredString addAttribute:NSBaselineOffsetAttributeName value:[NSNumber numberWithInt:-4] range:NSMakeRange(newRange.location, 1)];
+        lengthDetail += prelength - coloredString.length;
+    }
+    
+    return coloredString;
 }
 
 - (NSMutableAttributedString *)addLink:(NSMutableAttributedString *)coloredString  pattern:(NSString *)pattern scheme:(NSString *)scheme {

@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "FGLTStatus.h"
 #import "StatusInfo.h"
+#import "STalkTextView.h"
 
 @interface StatusTableViewCell : UITableViewCell
 @property (nonatomic, weak) StatusInfo *statusInfo;

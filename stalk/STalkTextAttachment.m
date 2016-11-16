@@ -19,8 +19,8 @@
     
 }
 
-//- (CGRect)attachmentBoundsForTextContainer:(NSTextContainer *)textContainer proposedLineFragment:(CGRect)lineFrag glyphPosition:(CGPoint)position characterIndex:(NSUInteger)charIndex
-//{
-//    return CGRectMake(0, -lineFrag.size.height * 0.2, lineFrag.size.height, lineFrag.size.height);
-//}
+- (CGRect)attachmentBoundsForTextContainer:(NSTextContainer *)textContainer proposedLineFragment:(CGRect)lineFrag glyphPosition:(CGPoint)position characterIndex:(NSUInteger)charIndex
+{
+    return CGRectMake(0, -2, lineFrag.size.height+4, lineFrag.size.height+4);
+}
 @end

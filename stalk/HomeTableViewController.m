@@ -12,6 +12,7 @@
 #import "AppDelegate.h"
 #import "StatusTableViewCell.h"
 #import "StatusInfo.h"
+#import "WBHttpRequest+FGLTWeiboStatus.h"
 
 @interface HomeTableViewController ()
 @property (nonatomic, strong) NSArray *statuesList;
@@ -26,24 +27,35 @@
     [super viewDidLoad];
     [self.tableView setSeparatorInset:UIEdgeInsetsZero];
     [self.tableView setLayoutMargins:UIEdgeInsetsZero];
-    //self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
-    NSURLSession *session = [NSURLSession sharedSession];
-    NSString *urlstr = [NSString stringWithFormat:@"https://api.weibo.com/2/statuses/friends_timeline.json?access_token=%@",appDelegate.wbAuthorizeResponse.accessToken];
-    NSURL *url = [NSURL URLWithString:urlstr];
-    // 通过URL初始化task,在block内部可以直接对返回的数据进行处理
-    NSURLSessionTask *task = [session dataTaskWithURL:url completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
-        id jsonObject = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil];
-        NSDictionary *dict = [jsonObject objectForKey:@"statuses"];
+    
+    [WBHttpRequest requestForStatusesOfPath:@"friends_timeline" withAccessToken:appDelegate.wbAuthorizeResponse.accessToken andOtherProperties:nil queue:nil withCompletionHandler:^(WBHttpRequest *httpRequest, id result, NSError *error) {
+        NSDictionary *dict = [result objectForKey:@"statuses"];
         
         self.statuesList = [StatusInfo statusInfosWithStatuses:[FGLTStatus statuesWithDict:dict]];
         dispatch_async(dispatch_get_main_queue(), ^{
             [self.tableView reloadData];
         });
-        // NSLog(@"%@",self.statuesList);
+        
     }];
-    [task resume];
+
+//    NSURLSession *session = [NSURLSession sharedSession];
+//    NSString *urlstr = [NSString stringWithFormat:@"https://api.weibo.com/2/statuses/friends_timeline.json?access_token=%@",appDelegate.wbAuthorizeResponse.accessToken];
+//    NSURL *url = [NSURL URLWithString:urlstr];
+//    // 通过URL初始化task,在block内部可以直接对返回的数据进行处理
+//    NSURLSessionTask *task = [session dataTaskWithURL:url completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+//        id jsonObject = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil];
+//        NSDictionary *dict = [jsonObject objectForKey:@"statuses"];
+//        
+//        self.statuesList = [StatusInfo statusInfosWithStatuses:[FGLTStatus statuesWithDict:dict]];
+//        dispatch_async(dispatch_get_main_queue(), ^{
+//            [self.tableView reloadData];
+//        });
+//        // NSLog(@"%@",self.statuesList);
+//    }];
+//    [task resume];
 }
+
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

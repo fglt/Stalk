@@ -9,7 +9,7 @@
 #import "Emotion.h"
 
 @implementation Emotion
-+ (Emotion *)getEmotionFromJsonDic:(NSDictionary *)dic
++ (Emotion *)emotionFromDict:(NSDictionary *)dic
 {
     Emotion *aEmotion = [[Emotion alloc] init];
     aEmotion.category = [dic objectForKey:@"category"];
@@ -25,4 +25,17 @@
     return aEmotion;
 }
 
+- (NSDictionary *)dictionary{
+    NSDictionary *dict = @{@"category":self.category,
+                           @"common":self.category,
+                           @"hot":self.category,
+                           @"icon":self.category,
+                           @"phrase":self.category,
+                           @"picid":self.category,
+                           @"type":self.category,
+                           @"url":self.category,
+                           @"value":self.category,
+                          };
+    return dict;
+}
 @end
