@@ -134,12 +134,13 @@
     self.from.text = [NSString stringWithFormat:@"%@ 来自%@", [_statusInfo.status.createdAt substringToIndex:11], [ self sourceWithString:_statusInfo.status.source]];
 
     UIFont *font = [UIFont systemFontOfSize:SIZE_FONT_CONTENT];
-//    NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
-//    style.alignment = NSTextAlignmentLeft;
-//    style.minimumLineHeight = font.pointSize;
-//    style.maximumLineHeight = font.pointSize;
-//    style.lineBreakMode = NSLineBreakByWordWrapping;
-//    style.lineSpacing = 5;
+    NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
+    style.alignment = NSTextAlignmentLeft;
+    style.minimumLineHeight = font.pointSize;
+    style.maximumLineHeight = font.pointSize;
+    style.lineBreakMode = NSLineBreakByWordWrapping;
+    style.lineSpacing = 5;
+    style.lineHeightMultiple = 0.0;
     NSDictionary* attributes =@{NSFontAttributeName:font};
     
     //Create attributed string, with applied syntax highlighting
@@ -213,24 +214,25 @@
 
     NSUInteger lengthDetail = 0;
     NSRange newRange;
+    NSString *bundleName = @"emotionResource.bundle";
     
     NSArray* matches = [[NSRegularExpression regularExpressionWithPattern:EmojiRegular options:NSRegularExpressionDotMatchesLineSeparators error:nil] matchesInString:coloredString.string options:0 range:NSMakeRange(0,coloredString.string.length)];
     for(NSTextCheckingResult* match in matches) {
         newRange = NSMakeRange(match.range.location - lengthDetail, match.range.length);
         NSString *emotionstr = [coloredString.string substringWithRange:newRange];
         STalkTextAttachment *attachment = [[STalkTextAttachment alloc] init];
-        Emotion *emotion = [_emotionHelper emotionWithValue:emotionstr];
-        [[SDWebImageManager sharedManager] downloadImageWithURL:[NSURL URLWithString:emotion.url] options:SDWebImageRetryFailed progress:nil completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, BOOL finished, NSURL *imageURL) {
-            if(image){
-                attachment.image = image;
-            }
-        }];
+        attachment.image = [UIImage imageNamed:[bundleName stringByAppendingPathComponent:emotionstr]];
+//        Emotion *emotion = [_emotionHelper emotionWithValue:emotionstr];
+//        [[SDWebImageManager sharedManager] downloadImageWithURL:[NSURL URLWithString:emotion.url] options:SDWebImageRetryFailed progress:nil completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, BOOL finished, NSURL *imageURL) {
+//            if(image){
+//                attachment.image = image;
+//            }
+//        }];
         //UIFont *font = [UIFont systemFontOfSize:19];
         //attachment.bounds = CGRectMake(0, -font.pointSize*0.2, font.pointSize, font.pointSize);
         NSAttributedString * attachStr = [NSAttributedString attributedStringWithAttachment:attachment];
         NSUInteger prelength = coloredString.length;
         [coloredString replaceCharactersInRange:newRange withAttributedString:attachStr];
-//        [coloredString addAttribute:NSBaselineOffsetAttributeName value:[NSNumber numberWithInt:-4] range:NSMakeRange(newRange.location, 1)];
         lengthDetail += prelength - coloredString.length;
     }
     
@@ -240,7 +242,7 @@
 - (NSMutableAttributedString *)addLink:(NSMutableAttributedString *)coloredString  pattern:(NSString *)pattern scheme:(NSString *)scheme {
     NSString* string = coloredString.string;
     NSRange range = NSMakeRange(0,[string length]);
-
+    
     NSArray* matches = [[NSRegularExpression regularExpressionWithPattern:pattern options:NSRegularExpressionDotMatchesLineSeparators error:nil] matchesInString:string options:0 range:range];
     for(NSTextCheckingResult* match in matches) {
 

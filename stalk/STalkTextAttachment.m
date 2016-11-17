@@ -21,6 +21,15 @@
 
 - (CGRect)attachmentBoundsForTextContainer:(NSTextContainer *)textContainer proposedLineFragment:(CGRect)lineFrag glyphPosition:(CGPoint)position characterIndex:(NSUInteger)charIndex
 {
-    return CGRectMake(0, -2, lineFrag.size.height+4, lineFrag.size.height+4);
+    UIFont *font = [textContainer.layoutManager.textStorage attribute:NSFontAttributeName
+                                                              atIndex:charIndex
+                                                       effectiveRange:nil];
+    CGFloat baseLineHeight = (font?font.lineHeight:lineFrag.size.height);
+
+    CGFloat y = font.descender;
+    y -= (lineFrag.size.height-baseLineHeight)/2;
+    
+    return CGRectMake(0, y, lineFrag.size.height, lineFrag.size.height);
+
 }
 @end

@@ -40,9 +40,9 @@
 		171BCD2C1DDADA38009FF89E /* Emotion.m in Sources */ = {isa = PBXBuildFile; fileRef = 171BCD2B1DDADA38009FF89E /* Emotion.m */; };
 		171BCD521DDB4D5E009FF89E /* STalkTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 171BCD511DDB4D5E009FF89E /* STalkTextView.m */; };
 		171BCD551DDBD9F8009FF89E /* WBHttpRequest+FGLTWeiboStatus.m in Sources */ = {isa = PBXBuildFile; fileRef = 171BCD541DDBD9F8009FF89E /* WBHttpRequest+FGLTWeiboStatus.m */; };
-		171BCD571DDBFA33009FF89E /* image.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 171BCD561DDBFA33009FF89E /* image.jpg */; };
 		171BCD5A1DDBFC1F009FF89E /* EmotionHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 171BCD591DDBFC1F009FF89E /* EmotionHelper.m */; };
 		171BCD5D1DDBFCCA009FF89E /* WBHttpRequest+WeiboEmotion.m in Sources */ = {isa = PBXBuildFile; fileRef = 171BCD5C1DDBFCCA009FF89E /* WBHttpRequest+WeiboEmotion.m */; };
+		17AFD3F41DDDFABF007C7DB9 /* emotionResource.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 17AFD3F31DDDFABF007C7DB9 /* emotionResource.bundle */; };
 		94EB5C9CEFE6D90560C4BBA6 /* libPods-stalk.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A428582C3D25FA0ACB23CE58 /* libPods-stalk.a */; };
 /* End PBXBuildFile section */
 
@@ -101,11 +101,11 @@
 		171BCD511DDB4D5E009FF89E /* STalkTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STalkTextView.m; sourceTree = "<group>"; };
 		171BCD531DDBD9F7009FF89E /* WBHttpRequest+FGLTWeiboStatus.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "WBHttpRequest+FGLTWeiboStatus.h"; sourceTree = "<group>"; };
 		171BCD541DDBD9F8009FF89E /* WBHttpRequest+FGLTWeiboStatus.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "WBHttpRequest+FGLTWeiboStatus.m"; sourceTree = "<group>"; };
-		171BCD561DDBFA33009FF89E /* image.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = image.jpg; path = stalk/image.jpg; sourceTree = "<group>"; };
 		171BCD581DDBFC1F009FF89E /* EmotionHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EmotionHelper.h; sourceTree = "<group>"; };
 		171BCD591DDBFC1F009FF89E /* EmotionHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EmotionHelper.m; sourceTree = "<group>"; };
 		171BCD5B1DDBFCCA009FF89E /* WBHttpRequest+WeiboEmotion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "WBHttpRequest+WeiboEmotion.h"; sourceTree = "<group>"; };
 		171BCD5C1DDBFCCA009FF89E /* WBHttpRequest+WeiboEmotion.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "WBHttpRequest+WeiboEmotion.m"; sourceTree = "<group>"; };
+		17AFD3F31DDDFABF007C7DB9 /* emotionResource.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = emotionResource.bundle; sourceTree = "<group>"; };
 		87E2433D0244AA4FB3BC3E1D /* Pods-stalk.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-stalk.debug.xcconfig"; path = "Pods/Target Support Files/Pods-stalk/Pods-stalk.debug.xcconfig"; sourceTree = "<group>"; };
 		A428582C3D25FA0ACB23CE58 /* libPods-stalk.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-stalk.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		DD42CF7E439995A5093D552A /* Pods-stalk.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-stalk.release.xcconfig"; path = "Pods/Target Support Files/Pods-stalk/Pods-stalk.release.xcconfig"; sourceTree = "<group>"; };
@@ -137,7 +137,6 @@
 		171BCC971DD4B6FF009FF89E = {
 			isa = PBXGroup;
 			children = (
-				171BCD561DDBFA33009FF89E /* image.jpg */,
 				171BCCA21DD4B6FF009FF89E /* stalk */,
 				171BCCA11DD4B6FF009FF89E /* Products */,
 				171BCCCA1DD4B858009FF89E /* Frameworks */,
@@ -156,6 +155,7 @@
 		171BCCA21DD4B6FF009FF89E /* stalk */ = {
 			isa = PBXGroup;
 			children = (
+				17AFD3F31DDDFABF007C7DB9 /* emotionResource.bundle */,
 				171BCD141DD70299009FF89E /* category */,
 				171BCD131DD70277009FF89E /* modal */,
 				171BCD121DD7026D009FF89E /* view */,
@@ -329,9 +329,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				171BCCB31DD4B6FF009FF89E /* LaunchScreen.storyboard in Resources */,
+				17AFD3F41DDDFABF007C7DB9 /* emotionResource.bundle in Resources */,
 				171BCCB01DD4B6FF009FF89E /* Assets.xcassets in Resources */,
 				171BCCAE1DD4B6FF009FF89E /* Main.storyboard in Resources */,
-				171BCD571DDBFA33009FF89E /* image.jpg in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -478,7 +478,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -522,7 +522,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
