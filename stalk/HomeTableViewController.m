@@ -22,7 +22,7 @@
 #import "NSObject+runtime.h"
 #import "YYFPSLabel.h"
 
-@interface HomeTableViewController ()<StatusTableViewCellDelegate,SFSafariViewControllerDelegate>
+@interface HomeTableViewController ()<WBStatusCellDelegate,SFSafariViewControllerDelegate>
 @property (nonatomic, strong) NSArray *statuesList;
 @end
 
@@ -139,7 +139,7 @@
 
     WBStatusCell * cell = [[WBStatusCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"ALLStatusesCellID"];
     cell.layout = _statuesList[indexPath.row];
-    cell.cellDelegate =self;
+    cell.delegate =self;
     return cell;
 }
 
@@ -150,12 +150,12 @@
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
-    StatusDetailViewController *detailViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"StatusDetailViewController"];
-    NSInteger selectedIndex = [[self.tableView indexPathForSelectedRow] row];
-    WBStatusLayout *info = [self.statuesList objectAtIndex:selectedIndex];;
-    detailViewController.layout = info;
-    detailViewController.title = @"微博正文";
-    [self.navigationController pushViewController:detailViewController animated:YES];
+//    StatusDetailViewController *detailViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"StatusDetailViewController"];
+//    NSInteger selectedIndex = [[self.tableView indexPathForSelectedRow] row];
+//    WBStatusLayout *info = [self.statuesList objectAtIndex:selectedIndex];;
+//    detailViewController.layout = info;
+//    detailViewController.title = @"微博正文";
+//    [self.navigationController pushViewController:detailViewController animated:YES];
 }
 /*
 // Override to support conditional editing of the table view.
@@ -191,12 +191,14 @@
 }
 */
 
-- (void)cellLinkIsClicked:(MLLink *)link
+- (void)cellLinkIsClicked:(WBStatusCell *)cell :(MLLink *)link
 {
+    cell.userInteractionEnabled = NO;
     if (link.linkType==MLLinkTypeURL) {
         NSURL *url = [NSURL URLWithString:link.linkValue];
         SFSafariViewController *controller = [[SFSafariViewController alloc]initWithURL:url entersReaderIfAvailable:YES];
         [self presentViewController:controller animated:YES completion:nil];
+        cell.userInteractionEnabled = YES;
 //        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:link.linkValue] options:@{} completionHandler:nil];
         return;
     }else if (link.linkType == MLLinkTypeUserHandle) {
@@ -206,23 +208,14 @@
         [WBHttpRequest requestForUserWithAccessToken:appDelegate.wbAuthorizeResponse.accessToken screen_name:screenName queue:[WBRequestQueue queueForWBRequest] withCompletionHandler:^(WBHttpRequest *httpRequest, id result, NSError *error) {
             FGLTUser *user = [FGLTUser userWithDict:result];
             dispatch_async(dispatch_get_main_queue(), ^{
+                cell.userInteractionEnabled = YES;
                 if(!user){
-                    
-                    //[self.navigationController popViewControllerAnimated:YES];
                     NSString *title = @"提示";
                     NSString *message = [NSString stringWithFormat:@"用户%@不存在", link.linkValue];
                     NSMutableAttributedString *attmess = [[NSMutableAttributedString alloc]initWithString:message];
                     [attmess addAttribute:NSForegroundColorAttributeName value:[UIColor blueColor] range:NSMakeRange(2, link.linkValue.length)];
                     
-                    UIAlertController *alert = [UIAlertController alertControllerWithTitle:title message:message preferredStyle:UIAlertControllerStyleAlert];
-                
-                    if ([alert existVar:@"attributedMessage"]) {
-                        [alert setValue:attmess forKey:@"attributedMessage"];
-                    }
-                    UIAlertAction *yesAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"确定", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-                        
-                    }];
-                    [alert addAction:yesAction];
+                    UIAlertController *alert = [self alertControllerWithTitle:title message:attmess];
                     [self presentViewController:alert animated:YES completion:nil];
                     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 1.5*NSEC_PER_SEC), dispatch_get_main_queue(), ^{
                         [self dismissViewControllerAnimated:YES completion:nil];
@@ -233,21 +226,60 @@
                     userViewController.user = user;
                     userViewController.title = user.screenName;
                     [self.navigationController pushViewController:userViewController animated:YES];
-                    //self.user = user;
-                    //self.title = user.screenName;
                 }
             });
         }];
 
         
-      
        //[self.navigationController pushViewController:userViewController animated:YES];
 
         return;
     }
 }
 
+- (void)cellStatusIsClicked:(WBStatusCell *)cell{
+    StatusDetailViewController *detailViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"StatusDetailViewController"];
+    NSInteger selectedIndex = [[self.tableView indexPathForSelectedRow] row];
+    WBStatusLayout *layout = [self.statuesList objectAtIndex:selectedIndex];;
+    detailViewController.layout = layout;
+    detailViewController.title = @"微博正文";
+    [self.navigationController pushViewController:detailViewController animated:YES];
+}
+
+- (void)cellRetweetIsClicked:(WBStatusCell *)cell{
+    StatusDetailViewController *detailViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"StatusDetailViewController"];
+    NSInteger selectedIndex = [[self.tableView indexPathForSelectedRow] row];
+    WBStatusLayout *layout = [self.statuesList objectAtIndex:selectedIndex];;
+    detailViewController.layout = layout;
+    detailViewController.title = @"微博正文";
+    [self.navigationController pushViewController:detailViewController animated:YES];
+
+}
+- (void)cellUserIsClicked:(WBStatusCell *)cell{
+    UserViewController *userViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"UserViewController"];
+    userViewController.user =  cell.layout.status.user;
+    userViewController.title = userViewController.user.screenName;
+    [self.navigationController pushViewController:userViewController animated:YES];
+}
+
 - (void)safariViewControllerDidFinish:(SFSafariViewController *)controller{
     [controller dismissViewControllerAnimated:YES completion:nil];
+}
+- (IBAction)sendStatus:(UIBarButtonItem *)sender {
+}
+
+
+- (UIAlertController *)alertControllerWithTitle:(NSString *)title message:(NSAttributedString *)message
+{
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:title message:message.string preferredStyle:UIAlertControllerStyleAlert];
+    
+    if ([alert existVar:@"attributedMessage"]) {
+        [alert setValue:message forKey:@"attributedMessage"];
+    }
+    UIAlertAction *yesAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"确定", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        
+    }];
+    [alert addAction:yesAction];
+    return alert;
 }
 @end

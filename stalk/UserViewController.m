@@ -50,20 +50,20 @@
 //    
 //}
 
-- (void)setUserName:(NSString *)screenName{
-    AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
-    [WBHttpRequest requestForUserWithAccessToken:appDelegate.wbAuthorizeResponse.accessToken screen_name:screenName queue:[WBRequestQueue queueForWBRequest] withCompletionHandler:^(WBHttpRequest *httpRequest, id result, NSError *error) {
-        FGLTUser *user = [FGLTUser userWithDict:result];
-        dispatch_async(dispatch_get_main_queue(), ^{
-            if(!user){
-                [self.navigationController popViewControllerAnimated:YES];
-            }else{
-                self.user = user;
-                self.title = user.screenName;
-            }
-        });
-    }];
-
-}
+//- (void)setUserName:(NSString *)screenName{
+//    AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+//    [WBHttpRequest requestForUserWithAccessToken:appDelegate.wbAuthorizeResponse.accessToken screen_name:screenName queue:[WBRequestQueue queueForWBRequest] withCompletionHandler:^(WBHttpRequest *httpRequest, id result, NSError *error) {
+//        FGLTUser *user = [FGLTUser userWithDict:result];
+//        dispatch_async(dispatch_get_main_queue(), ^{
+//            if(!user){
+//                [self.navigationController popViewControllerAnimated:YES];
+//            }else{
+//                self.user = user;
+//                self.title = user.screenName;
+//            }
+//        });
+//    }];
+//
+//}
 
 @end

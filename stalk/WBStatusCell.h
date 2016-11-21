@@ -10,16 +10,18 @@
 #import "FGLTStatus.h"
 #import "WBStatusLayout.h"
 #import "STalkTextView.h"
-@class StatusTableViewCell;
+@class WBStatusCell;
 @class MLLink;
 
-@protocol StatusTableViewCellDelegate <NSObject>
-
-- (void)cellLinkIsClicked:(MLLink *)link;
-
+@protocol WBStatusCellDelegate <NSObject>
+@optional
+- (void)cellLinkIsClicked:(WBStatusCell *)cell :(MLLink *)link;
+- (void)cellStatusIsClicked:(WBStatusCell *)cell;
+- (void)cellRetweetIsClicked:(WBStatusCell *)cell;
+- (void)cellUserIsClicked:(WBStatusCell *)cell;
 @end
 
 @interface WBStatusCell : UITableViewCell
 @property (nonatomic, weak) WBStatusLayout *layout;
-@property (nonatomic, weak) id<StatusTableViewCellDelegate> cellDelegate;
+@property (nonatomic, weak) id<WBStatusCellDelegate> delegate;
 @end

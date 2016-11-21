@@ -17,6 +17,10 @@
 #define SIZE_FONT_SUBCONTENT (SIZE_FONT_CONTENT-1)
 #define MAX_SIZE_WIDTH 600
 
+#define kWBCellBackgroundColor UIColorHex(f2f2f2)    // Cell背景灰色
+#define kWBCellHighlightColor UIColorHex(f0f0f0)      // Cell高亮时灰色
+#define kWBCellInnerViewColor UIColorHex(f7f7f7) 
+
 @interface WBStatusLayout : NSObject
 
 @property (nonatomic, copy) FGLTStatus *status;

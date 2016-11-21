@@ -47,15 +47,6 @@
 {
     CGFloat cellWidth = MIN( [UIScreen mainScreen].bounds.size.width, MAX_SIZE_WIDTH);
     CGFloat viewWidth = cellWidth - (PADDING<<1);
-    //self.iconFrame = CGRectMake(startX, PADDING, ICONWIDTH, ICONWIDTH);
-    
-    //    //名字
-    //    CGSize nameSize = [_status.user.screenName sizeWithConstrainedToWidth:width fromFont:[UIFont systemFontOfSize:SIZE_FONT_CONTENT] lineSpace:5];
-    //CGFloat nameX = ICONWIDTH + PADDING *2;
-    //CGFloat nameY = PADDING;
-    //self.nameFrame = CGRectMake(nameX, nameY, width, 20);
-    //    self.fromFrame = CGRectMake(nameX, CGRectGetMaxY(self.nameFrame) +PADDING, width,ICONWIDTH -  CGRectGetMaxY(self.nameFrame) - PADDING);
-    
     UIFont *font = [UIFont systemFontOfSize:SIZE_FONT_CONTENT];
     NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
     style.alignment = NSTextAlignmentLeft;
@@ -92,6 +83,7 @@
         CGSize retweetSize = [self sizeWithText:attributedStr maxSize:CGSizeMake(viewWidth-16, MAXFLOAT)];
         self.retweetStatusTextFrame = CGRectMake(PADDING, CGRectGetMaxY(self.textFrame) + PADDING, viewWidth, retweetSize.height+16);
     }
+    
     u_long count= _status.retweetedStatus.thumbnailPic.count>0 ? :_status.thumbnailPic.count;
     
     if(count>0 ){

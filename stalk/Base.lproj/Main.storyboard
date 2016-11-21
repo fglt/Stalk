@@ -66,9 +66,13 @@
                     <toolbarItems/>
                     <navigationItem key="navigationItem" title="主页" id="kFc-Yw-yNh">
                         <barButtonItem key="leftBarButtonItem" title="帐号" id="ifZ-NW-dSI"/>
-                        <barButtonItem key="rightBarButtonItem" title="写微博" id="UdT-wY-u49"/>
+                        <barButtonItem key="rightBarButtonItem" title="写微博" id="UdT-wY-u49">
+                            <connections>
+                                <action selector="sendStatus:" destination="0PB-Om-BrJ" id="yCS-At-lt5"/>
+                                <segue destination="nPL-Z7-cIS" kind="show" id="G6J-Y4-EBH"/>
+                            </connections>
+                        </barButtonItem>
                     </navigationItem>
-                    <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="IGE-c2-lhB" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -107,7 +111,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="TNU-kb-j9X" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1916" y="-593"/>
+            <point key="canvasLocation" x="-2009" y="-530"/>
         </scene>
         <!--我的微博-->
         <scene sceneID="efa-JK-GMr">
@@ -122,7 +126,7 @@
                                 <rect key="frame" x="0.0" y="28" width="375" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="cmR-PZ-6zg" id="vkj-t8-LTK">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="43"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </tableViewCellContentView>
                                 <connections>
@@ -266,6 +270,42 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="cQw-Wl-p4P" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-188" y="-1034.0329835082459"/>
+        </scene>
+        <!--发微博-->
+        <scene sceneID="Dtp-4b-5tz">
+            <objects>
+                <viewController title="发微博" id="nPL-Z7-cIS" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="bri-9r-gMj"/>
+                        <viewControllerLayoutGuide type="bottom" id="gbQ-Xa-CmP"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="3VH-ou-0Sz">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" text="发微博" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="mhA-ev-dMO">
+                                <rect key="frame" x="0.0" y="64" width="375" height="543"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                            </textView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="mhA-ev-dMO" firstAttribute="top" secondItem="bri-9r-gMj" secondAttribute="bottom" id="42q-k8-3Qj"/>
+                            <constraint firstItem="mhA-ev-dMO" firstAttribute="leading" secondItem="3VH-ou-0Sz" secondAttribute="leading" id="AdX-4V-h8g"/>
+                            <constraint firstItem="gbQ-Xa-CmP" firstAttribute="top" secondItem="mhA-ev-dMO" secondAttribute="bottom" constant="60" id="SBd-uv-RxQ"/>
+                            <constraint firstAttribute="trailing" secondItem="mhA-ev-dMO" secondAttribute="trailing" id="a61-tC-vuW"/>
+                        </constraints>
+                    </view>
+                    <toolbarItems/>
+                    <navigationItem key="navigationItem" title="发微博" id="Vn1-Ps-fLg">
+                        <barButtonItem key="rightBarButtonItem" title="发送" id="efb-ds-28v"/>
+                    </navigationItem>
+                    <nil key="simulatedBottomBarMetrics"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="J3K-td-6BO" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
         </scene>
     </scenes>
 </document>
