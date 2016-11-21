@@ -12,7 +12,7 @@
 #import "NSString+Additions.h"
 #import "FGLTStatus.h"
 #import "FGLTUser.h"
-#import "StatusInfo.h"
+#import "WBStatusLayout.h"
 #import "STalkTextAttachment.h"
 #import "Emotion.h"
 #import "AppDelegate.h"
@@ -169,29 +169,29 @@
 }
 
 //重写set方法，模型传递
-- (void)setStatusInfo:(StatusInfo *)statusInfo{
-    _statusInfo = statusInfo;
-    self.icon.imageURL =[NSURL URLWithString:_statusInfo.status.user.avatarLarge];
+- (void)setLayout:(WBStatusLayout *)layout{
+    _layout = layout;
+    self.icon.imageURL =[NSURL URLWithString:_layout.status.user.avatarLarge];
     
-    self.name.text =_statusInfo.status.user.screenName;
+    self.name.text =_layout.status.user.screenName;
 
     
-    self.from.text = [NSString stringWithFormat:@"%@ 来自%@", [_statusInfo.status.createdAt substringToIndex:11], [ self sourceWithString:_statusInfo.status.source]];
+    self.from.text = [NSString stringWithFormat:@"%@ 来自%@", [_layout.status.createdAt substringToIndex:11], [ self sourceWithString:_layout.status.source]];
     self.statusText.numberOfLines = 0;
     self.statusText.beforeAddLinkBlock = nil;
-    NSMutableAttributedString *attributedStr = _statusInfo.statusAttributedText;
-    self.statusText.frame = _statusInfo.textFrame;
+    NSMutableAttributedString *attributedStr = _layout.statusAttributedText;
+    self.statusText.frame = _layout.textFrame;
     self.statusText.dataDetectorTypes = MLDataDetectorTypeAll;
     
     [self.statusText setDidClickLinkBlock:^(MLLink *link, NSString *linkText, MLLinkLabel *label) {
         [_cellDelegate cellLinkIsClicked:link];
     }];
     self.statusText.attributedText = attributedStr;
-    if(_statusInfo.status.retweetedStatus){
-        NSMutableAttributedString *attributedStr = _statusInfo.retweetAttributedText;
+    if(_layout.status.retweetedStatus){
+        NSMutableAttributedString *attributedStr = _layout.retweetAttributedText;
         self.retweetText.numberOfLines = 0;
         self.retweetText.attributedText = attributedStr;
-        self.retweetText.frame = _statusInfo.retweetStatusTextFrame;
+        self.retweetText.frame = _layout.retweetStatusTextFrame;
         self.retweetText.dataDetectorTypes = MLDataDetectorTypeAll;
         [self.retweetText setDidClickLinkBlock:^(MLLink *link, NSString *linkText, MLLinkLabel *label) {
             [_cellDelegate cellLinkIsClicked:link];
@@ -200,16 +200,16 @@
     
     NSArray *urls;
     FGLTStatus *status;
-    if (_statusInfo.status.retweetedStatus) {
-        status = _statusInfo.status.retweetedStatus;
-        urls = _statusInfo.status.retweetedStatus.thumbnailPic;
+    if (_layout.status.retweetedStatus) {
+        status = _layout.status.retweetedStatus;
+        urls = _layout.status.retweetedStatus.thumbnailPic;
     } else {
-        status = _statusInfo.status;
-        urls = _statusInfo.status.thumbnailPic;
+        status = _layout.status;
+        urls = _layout.status.thumbnailPic;
     }
     if (urls.count>0) {
         self.pictureHolder.hidden = NO;
-        self.pictureHolder.frame = _statusInfo.pictureFrame;
+        self.pictureHolder.frame = _layout.pictureFrame;
         NSURL *baseURL = [NSURL URLWithString:[self imageFilePath:status.bmiddlePic]];
         for (NSInteger i=0; i<9; i++) {
             UIImageView *thumbView = [[UIImageView alloc] init];

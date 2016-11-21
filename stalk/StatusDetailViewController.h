@@ -7,8 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
-@class StatusInfo;
+@class WBStatusLayout;
 
 @interface StatusDetailViewController : UIViewController
-@property (nonatomic, weak) StatusInfo *statusInfo;
+@property (nonatomic, weak) WBStatusLayout *layout;
 @end

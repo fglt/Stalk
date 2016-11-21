@@ -30,7 +30,7 @@
     [WBHttpRequest requestForStatusesOfPath:@"user_timeline" withAccessToken:appDelegate.wbAuthorizeResponse.accessToken andOtherProperties:nil queue:[WBRequestQueue queueForWBRequest] withCompletionHandler:^(WBHttpRequest *httpRequest, id result, NSError *error) {
         NSDictionary *dict = [result objectForKey:@"statuses"];
         
-        self.statuesList = [StatusInfo statusInfosWithStatuses:[FGLTStatus statuesWithDict:dict]];
+        self.statuesList = [WBStatusLayout statusLayoutsWithStatuses:[FGLTStatus statuesWithDict:dict]];
         dispatch_async(dispatch_get_main_queue(), ^{
             [self.tableView reloadData];
         });
@@ -45,8 +45,8 @@
 
 //- (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
 //{
-//    for(StatusInfo *statusInfo in self.statuesList){
-//        [statusInfo resetFrame];
+//    for(WBStatusLayout *layout in self.statuesList){
+//        [layout resetFrame];
 //    }
 //    [self.tableView reloadData];
 //}
@@ -66,13 +66,13 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     WBStatusCell * cell = [[WBStatusCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"ALLStatusesCellID"];
-    cell.statusInfo = _statuesList[indexPath.row];
+    cell.layout = _statuesList[indexPath.row];
     return cell;
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     
-    StatusInfo *info = _statuesList[indexPath.row];
+    WBStatusLayout *info = _statuesList[indexPath.row];
     return info.cellHeight;
 }
 

@@ -35,7 +35,7 @@
 		171BCD0D1DD7025A009FF89E /* UIScreen+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = 171BCD031DD7025A009FF89E /* UIScreen+Additions.m */; };
 		171BCD0E1DD7025A009FF89E /* UIView+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = 171BCD051DD7025A009FF89E /* UIView+Additions.m */; };
 		171BCD1A1DD7347D009FF89E /* WBStatusCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 171BCD191DD7347D009FF89E /* WBStatusCell.m */; };
-		171BCD1D1DD7F666009FF89E /* StatusInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 171BCD1C1DD7F666009FF89E /* StatusInfo.m */; };
+		171BCD1D1DD7F666009FF89E /* WBStatusLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 171BCD1C1DD7F666009FF89E /* WBStatusLayout.m */; };
 		171BCD291DDAD6A5009FF89E /* STalkTextAttachment.m in Sources */ = {isa = PBXBuildFile; fileRef = 171BCD281DDAD6A5009FF89E /* STalkTextAttachment.m */; };
 		171BCD2C1DDADA38009FF89E /* Emotion.m in Sources */ = {isa = PBXBuildFile; fileRef = 171BCD2B1DDADA38009FF89E /* Emotion.m */; };
 		171BCD521DDB4D5E009FF89E /* STalkTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 171BCD511DDB4D5E009FF89E /* STalkTextView.m */; };
@@ -99,8 +99,8 @@
 		171BCD051DD7025A009FF89E /* UIView+Additions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+Additions.m"; sourceTree = "<group>"; };
 		171BCD181DD7347D009FF89E /* WBStatusCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WBStatusCell.h; sourceTree = "<group>"; };
 		171BCD191DD7347D009FF89E /* WBStatusCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WBStatusCell.m; sourceTree = "<group>"; };
-		171BCD1B1DD7F666009FF89E /* StatusInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StatusInfo.h; sourceTree = "<group>"; };
-		171BCD1C1DD7F666009FF89E /* StatusInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StatusInfo.m; sourceTree = "<group>"; };
+		171BCD1B1DD7F666009FF89E /* WBStatusLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WBStatusLayout.h; sourceTree = "<group>"; };
+		171BCD1C1DD7F666009FF89E /* WBStatusLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WBStatusLayout.m; sourceTree = "<group>"; };
 		171BCD271DDAD6A5009FF89E /* STalkTextAttachment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STalkTextAttachment.h; sourceTree = "<group>"; };
 		171BCD281DDAD6A5009FF89E /* STalkTextAttachment.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STalkTextAttachment.m; sourceTree = "<group>"; };
 		171BCD2A1DDADA38009FF89E /* Emotion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Emotion.h; sourceTree = "<group>"; };
@@ -260,8 +260,8 @@
 				171BCCE31DD60210009FF89E /* FGLTUser.m */,
 				171BCCE51DD60245009FF89E /* FGLTStatus.h */,
 				171BCCE61DD60245009FF89E /* FGLTStatus.m */,
-				171BCD1B1DD7F666009FF89E /* StatusInfo.h */,
-				171BCD1C1DD7F666009FF89E /* StatusInfo.m */,
+				171BCD1B1DD7F666009FF89E /* WBStatusLayout.h */,
+				171BCD1C1DD7F666009FF89E /* WBStatusLayout.m */,
 				171BCD2A1DDADA38009FF89E /* Emotion.h */,
 				171BCD2B1DDADA38009FF89E /* Emotion.m */,
 				171BCD271DDAD6A5009FF89E /* STalkTextAttachment.h */,
@@ -454,7 +454,7 @@
 				171BCCF81DD698F3009FF89E /* constant.m in Sources */,
 				171BCD551DDBD9F8009FF89E /* WBHttpRequest+FGLTWeiboStatus.m in Sources */,
 				1741E66B1DDF41E400C887D0 /* TopicViewController.m in Sources */,
-				171BCD1D1DD7F666009FF89E /* StatusInfo.m in Sources */,
+				171BCD1D1DD7F666009FF89E /* WBStatusLayout.m in Sources */,
 				171BCD5A1DDBFC1F009FF89E /* EmotionHelper.m in Sources */,
 				1741E6621DDF165D00C887D0 /* UserViewController.m in Sources */,
 				171BCD291DDAD6A5009FF89E /* STalkTextAttachment.m in Sources */,

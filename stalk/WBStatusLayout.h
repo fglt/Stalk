@@ -1,5 +1,5 @@
 //
-//  StatusInfo.h
+//  WBStatusLayout.h
 //  stalk
 //
 //  Created by Coding on 13/11/2016.
@@ -17,7 +17,7 @@
 #define SIZE_FONT_SUBCONTENT (SIZE_FONT_CONTENT-1)
 #define MAX_SIZE_WIDTH 600
 
-@interface StatusInfo : NSObject
+@interface WBStatusLayout : NSObject
 
 @property (nonatomic, copy) FGLTStatus *status;
 @property (nonatomic, strong) NSMutableAttributedString *statusAttributedText;
@@ -28,6 +28,6 @@
 @property (nonatomic) CGFloat cellHeight;
 //@property (nonatomic) CGRect sepratorLineFrame;
 
-+ (NSArray *)statusInfosWithStatuses:(NSArray *)FGLTStatus;
-- (void)resetFrame;
++ (NSArray *)statusLayoutsWithStatuses:(NSArray *)FGLTStatus;
+- (void)layout;
 @end

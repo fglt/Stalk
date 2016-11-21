@@ -1,12 +1,12 @@
 //
-//  StatusInfo.m
+//  WBStatusLayout.m
 //  stalk
 //
 //  Created by Coding on 13/11/2016.
 //  Copyright © 2016 Coding. All rights reserved.
 //
 
-#import "StatusInfo.h"
+#import "WBStatusLayout.h"
 #import "UIView+Additions.h"
 #import "UIScreen+Additions.h"
 #import "NSString+Additions.h"
@@ -20,17 +20,17 @@
 #define AccountRegular @"@[\u4e00-\u9fa5a-zA-Z0-9_-]{2,30}"
 #define TopicRegular @"#[^#]+#"
 
-@implementation StatusInfo
+@implementation WBStatusLayout
 
 - (void)setStatus:(FGLTStatus *)status{
     _status = status;
-    [self resetFrame];
+    [self layout];
 }
 
-+ (NSArray *)statusInfosWithStatuses:(NSArray *)statuses{
++ (NSArray *)statusLayoutsWithStatuses:(NSArray *)statuses{
     NSMutableArray *array = [NSMutableArray arrayWithCapacity:statuses.count];
     for(FGLTStatus *status in statuses){
-        StatusInfo *info = [[StatusInfo alloc] init];
+        WBStatusLayout *info = [[WBStatusLayout alloc] init];
         info.status = status;
         [array addObject:info];
     }
@@ -43,7 +43,7 @@
     return [text boundingRectWithSize:maxSize options:NSStringDrawingUsesLineFragmentOrigin context:nil].size;
 }
 
-- (void)resetFrame
+- (void)layout
 {
     CGFloat cellWidth = MIN( [UIScreen mainScreen].bounds.size.width, MAX_SIZE_WIDTH);
     CGFloat viewWidth = cellWidth - (PADDING<<1);

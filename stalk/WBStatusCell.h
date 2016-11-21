@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "FGLTStatus.h"
-#import "StatusInfo.h"
+#import "WBStatusLayout.h"
 #import "STalkTextView.h"
 @class StatusTableViewCell;
 @class MLLink;
@@ -20,6 +20,6 @@
 @end
 
 @interface WBStatusCell : UITableViewCell
-@property (nonatomic, weak) StatusInfo *statusInfo;
+@property (nonatomic, weak) WBStatusLayout *layout;
 @property (nonatomic, weak) id<StatusTableViewCellDelegate> cellDelegate;
 @end

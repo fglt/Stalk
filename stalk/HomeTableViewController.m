@@ -11,7 +11,7 @@
 #import "FGLTStatus.h"
 #import "AppDelegate.h"
 #import "WBStatusCell.h"
-#import "StatusInfo.h"
+#import "WBStatusLayout.h"
 #import "WBHttpRequest+FGLTWeiboStatus.h"
 #import "StatusDetailViewController.h"
 #import "MLLinkLabel.h"
@@ -63,7 +63,7 @@
     [WBHttpRequest requestForStatusesOfPath:@"friends_timeline" withAccessToken:appDelegate.wbAuthorizeResponse.accessToken andOtherProperties:dict queue:[WBRequestQueue queueForWBRequest] withCompletionHandler:^(WBHttpRequest *httpRequest, id result, NSError *error) {
         NSDictionary *dict = [result objectForKey:@"statuses"];
         
-        self.statuesList = [StatusInfo statusInfosWithStatuses:[FGLTStatus statuesWithDict:dict]];
+        self.statuesList = [WBStatusLayout statusLayoutsWithStatuses:[FGLTStatus statuesWithDict:dict]];
         dispatch_async(dispatch_get_main_queue(), ^{
             [indicator removeFromSuperview];
             self.navigationController.view.userInteractionEnabled = YES;
@@ -72,7 +72,6 @@
         
     }];
 }
-
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
@@ -117,8 +116,8 @@
 
 //- (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
 //{
-//    for(StatusInfo *statusInfo in self.statuesList){
-//        [statusInfo resetFrame];
+//    for(WBStatusLayout *layout in self.statuesList){
+//        [layout resetFrame];
 //    }
 //    [self.tableView reloadData];
 //}
@@ -139,22 +138,22 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
 
     WBStatusCell * cell = [[WBStatusCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"ALLStatusesCellID"];
-    cell.statusInfo = _statuesList[indexPath.row];
+    cell.layout = _statuesList[indexPath.row];
     cell.cellDelegate =self;
     return cell;
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     
-    StatusInfo *info = _statuesList[indexPath.row];
+    WBStatusLayout *info = _statuesList[indexPath.row];
     return info.cellHeight;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     StatusDetailViewController *detailViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"StatusDetailViewController"];
     NSInteger selectedIndex = [[self.tableView indexPathForSelectedRow] row];
-    StatusInfo *info = [self.statuesList objectAtIndex:selectedIndex];;
-    detailViewController.statusInfo = info;
+    WBStatusLayout *info = [self.statuesList objectAtIndex:selectedIndex];;
+    detailViewController.layout = info;
     detailViewController.title = @"微博正文";
     [self.navigationController pushViewController:detailViewController animated:YES];
 }
