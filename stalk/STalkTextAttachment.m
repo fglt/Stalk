@@ -24,12 +24,11 @@
     UIFont *font = [textContainer.layoutManager.textStorage attribute:NSFontAttributeName
                                                               atIndex:charIndex
                                                        effectiveRange:nil];
-    CGFloat baseLineHeight = (font?font.lineHeight:lineFrag.size.height);
-
-    CGFloat y = font.descender;
-    y -= (lineFrag.size.height-baseLineHeight)/2;
     
-    return CGRectMake(0, y, lineFrag.size.height, lineFrag.size.height);
-
+    if(font){
+        return CGRectMake(0, font.descender-(font.pointSize-font.lineHeight)/2, font.pointSize, font.pointSize);
+    }else{
+        return CGRectMake(0, -2, lineFrag.size.height, lineFrag.size.height);
+    }
 }
 @end

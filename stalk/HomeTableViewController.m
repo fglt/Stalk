@@ -10,50 +10,67 @@
 #import "FGLTUser.h"
 #import "FGLTStatus.h"
 #import "AppDelegate.h"
-#import "StatusTableViewCell.h"
+#import "WBStatusCell.h"
 #import "StatusInfo.h"
 #import "WBHttpRequest+FGLTWeiboStatus.h"
+#import "StatusDetailViewController.h"
+#import "MLLinkLabel.h"
+#import "WBHttpRequest+WBUser.h"
+#import "UserViewController.h"
+#import <SafariServices/SafariServices.h>
+#import "WBRequestQueue.h"
+#import "NSObject+runtime.h"
+#import "YYFPSLabel.h"
 
-@interface HomeTableViewController ()
+@interface HomeTableViewController ()<StatusTableViewCellDelegate,SFSafariViewControllerDelegate>
 @property (nonatomic, strong) NSArray *statuesList;
 @end
 
 @implementation HomeTableViewController{
     NSMutableArray *needLoadArr;
     BOOL scrollToToping;
+    YYFPSLabel *_fpsLabel;
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self.tableView setSeparatorInset:UIEdgeInsetsZero];
     [self.tableView setLayoutMargins:UIEdgeInsetsZero];
+    self.tableView.delegate = self;
+    NSLog(@"%@",self.view.class);
+    _fpsLabel = [YYFPSLabel new];
+    [_fpsLabel sizeToFit];
+    _fpsLabel.bottom = self.view.height - 100;
+    _fpsLabel.left = 12;
+    _fpsLabel.alpha = 0;
+    [self.navigationController.navigationBar addSubview:_fpsLabel];
+    _fpsLabel.center = (CGPoint){self.navigationController.navigationBar.bounds.size.width/2,self.navigationController.navigationBar.bounds.size.height/2};
+    
+    self.navigationController.view.userInteractionEnabled = NO;
+    UIActivityIndicatorView *indicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
+    indicator.size = CGSizeMake(50, 50);
+    indicator.center = CGPointMake(self.view.width / 2, self.view.height / 2);
+    indicator.backgroundColor = [UIColor colorWithWhite:0.000 alpha:0.670];
+    indicator.clipsToBounds = YES;
+    
+    indicator.layer.cornerRadius = 6;
+    [indicator startAnimating];
+    [self.view addSubview:indicator];
+
     AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
     
-    [WBHttpRequest requestForStatusesOfPath:@"friends_timeline" withAccessToken:appDelegate.wbAuthorizeResponse.accessToken andOtherProperties:nil queue:nil withCompletionHandler:^(WBHttpRequest *httpRequest, id result, NSError *error) {
+    NSDictionary *dict = @{@"count":[NSString stringWithFormat:@"%d",100]};
+    [WBHttpRequest requestForStatusesOfPath:@"friends_timeline" withAccessToken:appDelegate.wbAuthorizeResponse.accessToken andOtherProperties:dict queue:[WBRequestQueue queueForWBRequest] withCompletionHandler:^(WBHttpRequest *httpRequest, id result, NSError *error) {
         NSDictionary *dict = [result objectForKey:@"statuses"];
         
         self.statuesList = [StatusInfo statusInfosWithStatuses:[FGLTStatus statuesWithDict:dict]];
         dispatch_async(dispatch_get_main_queue(), ^{
+            [indicator removeFromSuperview];
+            self.navigationController.view.userInteractionEnabled = YES;
             [self.tableView reloadData];
         });
         
     }];
-
-//    NSURLSession *session = [NSURLSession sharedSession];
-//    NSString *urlstr = [NSString stringWithFormat:@"https://api.weibo.com/2/statuses/friends_timeline.json?access_token=%@",appDelegate.wbAuthorizeResponse.accessToken];
-//    NSURL *url = [NSURL URLWithString:urlstr];
-//    // 通过URL初始化task,在block内部可以直接对返回的数据进行处理
-//    NSURLSessionTask *task = [session dataTaskWithURL:url completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
-//        id jsonObject = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil];
-//        NSDictionary *dict = [jsonObject objectForKey:@"statuses"];
-//        
-//        self.statuesList = [StatusInfo statusInfosWithStatuses:[FGLTStatus statuesWithDict:dict]];
-//        dispatch_async(dispatch_get_main_queue(), ^{
-//            [self.tableView reloadData];
-//        });
-//        // NSLog(@"%@",self.statuesList);
-//    }];
-//    [task resume];
 }
 
 
@@ -61,6 +78,42 @@
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
+
+- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView {
+    if (_fpsLabel.alpha == 0) {
+        [UIView animateWithDuration:0.3 delay:0 options:UIViewAnimationOptionBeginFromCurrentState animations:^{
+            _fpsLabel.alpha = 1;
+        } completion:NULL];
+    }
+}
+
+- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate {
+    if (!decelerate) {
+        if (_fpsLabel.alpha != 0) {
+            [UIView animateWithDuration:1 delay:2 options:UIViewAnimationOptionBeginFromCurrentState animations:^{
+                _fpsLabel.alpha = 0;
+            } completion:NULL];
+        }
+    }
+}
+
+- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
+    if (_fpsLabel.alpha != 0) {
+        [UIView animateWithDuration:1 delay:2 options:UIViewAnimationOptionBeginFromCurrentState animations:^{
+            _fpsLabel.alpha = 0;
+        } completion:NULL];
+    }
+}
+
+- (void)scrollViewDidScrollToTop:(UIScrollView *)scrollView {
+    if (_fpsLabel.alpha == 0) {
+        [UIView animateWithDuration:0.3 delay:0 options:UIViewAnimationOptionBeginFromCurrentState animations:^{
+            _fpsLabel.alpha = 1;
+        } completion:^(BOOL finished) {
+        }];
+    }
+}
+
 
 //- (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
 //{
@@ -85,8 +138,9 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
 
-    StatusTableViewCell * cell = [[StatusTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"ALLStatusesCellID"];
+    WBStatusCell * cell = [[WBStatusCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"ALLStatusesCellID"];
     cell.statusInfo = _statuesList[indexPath.row];
+    cell.cellDelegate =self;
     return cell;
 }
 
@@ -94,6 +148,15 @@
     
     StatusInfo *info = _statuesList[indexPath.row];
     return info.cellHeight;
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    StatusDetailViewController *detailViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"StatusDetailViewController"];
+    NSInteger selectedIndex = [[self.tableView indexPathForSelectedRow] row];
+    StatusInfo *info = [self.statuesList objectAtIndex:selectedIndex];;
+    detailViewController.statusInfo = info;
+    detailViewController.title = @"微博正文";
+    [self.navigationController pushViewController:detailViewController animated:YES];
 }
 /*
 // Override to support conditional editing of the table view.
@@ -129,14 +192,63 @@
 }
 */
 
-/*
-#pragma mark - Navigation
+- (void)cellLinkIsClicked:(MLLink *)link
+{
+    if (link.linkType==MLLinkTypeURL) {
+        NSURL *url = [NSURL URLWithString:link.linkValue];
+        SFSafariViewController *controller = [[SFSafariViewController alloc]initWithURL:url entersReaderIfAvailable:YES];
+        [self presentViewController:controller animated:YES completion:nil];
+//        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:link.linkValue] options:@{} completionHandler:nil];
+        return;
+    }else if (link.linkType == MLLinkTypeUserHandle) {
+        
+        NSString *screenName = [link.linkValue substringFromIndex:1];
+        AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+        [WBHttpRequest requestForUserWithAccessToken:appDelegate.wbAuthorizeResponse.accessToken screen_name:screenName queue:[WBRequestQueue queueForWBRequest] withCompletionHandler:^(WBHttpRequest *httpRequest, id result, NSError *error) {
+            FGLTUser *user = [FGLTUser userWithDict:result];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                if(!user){
+                    
+                    //[self.navigationController popViewControllerAnimated:YES];
+                    NSString *title = @"提示";
+                    NSString *message = [NSString stringWithFormat:@"用户%@不存在", link.linkValue];
+                    NSMutableAttributedString *attmess = [[NSMutableAttributedString alloc]initWithString:message];
+                    [attmess addAttribute:NSForegroundColorAttributeName value:[UIColor blueColor] range:NSMakeRange(2, link.linkValue.length)];
+                    
+                    UIAlertController *alert = [UIAlertController alertControllerWithTitle:title message:message preferredStyle:UIAlertControllerStyleAlert];
+                
+                    if ([alert existVar:@"attributedMessage"]) {
+                        [alert setValue:attmess forKey:@"attributedMessage"];
+                    }
+                    UIAlertAction *yesAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"确定", nil) style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                        
+                    }];
+                    [alert addAction:yesAction];
+                    [self presentViewController:alert animated:YES completion:nil];
+                    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 1.5*NSEC_PER_SEC), dispatch_get_main_queue(), ^{
+                        [self dismissViewControllerAnimated:YES completion:nil];
+                    });
+      
+                }else{
+                    UserViewController *userViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"UserViewController"];
+                    userViewController.user = user;
+                    userViewController.title = user.screenName;
+                    [self.navigationController pushViewController:userViewController animated:YES];
+                    //self.user = user;
+                    //self.title = user.screenName;
+                }
+            });
+        }];
 
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
+        
+      
+       //[self.navigationController pushViewController:userViewController animated:YES];
+
+        return;
+    }
 }
-*/
 
+- (void)safariViewControllerDidFinish:(SFSafariViewController *)controller{
+    [controller dismissViewControllerAnimated:YES completion:nil];
+}
 @end

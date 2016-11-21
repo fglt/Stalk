@@ -10,8 +10,9 @@
 #import "FGLTUser.h"
 #import "FGLTStatus.h"
 #import "AppDelegate.h"
-#import "StatusTableViewCell.h"
+#import "WBStatusCell.h"
 #import "WBHttpRequest+FGLTWeiboStatus.h"
+#import "WBRequestQueue.h"
 
 @interface UserWeiBoTableViewController ()
 @property (nonatomic, strong) NSArray *statuesList;
@@ -26,7 +27,7 @@
     [self.tableView setLayoutMargins:UIEdgeInsetsZero];
     
     AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
-    [WBHttpRequest requestForStatusesOfPath:@"user_timeline" withAccessToken:appDelegate.wbAuthorizeResponse.accessToken andOtherProperties:nil queue:nil withCompletionHandler:^(WBHttpRequest *httpRequest, id result, NSError *error) {
+    [WBHttpRequest requestForStatusesOfPath:@"user_timeline" withAccessToken:appDelegate.wbAuthorizeResponse.accessToken andOtherProperties:nil queue:[WBRequestQueue queueForWBRequest] withCompletionHandler:^(WBHttpRequest *httpRequest, id result, NSError *error) {
         NSDictionary *dict = [result objectForKey:@"statuses"];
         
         self.statuesList = [StatusInfo statusInfosWithStatuses:[FGLTStatus statuesWithDict:dict]];
@@ -64,7 +65,7 @@
 
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    StatusTableViewCell * cell = [[StatusTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"ALLStatusesCellID"];
+    WBStatusCell * cell = [[WBStatusCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"ALLStatusesCellID"];
     cell.statusInfo = _statuesList[indexPath.row];
     return cell;
 }
@@ -109,14 +110,12 @@
 }
 */
 
-/*
-#pragma mark - Navigation
 
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
+//#pragma mark - Navigation
+//
+//- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+//    [segue destinationViewController].
+//}
+
 
 @end

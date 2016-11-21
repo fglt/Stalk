@@ -19,7 +19,9 @@
 
 @interface StatusInfo : NSObject
 
-@property (nonatomic, strong) FGLTStatus *status;
+@property (nonatomic, copy) FGLTStatus *status;
+@property (nonatomic, strong) NSMutableAttributedString *statusAttributedText;
+@property (nonatomic, strong) NSMutableAttributedString *retweetAttributedText;
 @property (nonatomic) CGRect textFrame;
 @property (nonatomic) CGRect pictureFrame;
 @property (nonatomic) CGRect retweetStatusTextFrame;

@@ -10,8 +10,6 @@
 #import "WBHttpRequest+WeiboEmotion.h"
 #import "AppDelegate.h"
 #import "Emotion.h"
-#import "SDWebImageDownloader.h"
-#import "SDWebImageManager.h"
 
 static EmotionHelper *sharedEmotionHelper;
 @implementation EmotionHelper
@@ -19,19 +17,17 @@ static EmotionHelper *sharedEmotionHelper;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         sharedEmotionHelper = [[EmotionHelper alloc]init];
-        
-        NSString *bundleName = @"emotionResource.bundle";
-        
+//        
 //        NSString *dir = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject];
 //        NSString *faceEmotionPath = [dir stringByAppendingPathComponent:@"faceEmotion.plist"];
 //        NSString *aniEmotionPath = [dir stringByAppendingPathComponent:@"aniEmotion.plist"];
 //        NSString *cartoonEmotionPath = [dir stringByAppendingPathComponent:@"cartoonEmotion.plist"];
-//        NSFileManager *manager = [ NSFileManager defaultManager];
-//        BOOL  fileExits = [manager fileExistsAtPath:faceEmotionPath];
-//        if(fileExits){
-//            sharedEmotionHelper.faceEmotionsArray = [NSMutableArray arrayWithContentsOfFile:faceEmotionPath];
-//            sharedEmotionHelper.aniEmotionsArray = [NSMutableArray arrayWithContentsOfFile:aniEmotionPath];
-//            sharedEmotionHelper.cartoonEmotionsArray = [NSMutableArray arrayWithContentsOfFile:cartoonEmotionPath];
+////        NSFileManager *manager = [ NSFileManager defaultManager];
+////        BOOL  fileExits = [manager fileExistsAtPath:faceEmotionPath];
+//        if(false){
+////            sharedEmotionHelper.faceEmotionsArray = [NSMutableArray arrayWithContentsOfFile:faceEmotionPath];
+////            sharedEmotionHelper.aniEmotionsArray = [NSMutableArray arrayWithContentsOfFile:aniEmotionPath];
+////            sharedEmotionHelper.cartoonEmotionsArray = [NSMutableArray arrayWithContentsOfFile:cartoonEmotionPath];
 //        }else{
 //            NSString *expressionDir = [dir stringByAppendingPathComponent:@"ClippedExpression"];
 //            NSLog(@"%@", expressionDir);
@@ -43,10 +39,12 @@ static EmotionHelper *sharedEmotionHelper;
 //            [WBHttpRequest requestForEmotionwithAccessToken:appDelegate.wbAuthorizeResponse.accessToken type:@"face" andOtherProperties:nil queue:nil withCompletionHandler:^(WBHttpRequest *httpRequest, id result, NSError *error) {
 //                for(NSDictionary *dict in result){
 //                    [[SDWebImageManager sharedManager] downloadImageWithURL:[NSURL URLWithString:dict[@"url"]] options:SDWebImageRetryFailed progress:nil completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, BOOL finished, NSURL *imageURL) {
-//                        NSString *phrase = dict[@"phrase"];
+//                        
+//                        BOOL common = [dict[@"common"] boolValue];
+//                        if(common){
 //                        NSString *newImagePath = [dir stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.png", dict[@"phrase"]]];
-//                        BOOL sucess = [UIImagePNGRepresentation(image) writeToFile:newImagePath atomically:YES];
-//                        NSLog(@"%d",sucess);
+//                       [UIImagePNGRepresentation(image) writeToFile:newImagePath atomically:YES];
+//                        }
 //                        [[SDImageCache sharedImageCache] storeImage:image forKey:dict[@"url"]];
 //                    }];
 //                    [sharedEmotionHelper.faceEmotionsArray addObject:dict];
@@ -57,29 +55,35 @@ static EmotionHelper *sharedEmotionHelper;
 //            [WBHttpRequest requestForEmotionwithAccessToken:appDelegate.wbAuthorizeResponse.accessToken type:@"ani" andOtherProperties:nil queue:nil withCompletionHandler:^(WBHttpRequest *httpRequest, id result, NSError *error) {
 //                for(NSDictionary *dict in result){
 //                    [[SDWebImageManager sharedManager] downloadImageWithURL:[NSURL URLWithString:dict[@"url"]] options:SDWebImageRetryFailed progress:nil completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, BOOL finished, NSURL *imageURL) {
-//                        NSString *phrase = dict[@"phrase"];
-//                        NSString *newImagePath = [expressionDir stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.png",dict[@"phrase"]]];
-//                        [UIImagePNGRepresentation(image) writeToFile:newImagePath atomically:YES];
+//                        BOOL common = [dict[@"common"] boolValue];
+//                        if(common){
+//                            NSString *newImagePath = [dir stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.png", dict[@"phrase"]]];
+//                            [UIImagePNGRepresentation(image) writeToFile:newImagePath atomically:YES];
+//                        }
+//
 //                        [[SDImageCache sharedImageCache] storeImage:image forKey:dict[@"url"]];
 //                    }];
 //
 //                    [sharedEmotionHelper.aniEmotionsArray addObject:dict];
 //                }
-//                [sharedEmotionHelper.faceEmotionsArray writeToFile:aniEmotionPath atomically:YES];
+//                [sharedEmotionHelper.aniEmotionsArray writeToFile:aniEmotionPath atomically:YES];
 //            }];
 //            [WBHttpRequest requestForEmotionwithAccessToken:appDelegate.wbAuthorizeResponse.accessToken type:@"cartoon" andOtherProperties:nil queue:nil withCompletionHandler:^(WBHttpRequest *httpRequest, id result, NSError *error) {
 //                
 //                for(NSDictionary *dict in result){
 //                    [[SDWebImageManager sharedManager] downloadImageWithURL:[NSURL URLWithString:dict[@"url"]] options:SDWebImageRetryFailed progress:nil completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, BOOL finished, NSURL *imageURL) {
-//                        NSString *phrase = dict[@"phrase"];
-//                        NSString *newImagePath = [expressionDir stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.png",dict[@"phrase"]]];
-//                        [UIImagePNGRepresentation(image) writeToFile:newImagePath atomically:YES];
+//                        BOOL common = [dict[@"common"] boolValue];
+//                        if(common){
+//                            NSString *newImagePath = [dir stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.png", dict[@"phrase"]]];
+//                            [UIImagePNGRepresentation(image) writeToFile:newImagePath atomically:YES];
+//                        }
+//
 //                        [[SDImageCache sharedImageCache] storeImage:image forKey:dict[@"url"]];
 //                    }];
 //
 //                    [sharedEmotionHelper.cartoonEmotionsArray addObject:dict];
 //                }
-//                [sharedEmotionHelper.faceEmotionsArray writeToFile:cartoonEmotionPath atomically:YES];
+//                [sharedEmotionHelper.cartoonEmotionsArray writeToFile:cartoonEmotionPath atomically:YES];
 //            }];
 //        }
     });

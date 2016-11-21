@@ -13,6 +13,7 @@
 +(instancetype) userWithDict:(NSDictionary *) dic {
     FGLTUser *user = [[FGLTUser alloc] init];
     user.userId = [dic objectForKey:@"id"];
+    if(user.userId.intValue==0) return nil;
     if ([dic objectForKey:@"screen_name"] != nil && ![[dic objectForKey:@"screen_name"] isEqualToString:@""] ) {
         user.screenName = [dic objectForKey:@"screen_name"];
     }else{
@@ -23,7 +24,7 @@
     user.province = [dic objectForKey:@"province"];
     user.city = [dic objectForKey:@"city"];
     user.location = [dic objectForKey:@"location"];
-    user.descriptions = [dic objectForKey:@"description"];
+    user.desc = [dic objectForKey:@"description"];
     user.url = [dic objectForKey:@"url"];
     user.profileImageUrl = [dic objectForKey:@"profile_image_url"];
     user.profileUrl = [dic objectForKey:@"profile_url"];

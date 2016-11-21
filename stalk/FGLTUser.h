@@ -13,7 +13,7 @@
 /**
  *	用户ID
  */
-@property (nonatomic, copy)NSString *userId;
+@property (nonatomic, copy)NSNumber *userId;
 
 
 /**
@@ -49,7 +49,7 @@
 /**
  *	用户个人描述
  */
-@property (nonatomic, copy)NSString *descriptions;
+@property (nonatomic, copy)NSString *desc;
 
 
 /**

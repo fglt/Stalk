@@ -6,12 +6,10 @@
 //  Copyright © 2016 Coding. All rights reserved.
 //
 
-#import "StatusTableViewCell.h"
+#import "WBStatusCell.h"
 #import "UIView+Additions.h"
 #import "UIScreen+Additions.h"
 #import "NSString+Additions.h"
-#import "UIImageView+WebCache.h"
-#import "UIButton+WebCache.h"
 #import "FGLTStatus.h"
 #import "FGLTUser.h"
 #import "StatusInfo.h"
@@ -19,6 +17,8 @@
 #import "Emotion.h"
 #import "AppDelegate.h"
 #import "EmotionHelper.h"
+#import "MLLinkLabel.h"
+#import "AppDelegate.h"
 
 #define kRegexHighlightViewTypeURL @"url"
 #define kRegexHighlightViewTypeAccount @"account"
@@ -31,39 +31,93 @@
 #define TopicRegular @"#[^#]+#"
 
 
-@interface StatusTableViewCell ()<UITextViewDelegate>
+@interface WBStatusCell ()<UITextViewDelegate>
 
 @property (nonatomic, weak) UIImageView *icon;
 @property (nonatomic, weak) UILabel *name;
 @property (nonatomic, weak) UILabel *from;
-@property (nonatomic, weak) STalkTextView *statusText;
+@property (nonatomic, weak) MLLinkLabel *statusText;
 @property (nonatomic, weak) UIScrollView *pictureHolder;
-@property (nonatomic, weak) STalkTextView *retweetText;
-@property (nonatomic, strong) EmotionHelper *emotionHelper;
+@property (nonatomic, weak) MLLinkLabel *retweetText;
 //@property (nonatomic, weak) UIView *seprator;
 
 @end
 
-@implementation StatusTableViewCell{
+@implementation WBStatusCell{
     UIColor *highlightColor;
 }
 
 + (instancetype)cellWIthTableView:(UITableView *)tableView identifier:(NSString *)identifier
 {
     //先在缓存池中取
-    StatusTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:identifier];
+    WBStatusCell *cell = [tableView dequeueReusableCellWithIdentifier:identifier];
     //缓存池中没有再创建，并添加标识，cell移出屏幕时放入缓存池以复用
     if (cell == nil) {
-        cell = [[StatusTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:identifier];
+        cell = [[WBStatusCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:identifier];
     }
     
     return cell;
 }
-
+//- (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
+//{
+//    highlightColor = [UIColor colorWithRed:106/255.0 green:140/255.0 blue:181/255.0 alpha:1];
+//    if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]) {
+//        //取消点击高亮状态
+//        self.selectionStyle = UITableViewCellSelectionStyleNone;
+//        CGFloat cellWidth = MIN( [UIScreen mainScreen].bounds.size.width, MAX_SIZE_WIDTH);
+//        CGFloat viewWidth = cellWidth - (PADDING<<1);
+//        //头像
+//        UIImageView *icon = [[UIImageView alloc] init];
+//        [self.contentView addSubview:icon];
+//        self.icon = icon;
+//        self.icon.frame = CGRectMake(PADDING, PADDING, ICONWIDTH, ICONWIDTH);
+//        self.icon.layer.cornerRadius = ICONWIDTH>>1;
+//        self.icon.clipsToBounds = YES;
+//        
+//        //名字
+//        UILabel *name = [[UILabel alloc] init];
+//        name.font =[UIFont systemFontOfSize:SIZE_FONT_CONTENT];
+//        [self.contentView addSubview:name];
+//        self.name = name;
+//        self.name.frame = CGRectMake(ICONWIDTH + PADDING *2, PADDING, viewWidth-ICONWIDTH-PADDING *2, 20);
+//        UILabel *from = [[UILabel alloc] init];
+//        from.font =[UIFont systemFontOfSize:SIZE_FONT_CONTENT-5];
+//        [self.contentView addSubview:from];
+//        self.from = from;
+//        self.from.frame = CGRectMake(self.name.frame.origin.x, CGRectGetMaxY(self.name.frame) +PADDING, viewWidth-ICONWIDTH-PADDING *2,ICONWIDTH -self.name.frame.size.height-PADDING);
+//        //内容
+//        STalkTextView *text = [[STalkTextView alloc] init];
+//        text.editable = NO;
+//        text.scrollEnabled = NO;
+//        text.delegate = self;
+//        [self.contentView addSubview:text];
+//        self.statusText = text;
+//        
+//        STalkTextView *retweetText = [[STalkTextView alloc] init];
+//        retweetText.editable = NO;
+//        retweetText.scrollEnabled = NO;
+//        retweetText.delegate =self;
+//        self.retweetText = retweetText;
+//        [self.contentView addSubview:retweetText];
+//        
+//        
+//        UIScrollView *pictureHolder = [[UIScrollView alloc]init];
+//        self.pictureHolder = pictureHolder;
+//        [self.contentView addSubview:pictureHolder];
+//        pictureHolder.scrollsToTop = NO;
+//        pictureHolder.showsHorizontalScrollIndicator = NO;
+//        pictureHolder.showsVerticalScrollIndicator = NO;
+//        pictureHolder.tag = NSIntegerMax;
+//        pictureHolder.hidden = YES;
+//        [self.contentView addSubview:pictureHolder];
+//        
+//    }
+//    
+//    return self;
+//}
 //重写init方法构建cell内容
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
 {
-    _emotionHelper = [EmotionHelper sharedEmotionHelper];
     highlightColor = [UIColor colorWithRed:106/255.0 green:140/255.0 blue:181/255.0 alpha:1];
     if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]) {
         //取消点击高亮状态
@@ -90,19 +144,11 @@
         self.from = from;
         self.from.frame = CGRectMake(self.name.frame.origin.x, CGRectGetMaxY(self.name.frame) +PADDING, viewWidth-ICONWIDTH-PADDING *2,ICONWIDTH -self.name.frame.size.height-PADDING);
         //内容
-        STalkTextView *text = [[STalkTextView alloc] init];
-        text.editable = NO;
-        text.scrollEnabled = NO;
-        text.font =[UIFont systemFontOfSize:SIZE_FONT_CONTENT];
-        text.delegate = self;
+        MLLinkLabel *text = [[MLLinkLabel alloc] init];
         [self.contentView addSubview:text];
         self.statusText = text;
         
-        STalkTextView *retweetText = [[STalkTextView alloc] init];
-        retweetText.editable = NO;
-        retweetText.scrollEnabled = NO;
-        retweetText.font = [UIFont systemFontOfSize:SIZE_FONT_CONTENT-1];
-        retweetText.delegate =self;
+        MLLinkLabel *retweetText = [[MLLinkLabel alloc] init];
         self.retweetText = retweetText;
         [self.contentView addSubview:retweetText];
         
@@ -125,49 +171,31 @@
 //重写set方法，模型传递
 - (void)setStatusInfo:(StatusInfo *)statusInfo{
     _statusInfo = statusInfo;
-
-    [self.icon sd_setImageWithURL:[NSURL URLWithString:_statusInfo.status.user.avatarLarge]];
+    self.icon.imageURL =[NSURL URLWithString:_statusInfo.status.user.avatarLarge];
     
     self.name.text =_statusInfo.status.user.screenName;
 
     
     self.from.text = [NSString stringWithFormat:@"%@ 来自%@", [_statusInfo.status.createdAt substringToIndex:11], [ self sourceWithString:_statusInfo.status.source]];
-
-    UIFont *font = [UIFont systemFontOfSize:SIZE_FONT_CONTENT];
-    NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
-    style.alignment = NSTextAlignmentLeft;
-    style.minimumLineHeight = font.pointSize;
-    style.maximumLineHeight = font.pointSize;
-    style.lineBreakMode = NSLineBreakByWordWrapping;
-    style.lineSpacing = 5;
-    style.lineHeightMultiple = 0.0;
-    NSDictionary* attributes =@{NSFontAttributeName:font};
-    
-    //Create attributed string, with applied syntax highlighting
-    NSMutableAttributedString *attributedStr = [[NSMutableAttributedString alloc] initWithString:_statusInfo.status.text attributes:attributes];
-
-    attributedStr = [self addLink:attributedStr pattern:URLRegular scheme:@""];
-    attributedStr = [self addLink:attributedStr pattern:AccountRegular scheme:@"account://"];
-    attributedStr = [self addLink:attributedStr pattern:TopicRegular scheme:@"topic://"];
-    attributedStr = [self replaceEmotion:attributedStr];
-    self.statusText.attributedText = attributedStr;
+    self.statusText.numberOfLines = 0;
+    self.statusText.beforeAddLinkBlock = nil;
+    NSMutableAttributedString *attributedStr = _statusInfo.statusAttributedText;
     self.statusText.frame = _statusInfo.textFrame;
+    self.statusText.dataDetectorTypes = MLDataDetectorTypeAll;
+    
+    [self.statusText setDidClickLinkBlock:^(MLLink *link, NSString *linkText, MLLinkLabel *label) {
+        [_cellDelegate cellLinkIsClicked:link];
+    }];
+    self.statusText.attributedText = attributedStr;
     if(_statusInfo.status.retweetedStatus){
-        UIFont *font = [UIFont systemFontOfSize:SIZE_FONT_CONTENT-1];
-        NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
-        style.alignment = NSTextAlignmentLeft;
-        style.minimumLineHeight = font.pointSize;
-        style.maximumLineHeight = font.pointSize;
-        style.lineBreakMode = NSLineBreakByWordWrapping;
-        style.lineSpacing = 5;
-
-        NSMutableAttributedString *attributedStr = [[NSMutableAttributedString alloc] initWithString:_statusInfo.status.retweetedStatus.text attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:SIZE_FONT_CONTENT-1]}];
-        
-        attributedStr = [self addLink:attributedStr pattern:URLRegular scheme:@""];
-        attributedStr = [self addLink:attributedStr pattern:AccountRegular scheme:@"account://"];
-        attributedStr = [self addLink:attributedStr pattern:TopicRegular scheme:@"topic://"];
+        NSMutableAttributedString *attributedStr = _statusInfo.retweetAttributedText;
+        self.retweetText.numberOfLines = 0;
         self.retweetText.attributedText = attributedStr;
         self.retweetText.frame = _statusInfo.retweetStatusTextFrame;
+        self.retweetText.dataDetectorTypes = MLDataDetectorTypeAll;
+        [self.retweetText setDidClickLinkBlock:^(MLLink *link, NSString *linkText, MLLinkLabel *label) {
+            [_cellDelegate cellLinkIsClicked:link];
+        }];
     }
     
     NSArray *urls;
@@ -195,7 +223,7 @@
                 thumbView.hidden = NO;
                 NSURL *url= [NSURL URLWithString:[self imageName:urls[i]] relativeToURL:baseURL];
 
-                [thumbView sd_setImageWithURL:url];
+                thumbView.imageURL = url;
             } else {
                 thumbView.hidden = YES;
             }
@@ -205,55 +233,44 @@
             self.pictureHolder.contentSize = CGSizeMake(cw, 0);
         }
     }
-    
-    //    self.seprator.frame = _statusInfo.sepratorLineFrame;
-    
 }
 
-- (NSMutableAttributedString *)replaceEmotion:(NSMutableAttributedString *)coloredString{
-
-    NSUInteger lengthDetail = 0;
-    NSRange newRange;
-    NSString *bundleName = @"emotionResource.bundle";
-    
-    NSArray* matches = [[NSRegularExpression regularExpressionWithPattern:EmojiRegular options:NSRegularExpressionDotMatchesLineSeparators error:nil] matchesInString:coloredString.string options:0 range:NSMakeRange(0,coloredString.string.length)];
-    for(NSTextCheckingResult* match in matches) {
-        newRange = NSMakeRange(match.range.location - lengthDetail, match.range.length);
-        NSString *emotionstr = [coloredString.string substringWithRange:newRange];
-        STalkTextAttachment *attachment = [[STalkTextAttachment alloc] init];
-        attachment.image = [UIImage imageNamed:[bundleName stringByAppendingPathComponent:emotionstr]];
-//        Emotion *emotion = [_emotionHelper emotionWithValue:emotionstr];
-//        [[SDWebImageManager sharedManager] downloadImageWithURL:[NSURL URLWithString:emotion.url] options:SDWebImageRetryFailed progress:nil completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, BOOL finished, NSURL *imageURL) {
-//            if(image){
-//                attachment.image = image;
-//            }
-//        }];
-        //UIFont *font = [UIFont systemFontOfSize:19];
-        //attachment.bounds = CGRectMake(0, -font.pointSize*0.2, font.pointSize, font.pointSize);
-        NSAttributedString * attachStr = [NSAttributedString attributedStringWithAttachment:attachment];
-        NSUInteger prelength = coloredString.length;
-        [coloredString replaceCharactersInRange:newRange withAttributedString:attachStr];
-        lengthDetail += prelength - coloredString.length;
-    }
-    
-    return coloredString;
-}
-
-- (NSMutableAttributedString *)addLink:(NSMutableAttributedString *)coloredString  pattern:(NSString *)pattern scheme:(NSString *)scheme {
-    NSString* string = coloredString.string;
-    NSRange range = NSMakeRange(0,[string length]);
-    
-    NSArray* matches = [[NSRegularExpression regularExpressionWithPattern:pattern options:NSRegularExpressionDotMatchesLineSeparators error:nil] matchesInString:string options:0 range:range];
-    for(NSTextCheckingResult* match in matches) {
-
-        NSString *str = [string substringWithRange:match.range];
-        NSString *urlstr = [NSString stringWithFormat:@"%@%@", scheme, str];
-        [coloredString addAttribute:NSLinkAttributeName value:urlstr range:match.range];
-        [coloredString addAttribute:(NSString*)NSForegroundColorAttributeName value:highlightColor range:match.range];
-    }
-    
-    return coloredString;
-}
+//- (NSMutableAttributedString *)replaceEmotion:(NSMutableAttributedString *)coloredString{
+//
+//    NSUInteger lengthDetail = 0;
+//    NSRange newRange;
+//    NSString *bundleName = @"emotionResource.bundle";
+//    
+//    NSArray* matches = [[NSRegularExpression regularExpressionWithPattern:EmojiRegular options:NSRegularExpressionDotMatchesLineSeparators error:nil] matchesInString:coloredString.string options:0 range:NSMakeRange(0,coloredString.string.length)];
+//    for(NSTextCheckingResult* match in matches) {
+//        newRange = NSMakeRange(match.range.location - lengthDetail, match.range.length);
+//        NSString *emotionstr = [coloredString.string substringWithRange:newRange];
+//        STalkTextAttachment *attachment = [[STalkTextAttachment alloc] init];
+//        attachment.image = [UIImage imageNamed:[bundleName stringByAppendingPathComponent:emotionstr]];
+//        NSAttributedString * attachStr = [NSAttributedString attributedStringWithAttachment:attachment];
+//        NSUInteger prelength = coloredString.length;
+//        [coloredString replaceCharactersInRange:newRange withAttributedString:attachStr];
+//        lengthDetail += prelength - coloredString.length;
+//    }
+//    
+//    return coloredString;
+//}
+//
+//- (NSMutableAttributedString *)addLink:(NSMutableAttributedString *)coloredString  pattern:(NSString *)pattern scheme:(NSString *)scheme {
+//    NSString* string = coloredString.string;
+//    NSRange range = NSMakeRange(0,[string length]);
+//    
+//    NSArray* matches = [[NSRegularExpression regularExpressionWithPattern:pattern options:NSRegularExpressionDotMatchesLineSeparators error:nil] matchesInString:string options:0 range:range];
+//    for(NSTextCheckingResult* match in matches) {
+//
+//        NSString *str = [string substringWithRange:match.range];
+//        NSString *urlstr = [NSString stringWithFormat:@"%@%@", scheme, str];
+//        [coloredString addAttribute:NSLinkAttributeName value:urlstr range:match.range];
+//        [coloredString addAttribute:(NSString*)NSForegroundColorAttributeName value:highlightColor range:match.range];
+//    }
+//    
+//    return coloredString;
+//}
 
 - (NSString *)imageFilePath:(NSString *)urlstr{
     u_long i = urlstr.length-1;
