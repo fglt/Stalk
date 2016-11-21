@@ -64,9 +64,9 @@
     [attributedStr addAttributes:attributes range:NSMakeRange(0, attributedStr.length)];
     self.statusAttributedText = attributedStr;
     //文字内容
-    CGSize textSize = [self sizeWithText:attributedStr maxSize:CGSizeMake(viewWidth-16, MAXFLOAT)];
+    CGSize textSize = [self sizeWithText:attributedStr maxSize:CGSizeMake(viewWidth, MAXFLOAT)];
 
-    self.textFrame = CGRectMake(PADDING, ICONWIDTH + PADDING * 2, viewWidth, textSize.height+16);
+    self.textFrame = CGRectMake(PADDING, ICONWIDTH + PADDING * 2, viewWidth, textSize.height);
 
     if(_status.retweetedStatus){
         UIFont *font = [UIFont systemFontOfSize:SIZE_FONT_CONTENT-1];
@@ -80,8 +80,8 @@
         [attributedStr addAttributes:attributes range:NSMakeRange(0, attributedStr.length)];
         self.retweetAttributedText = attributedStr;
         //文字内容
-        CGSize retweetSize = [self sizeWithText:attributedStr maxSize:CGSizeMake(viewWidth-16, MAXFLOAT)];
-        self.retweetStatusTextFrame = CGRectMake(PADDING, CGRectGetMaxY(self.textFrame) + PADDING, viewWidth, retweetSize.height+16);
+        CGSize retweetSize = [self sizeWithText:attributedStr maxSize:CGSizeMake(viewWidth, MAXFLOAT)];
+        self.retweetStatusFrame = CGRectMake(0, CGRectGetMaxY(self.textFrame) + PADDING, cellWidth, retweetSize.height);
     }
     
     u_long count= _status.retweetedStatus.thumbnailPic.count>0 ? :_status.thumbnailPic.count;
@@ -89,13 +89,13 @@
     if(count>0 ){
         
         if(_status.retweetedStatus){
-            self.pictureFrame = CGRectMake(PADDING, CGRectGetMaxY( self.retweetStatusTextFrame) + PADDING, viewWidth,  SIZE_IMAGE);
+            self.pictureFrame = CGRectMake(PADDING, CGRectGetMaxY( self.retweetStatusFrame) + PADDING, viewWidth,  SIZE_IMAGE);
         }else{
-            self.pictureFrame = CGRectMake(PADDING, CGRectGetMaxY( self.textFrame) + PADDING, viewWidth, SIZE_IMAGE);
+            self.pictureFrame = CGRectMake(PADDING, CGRectGetMaxY( self.textFrame) + PADDING, cellWidth, SIZE_IMAGE);
         }
         _cellHeight = CGRectGetMaxY(self.pictureFrame) + PADDING;
     }else if(_status.retweetedStatus){
-        _cellHeight = CGRectGetMaxY(self.retweetStatusTextFrame) + PADDING;
+        _cellHeight = CGRectGetMaxY(self.retweetStatusFrame) + PADDING;
     }else{
         _cellHeight = CGRectGetMaxY(self.textFrame) + PADDING;
     }

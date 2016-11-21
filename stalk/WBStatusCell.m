@@ -33,12 +33,13 @@
 
 @interface WBStatusCell ()
 
-@property (nonatomic, weak) UIImageView *icon;
-@property (nonatomic, weak) UILabel *name;
-@property (nonatomic, weak) UILabel *from;
-@property (nonatomic, weak) MLLinkLabel *statusText;
-@property (nonatomic, weak) UIScrollView *pictureHolder;
-@property (nonatomic, weak) MLLinkLabel *retweetText;
+@property (nonatomic, strong) UIImageView *icon;
+@property (nonatomic, strong) UILabel *name;
+@property (nonatomic, strong) UILabel *from;
+@property (nonatomic, strong) MLLinkLabel *statusText;
+@property (nonatomic, strong) UIScrollView *pictureHolder;
+@property (nonatomic, strong) MLLinkLabel *retweetText;
+@property (nonatomic, strong) UIView *retweetContentView;
 //@property (nonatomic, weak) UIView *seprator;
 
 @end
@@ -66,45 +67,42 @@
         CGFloat cellWidth = MIN( [UIScreen mainScreen].bounds.size.width, MAX_SIZE_WIDTH);
         CGFloat viewWidth = cellWidth - (PADDING<<1);
         //头像
-        UIImageView *icon = [[UIImageView alloc] init];
-        [self.contentView addSubview:icon];
-        self.icon = icon;
+        _icon = [[UIImageView alloc] init];
+        [self.contentView addSubview:_icon];
         
-        self.icon.frame = CGRectMake(PADDING, PADDING, ICONWIDTH, ICONWIDTH);
-        self.icon.layer.cornerRadius = ICONWIDTH>>1;
-        self.icon.clipsToBounds = YES;
+        _icon.frame = CGRectMake(PADDING, PADDING, ICONWIDTH, ICONWIDTH);
+        _icon.layer.cornerRadius = ICONWIDTH>>1;
+        _icon.clipsToBounds = YES;
 
         //名字
-        UILabel *name = [[UILabel alloc] init];
-        name.font =[UIFont systemFontOfSize:SIZE_FONT_CONTENT];
-        [self.contentView addSubview:name];
-        self.name = name;
-        self.name.frame = CGRectMake(ICONWIDTH + PADDING *2, PADDING, viewWidth-ICONWIDTH-PADDING *2, 20);
-        UILabel *from = [[UILabel alloc] init];
-        from.font =[UIFont systemFontOfSize:SIZE_FONT_CONTENT-5];
-        [self.contentView addSubview:from];
-        self.from = from;
-        self.from.frame = CGRectMake(self.name.frame.origin.x, CGRectGetMaxY(self.name.frame) +PADDING, viewWidth-ICONWIDTH-PADDING *2,ICONWIDTH -self.name.frame.size.height-PADDING);
+        _name = [[UILabel alloc] init];
+        _name.font =[UIFont systemFontOfSize:SIZE_FONT_CONTENT];
+        [self.contentView addSubview:_name];
+
+        _name.frame = CGRectMake(ICONWIDTH + PADDING *2, PADDING, viewWidth-ICONWIDTH-PADDING *2, 20);
+        _from = [[UILabel alloc] init];
+        _from.font =[UIFont systemFontOfSize:SIZE_FONT_CONTENT-5];
+        [self.contentView addSubview:_from];
+        _from.frame = CGRectMake(self.name.frame.origin.x, CGRectGetMaxY(self.name.frame) +PADDING, viewWidth-ICONWIDTH-PADDING *2,ICONWIDTH -self.name.frame.size.height-PADDING);
         //内容
-        MLLinkLabel *text = [[MLLinkLabel alloc] init];
-        [self.contentView addSubview:text];
-        self.statusText = text;
+        _statusText = [[MLLinkLabel alloc] init];
+        [self.contentView addSubview:_statusText];
         
-        MLLinkLabel *retweetText = [[MLLinkLabel alloc] init];
-        self.retweetText = retweetText;
-        self.retweetText.backgroundColor = kWBCellInnerViewColor;
-        [self.contentView addSubview:retweetText];
+        _retweetContentView = [UIView new];
+        _retweetText = [[MLLinkLabel alloc] init];
+        _retweetContentView.backgroundColor = kWBCellInnerViewColor;
+        [_retweetContentView addSubview:_retweetText];
+        [self.contentView addSubview:_retweetContentView];
         
         
-        UIScrollView *pictureHolder = [[UIScrollView alloc]init];
-        self.pictureHolder = pictureHolder;
-        [self.contentView addSubview:pictureHolder];
-        pictureHolder.scrollsToTop = NO;
-        pictureHolder.showsHorizontalScrollIndicator = NO;
-        pictureHolder.showsVerticalScrollIndicator = NO;
-        pictureHolder.tag = NSIntegerMax;
-        pictureHolder.hidden = YES;
-        [self.contentView addSubview:pictureHolder];
+        _pictureHolder = [[UIScrollView alloc]init];
+        [self.contentView addSubview:_pictureHolder];
+        _pictureHolder.scrollsToTop = NO;
+        _pictureHolder.showsHorizontalScrollIndicator = NO;
+        _pictureHolder.showsVerticalScrollIndicator = NO;
+        _pictureHolder.tag = NSIntegerMax;
+        _pictureHolder.hidden = YES;
+        [self.contentView addSubview:_pictureHolder];
     }
     
     return self;
@@ -115,31 +113,30 @@
 //重写set方法，模型传递
 - (void)setLayout:(WBStatusLayout *)layout{
     _layout = layout;
-    self.icon.imageURL =[NSURL URLWithString:_layout.status.user.avatarLarge];
-//    UITapGestureRecognizer *cellTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(cellIsTaped:)];
-//    [self addGestureRecognizer:cellTap];
-    self.name.text =_layout.status.user.screenName;
-    self.from.text = [NSString stringWithFormat:@"%@ 来自%@", [_layout.status.createdAt substringToIndex:11], [ self sourceWithString:_layout.status.source]];
-    self.statusText.numberOfLines = 0;
-    self.statusText.beforeAddLinkBlock = nil;
-    NSMutableAttributedString *attributedStr = _layout.statusAttributedText;
-    self.statusText.frame = _layout.textFrame;
-    self.statusText.dataDetectorTypes = MLDataDetectorTypeAll;
-    __weak WBStatusCell *weakself = self;
+    _icon.imageURL =[NSURL URLWithString:_layout.status.user.avatarLarge];
+    _name.text =_layout.status.user.screenName;
+    _from.text = [NSString stringWithFormat:@"%@ 来自%@", [_layout.status.createdAt substringToIndex:11], [ self sourceWithString:_layout.status.source]];
+    _statusText.numberOfLines = 0;
+    _statusText.beforeAddLinkBlock = nil;
+    _statusText.frame = _layout.textFrame;
+    _statusText.dataDetectorTypes = MLDataDetectorTypeAll;
+     WBStatusCell __weak *weakself = self;
     
     [self.statusText setDidClickLinkBlock:^(MLLink *link, NSString *linkText, MLLinkLabel *label) {
         
-        [_delegate cellLinkIsClicked:self :link];
+        [weakself.delegate cellLinkIsClicked:weakself :link];
     }];
-    self.statusText.attributedText = attributedStr;
+    self.statusText.attributedText = _layout.statusAttributedText;
     if(_layout.status.retweetedStatus){
         NSMutableAttributedString *attributedStr = _layout.retweetAttributedText;
+        _retweetContentView.frame = _layout.retweetStatusFrame;
         self.retweetText.numberOfLines = 0;
         self.retweetText.attributedText = attributedStr;
-        self.retweetText.frame = _layout.retweetStatusTextFrame;
+        
+        self.retweetText.frame = CGRectMake(PADDING, 0, _retweetContentView.frame.size.width - PADDING*2, _retweetContentView.frame.size.height);
         self.retweetText.dataDetectorTypes = MLDataDetectorTypeAll;
         [self.retweetText setDidClickLinkBlock:^(MLLink *link, NSString *linkText, MLLinkLabel *label) {
-            [_delegate cellLinkIsClicked:weakself :link];
+            [weakself.delegate cellLinkIsClicked:weakself :link];
         }];
     }
     
@@ -249,7 +246,7 @@
         CGPoint location = [touch locationInView:_retweetText];
     if (CGRectContainsPoint(_retweetText.bounds, location)){
         _touchRetweetView = YES;
-        [_retweetText performSelector:@selector(setBackgroundColor:) withObject:kWBCellHighlightColor afterDelay:0.15];
+        [_retweetContentView performSelector:@selector(setBackgroundColor:) withObject:kWBCellHighlightColor afterDelay:0.15];
     }else{
         [self performSelector:@selector(setBackgroundColor:) withObject:kWBCellHighlightColor afterDelay:0.15];
          _touchRetweetView = NO;
@@ -293,10 +290,10 @@
 
 - (void)touchesRestoreBackgroundColor {
     [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(setBackgroundColor:) object:kWBCellHighlightColor];
-    [NSObject cancelPreviousPerformRequestsWithTarget:_retweetText selector:@selector(setBackgroundColor:) object:kWBCellHighlightColor];
+    [NSObject cancelPreviousPerformRequestsWithTarget:_retweetContentView selector:@selector(setBackgroundColor:) object:kWBCellHighlightColor];
     
     self.backgroundColor = [UIColor whiteColor];
-    _retweetText.backgroundColor = kWBCellInnerViewColor;
+    _retweetContentView.backgroundColor = kWBCellInnerViewColor;
 }
 
 

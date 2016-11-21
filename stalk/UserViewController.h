@@ -12,5 +12,4 @@
 @interface UserViewController : UIViewController
 @property (nonatomic, strong) FGLTUser *user;
 
-- (void)setUserName:(NSString *)screenName;
 @end

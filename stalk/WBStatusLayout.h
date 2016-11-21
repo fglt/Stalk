@@ -28,7 +28,7 @@
 @property (nonatomic, strong) NSMutableAttributedString *retweetAttributedText;
 @property (nonatomic) CGRect textFrame;
 @property (nonatomic) CGRect pictureFrame;
-@property (nonatomic) CGRect retweetStatusTextFrame;
+@property (nonatomic) CGRect retweetStatusFrame;
 @property (nonatomic) CGFloat cellHeight;
 //@property (nonatomic) CGRect sepratorLineFrame;
 
