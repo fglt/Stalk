@@ -27,7 +27,7 @@
     [self layout];
 }
 
-+ (NSArray *)statusLayoutsWithStatuses:(NSArray *)statuses{
++ (NSMutableArray *)statusLayoutsWithStatuses:(NSArray *)statuses{
     NSMutableArray *array = [NSMutableArray arrayWithCapacity:statuses.count];
     for(FGLTStatus *status in statuses){
         WBStatusLayout *info = [[WBStatusLayout alloc] init];
@@ -73,9 +73,9 @@
         style.minimumLineHeight = font.lineHeight;
         style.maximumLineHeight = font.lineHeight;
         NSDictionary* attributes =@{NSFontAttributeName:font, NSParagraphStyleAttributeName: style};
-        
+        NSString * str = [NSString stringWithFormat:@"@%@ %@",_status.retweetedStatus.user.screenName,_status.retweetedStatus.text];
         //Create attributed string, with applied syntax highlighting
-        NSMutableAttributedString *attributedStr = [[NSMutableAttributedString alloc] initWithString:self.status.retweetedStatus.text attributes:nil];
+        NSMutableAttributedString *attributedStr = [[NSMutableAttributedString alloc] initWithString:str attributes:nil];
         attributedStr = [self replaceEmotion:attributedStr];
         [attributedStr addAttributes:attributes range:NSMakeRange(0, attributedStr.length)];
         self.retweetAttributedText = attributedStr;
@@ -99,8 +99,7 @@
     }else{
         _cellHeight = CGRectGetMaxY(self.statusTextFrame) + PADDING;
     }
-    //    self.sepratorLineFrame = CGRectMake(startX, _cellHeight, width, 1);
-    //    _cellHeight++;
+    _cellHeight = ceil(_cellHeight);
 }
 
 - (NSMutableAttributedString *)replaceEmotion:(NSMutableAttributedString *)coloredString{

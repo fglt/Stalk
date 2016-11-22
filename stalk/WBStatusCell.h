@@ -13,6 +13,8 @@
 @class WBStatusCell;
 @class MLLink;
 
+
+
 @protocol WBStatusCellDelegate <NSObject>
 @optional
 - (void)cellLinkIsClicked:(WBStatusCell *)cell :(MLLink *)link;
@@ -21,7 +23,14 @@
 - (void)cellUserIsClicked:(WBStatusCell *)cell;
 @end
 
+@interface WBStatusView : UIView
+- (void)setWithLayout:(WBStatusLayout *)layout;
+@property (nonatomic, weak) WBStatusCell *statusCell;
+@end
+
 @interface WBStatusCell : UITableViewCell
+@property (nonatomic, strong) WBStatusView *statusView;
 @property (nonatomic, weak) WBStatusLayout *layout;
 @property (nonatomic, weak) id<WBStatusCellDelegate> delegate;
++ (instancetype)cellWithTableView:(UITableView *)tableView identifier:(NSString *)identifier;
 @end

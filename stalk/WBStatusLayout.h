@@ -19,7 +19,7 @@
 
 #define kWBCellBackgroundColor UIColorHex(f2f2f2)    // Cell背景灰色
 #define kWBCellHighlightColor UIColorHex(f0f0f0)      // Cell高亮时灰色
-#define kWBCellInnerViewColor UIColorHex(f7f7f7) 
+#define kWBCellInnerViewColor UIColorHex(f7f7f7)      //retweetContentView 背景色
 
 @interface WBStatusLayout : NSObject
 
@@ -31,6 +31,6 @@
 @property (nonatomic) CGRect retweetContentFrame;
 @property (nonatomic) CGFloat cellHeight;
 
-+ (NSArray *)statusLayoutsWithStatuses:(NSArray *)FGLTStatus;
++ (NSMutableArray *)statusLayoutsWithStatuses:(NSArray *)FGLTStatus;
 - (void)layout;
 @end

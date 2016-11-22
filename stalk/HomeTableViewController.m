@@ -21,9 +21,12 @@
 #import "WBRequestQueue.h"
 #import "NSObject+runtime.h"
 #import "YYFPSLabel.h"
+#import "StatusDataSource.h"
+#import "TopicController.h"
 
 @interface HomeTableViewController ()<WBStatusCellDelegate,SFSafariViewControllerDelegate>
 @property (nonatomic, strong) NSArray *statuesList;
+@property (nonatomic, strong) StatusDataSource *dataSource;
 @end
 
 @implementation HomeTableViewController{
@@ -37,7 +40,14 @@
     [self.tableView setSeparatorInset:UIEdgeInsetsZero];
     [self.tableView setLayoutMargins:UIEdgeInsetsZero];
     self.tableView.delegate = self;
-    NSLog(@"%@",self.view.class);
+    [self.tableView registerClass:[WBStatusCell class] forCellReuseIdentifier:@"ALLStatusesCellID"];
+    _dataSource = [[StatusDataSource alloc]initWithCellIdentifer:@"ALLStatusesCellID" block:^(id cell, id statusLayout) {
+        WBStatusCell *wbcell = (WBStatusCell *)cell;
+        wbcell.layout = (WBStatusLayout *) statusLayout;
+        wbcell.delegate = self;
+    }];
+    self.tableView.dataSource = _dataSource;
+
     _fpsLabel = [YYFPSLabel new];
     [_fpsLabel sizeToFit];
     _fpsLabel.bottom = self.view.height - 100;
@@ -47,6 +57,19 @@
     _fpsLabel.center = (CGPoint){self.navigationController.navigationBar.bounds.size.width/2,self.navigationController.navigationBar.bounds.size.height/2};
     
     self.navigationController.view.userInteractionEnabled = NO;
+    UIActivityIndicatorView *indicator = [self activityIndicatorView];
+    [indicator startAnimating];
+    [self.view addSubview:indicator];
+    [self.dataSource loadDataWithCompletionHandler:^(NSError *error) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [indicator removeFromSuperview];
+            self.navigationController.view.userInteractionEnabled = YES;
+            [self.tableView reloadData];
+        });
+    }];
+}
+
+- (UIActivityIndicatorView *)activityIndicatorView{
     UIActivityIndicatorView *indicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
     indicator.size = CGSizeMake(50, 50);
     indicator.center = CGPointMake(self.view.width / 2, self.view.height / 2);
@@ -54,29 +77,15 @@
     indicator.clipsToBounds = YES;
     
     indicator.layer.cornerRadius = 6;
-    [indicator startAnimating];
-    [self.view addSubview:indicator];
-
-    AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
-    
-    NSDictionary *dict = @{@"count":[NSString stringWithFormat:@"%d",100]};
-    [WBHttpRequest requestForStatusesOfPath:@"friends_timeline" withAccessToken:appDelegate.wbAuthorizeResponse.accessToken andOtherProperties:dict queue:[WBRequestQueue queueForWBRequest] withCompletionHandler:^(WBHttpRequest *httpRequest, id result, NSError *error) {
-        NSDictionary *dict = [result objectForKey:@"statuses"];
-        
-        self.statuesList = [WBStatusLayout statusLayoutsWithStatuses:[FGLTStatus statuesWithDict:dict]];
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [indicator removeFromSuperview];
-            self.navigationController.view.userInteractionEnabled = YES;
-            [self.tableView reloadData];
-        });
-        
-    }];
+    return indicator;
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
+
+#pragma mark - UITableViewDelegate
 
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView {
     if (_fpsLabel.alpha == 0) {
@@ -113,127 +122,59 @@
     }
 }
 
-
-//- (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
-//{
-//    for(WBStatusLayout *layout in self.statuesList){
-//        [layout resetFrame];
-//    }
-//    [self.tableView reloadData];
-//}
-
-#pragma mark - Table view data source
-
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-
-    return 1;
-}
-
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-
-    return self.statuesList.count;
-}
-
-
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-
-    WBStatusCell * cell = [[WBStatusCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"ALLStatusesCellID"];
-    cell.layout = _statuesList[indexPath.row];
-    cell.delegate =self;
-    return cell;
-}
-
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-    
-    WBStatusLayout *info = _statuesList[indexPath.row];
-    return info.cellHeight;
+
+    return [_dataSource statusLayoutAtIndex:indexPath.row].cellHeight;
 }
 
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
-//    StatusDetailViewController *detailViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"StatusDetailViewController"];
-//    NSInteger selectedIndex = [[self.tableView indexPathForSelectedRow] row];
-//    WBStatusLayout *info = [self.statuesList objectAtIndex:selectedIndex];;
-//    detailViewController.layout = info;
-//    detailViewController.title = @"微博正文";
-//    [self.navigationController pushViewController:detailViewController animated:YES];
-}
-/*
-// Override to support conditional editing of the table view.
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
-    // Return NO if you do not want the specified item to be editable.
-    return YES;
-}
-*/
-
-/*
-// Override to support editing the table view.
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (editingStyle == UITableViewCellEditingStyleDelete) {
-        // Delete the row from the data source
-        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-    } else if (editingStyle == UITableViewCellEditingStyleInsert) {
-        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-    }   
-}
-*/
-
-/*
-// Override to support rearranging the table view.
-- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath {
-}
-*/
-
-/*
-// Override to support conditional rearranging of the table view.
-- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath {
-    // Return NO if you do not want the item to be re-orderable.
-    return YES;
-}
-*/
-
+#pragma mark - cellDelegate
 - (void)cellLinkIsClicked:(WBStatusCell *)cell :(MLLink *)link
 {
-    cell.userInteractionEnabled = NO;
-    if (link.linkType==MLLinkTypeURL) {
-        NSURL *url = [NSURL URLWithString:link.linkValue];
-        SFSafariViewController *controller = [[SFSafariViewController alloc]initWithURL:url entersReaderIfAvailable:YES];
-        [self presentViewController:controller animated:YES completion:nil];
-        cell.userInteractionEnabled = YES;
-//        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:link.linkValue] options:@{} completionHandler:nil];
-        return;
-    }else if (link.linkType == MLLinkTypeUserHandle) {
-        
-        NSString *screenName = [link.linkValue substringFromIndex:1];
-        AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
-        [WBHttpRequest requestForUserWithAccessToken:appDelegate.wbAuthorizeResponse.accessToken screen_name:screenName queue:[WBRequestQueue queueForWBRequest] withCompletionHandler:^(WBHttpRequest *httpRequest, id result, NSError *error) {
-            FGLTUser *user = [FGLTUser userWithDict:result];
-            dispatch_async(dispatch_get_main_queue(), ^{
-                cell.userInteractionEnabled = YES;
-                if(!user){
-                    NSString *title = @"提示";
-                    NSString *message = [NSString stringWithFormat:@"用户%@不存在", link.linkValue];
-                    NSMutableAttributedString *attmess = [[NSMutableAttributedString alloc]initWithString:message];
-                    [attmess addAttribute:NSForegroundColorAttributeName value:[UIColor blueColor] range:NSMakeRange(2, link.linkValue.length)];
-                    
-                    UIAlertController *alert = [self alertControllerWithTitle:title message:attmess];
-                    [self presentViewController:alert animated:YES completion:nil];
-                    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 1.5*NSEC_PER_SEC), dispatch_get_main_queue(), ^{
-                        [self dismissViewControllerAnimated:YES completion:nil];
-                    });
-      
-                }else{
-                    UserViewController *userViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"UserViewController"];
-                    userViewController.user = user;
-                    userViewController.title = user.screenName;
-                    [self.navigationController pushViewController:userViewController animated:YES];
-                }
-            });
-        }];
-
-        
-       //[self.navigationController pushViewController:userViewController animated:YES];
-
-        return;
+    AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+    
+    switch (link.linkType) {
+        case MLLinkTypeURL:{
+            SFSafariViewController *controller = [[SFSafariViewController alloc]initWithURL:[NSURL URLWithString:link.linkValue] entersReaderIfAvailable:YES];
+            [self presentViewController:controller animated:YES completion:nil];
+            break;
+        }
+        case MLLinkTypeUserHandle:{
+            NSString *screenName = [link.linkValue substringFromIndex:1];
+            
+            [WBHttpRequest requestForUserWithAccessToken:appDelegate.wbAuthorizeResponse.accessToken screen_name:screenName queue:[WBRequestQueue queueForWBRequest] withCompletionHandler:^(WBHttpRequest *httpRequest, id result, NSError *error) {
+                FGLTUser *user = [FGLTUser userWithDict:result];
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    if(!user){
+                        NSString *title = @"提示";
+                        NSString *message = [NSString stringWithFormat:@"用户%@不存在", link.linkValue];
+                        NSMutableAttributedString *attmess = [[NSMutableAttributedString alloc]initWithString:message];
+                        [attmess addAttribute:NSForegroundColorAttributeName value:[UIColor blueColor] range:NSMakeRange(2, link.linkValue.length)];
+                        
+                        UIAlertController *alert = [self alertControllerWithTitle:title message:attmess];
+                        [self presentViewController:alert animated:YES completion:nil];
+                        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 1.5*NSEC_PER_SEC), dispatch_get_main_queue(), ^{
+                            [self dismissViewControllerAnimated:YES completion:nil];
+                        });
+                        
+                    }else{
+                        UserViewController *userViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"UserViewController"];
+                        userViewController.user = user;
+                        userViewController.title = user.screenName;
+                        [self.navigationController pushViewController:userViewController animated:YES];
+                    }
+                });
+            }];
+            break;
+        }
+        case MLLinkTypeHashtag:{
+            NSString *topic = [link.linkValue substringWithRange:NSMakeRange(1, link.linkValue.length-1)];
+            TopicController *controller = [[TopicController alloc]init];
+            controller.topic = topic;
+            [self.navigationController pushViewController:controller animated:YES];
+        }
+            break;
+        default:
+            break;
     }
 }
 

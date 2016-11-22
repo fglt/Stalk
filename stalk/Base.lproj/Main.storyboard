@@ -49,11 +49,11 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" red="0.96862745098039216" green="0.96862745098039216" blue="0.96862745098039216" alpha="1" colorSpace="calibratedRGB"/>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="ALLStatusesCellID" rowHeight="88" id="fbp-UG-w6Q" customClass="StatusTableViewCell">
-                                <rect key="frame" x="0.0" y="28" width="375" height="88"/>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="ALLStatusesCellID" rowHeight="60" id="fbp-UG-w6Q" customClass="WBStatusCell">
+                                <rect key="frame" x="0.0" y="28" width="375" height="60"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="fbp-UG-w6Q" id="0Ee-Iu-Tlf">
-                                    <rect key="frame" x="0.0" y="0.0" width="342" height="87"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="59.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </tableViewCellContentView>
                             </tableViewCell>
@@ -126,7 +126,7 @@
                                 <rect key="frame" x="0.0" y="28" width="375" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="cmR-PZ-6zg" id="vkj-t8-LTK">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="43"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </tableViewCellContentView>
                                 <connections>
@@ -263,7 +263,7 @@
         <!--发微博-->
         <scene sceneID="Dtp-4b-5tz">
             <objects>
-                <viewController title="发微博" id="nPL-Z7-cIS" sceneMemberID="viewController">
+                <viewController title="发微博" id="nPL-Z7-cIS" customClass="SendStatusViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="bri-9r-gMj"/>
                         <viewControllerLayoutGuide type="bottom" id="gbQ-Xa-CmP"/>
@@ -289,9 +289,16 @@
                     </view>
                     <toolbarItems/>
                     <navigationItem key="navigationItem" title="发微博" id="Vn1-Ps-fLg">
-                        <barButtonItem key="rightBarButtonItem" title="发送" id="efb-ds-28v"/>
+                        <barButtonItem key="rightBarButtonItem" title="发送" id="efb-ds-28v">
+                            <connections>
+                                <action selector="sendStatus:" destination="nPL-Z7-cIS" id="zJP-Cy-8Ie"/>
+                            </connections>
+                        </barButtonItem>
                     </navigationItem>
                     <nil key="simulatedBottomBarMetrics"/>
+                    <connections>
+                        <outlet property="statusTextView" destination="mhA-ev-dMO" id="SfJ-xw-Qg8"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="J3K-td-6BO" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>

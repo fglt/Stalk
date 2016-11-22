@@ -31,4 +31,10 @@
               andOtherProperties:(NSDictionary*)otherProperties
                            queue:(NSOperationQueue*)queue
            withCompletionHandler:(WBRequestHandler)handler;
+
++ (void)requestForStatusesAboutTopic:(NSString*)topic
+                 withAccessToken:(NSString*)accessToken
+              andOtherProperties:(NSDictionary*)otherProperties
+                           queue:(NSOperationQueue*)queue
+           withCompletionHandler:(WBRequestHandler)handler;
 @end
