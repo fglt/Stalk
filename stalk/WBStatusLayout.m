@@ -66,7 +66,7 @@
     //文字内容
     CGSize textSize = [self sizeWithText:attributedStr maxSize:CGSizeMake(viewWidth, MAXFLOAT)];
 
-    self.textFrame = CGRectMake(PADDING, ICONWIDTH + PADDING * 2, viewWidth, textSize.height);
+    self.statusTextFrame = CGRectMake(PADDING, ICONWIDTH + PADDING * 2, viewWidth, textSize.height);
 
     if(_status.retweetedStatus){
         UIFont *font = [UIFont systemFontOfSize:SIZE_FONT_CONTENT-1];
@@ -81,7 +81,7 @@
         self.retweetAttributedText = attributedStr;
         //文字内容
         CGSize retweetSize = [self sizeWithText:attributedStr maxSize:CGSizeMake(viewWidth, MAXFLOAT)];
-        self.retweetStatusFrame = CGRectMake(0, CGRectGetMaxY(self.textFrame) + PADDING, cellWidth, retweetSize.height);
+        self.retweetContentFrame = CGRectMake(0, CGRectGetMaxY(self.statusTextFrame) + PADDING, cellWidth, retweetSize.height);
     }
     
     u_long count= _status.retweetedStatus.thumbnailPic.count>0 ? :_status.thumbnailPic.count;
@@ -89,15 +89,15 @@
     if(count>0 ){
         
         if(_status.retweetedStatus){
-            self.pictureFrame = CGRectMake(PADDING, CGRectGetMaxY( self.retweetStatusFrame) + PADDING, viewWidth,  SIZE_IMAGE);
+            self.pictureFrame = CGRectMake(PADDING, CGRectGetMaxY( self.retweetContentFrame) + PADDING, viewWidth,  SIZE_IMAGE);
         }else{
-            self.pictureFrame = CGRectMake(PADDING, CGRectGetMaxY( self.textFrame) + PADDING, cellWidth, SIZE_IMAGE);
+            self.pictureFrame = CGRectMake(PADDING, CGRectGetMaxY( self.statusTextFrame) + PADDING, cellWidth, SIZE_IMAGE);
         }
         _cellHeight = CGRectGetMaxY(self.pictureFrame) + PADDING;
     }else if(_status.retweetedStatus){
-        _cellHeight = CGRectGetMaxY(self.retweetStatusFrame) + PADDING;
+        _cellHeight = CGRectGetMaxY(self.retweetContentFrame) + PADDING;
     }else{
-        _cellHeight = CGRectGetMaxY(self.textFrame) + PADDING;
+        _cellHeight = CGRectGetMaxY(self.statusTextFrame) + PADDING;
     }
     //    self.sepratorLineFrame = CGRectMake(startX, _cellHeight, width, 1);
     //    _cellHeight++;

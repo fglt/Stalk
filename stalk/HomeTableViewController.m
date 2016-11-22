@@ -12,10 +12,10 @@
 #import "AppDelegate.h"
 #import "WBStatusCell.h"
 #import "WBStatusLayout.h"
-#import "WBHttpRequest+FGLTWeiboStatus.h"
+#import "WBHttpRequest+STalk.h"
 #import "StatusDetailViewController.h"
 #import "MLLinkLabel.h"
-#import "WBHttpRequest+WBUser.h"
+#import "WBHttpRequest+STalk.h"
 #import "UserViewController.h"
 #import <SafariServices/SafariServices.h>
 #import "WBRequestQueue.h"
@@ -258,7 +258,6 @@
 - (void)cellUserIsClicked:(WBStatusCell *)cell{
     UserViewController *userViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"UserViewController"];
     userViewController.user =  cell.layout.status.user;
-    userViewController.title = userViewController.user.screenName;
     [self.navigationController pushViewController:userViewController animated:YES];
 }
 

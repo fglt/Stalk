@@ -118,7 +118,7 @@
     _from.text = [NSString stringWithFormat:@"%@ 来自%@", [_layout.status.createdAt substringToIndex:11], [ self sourceWithString:_layout.status.source]];
     _statusText.numberOfLines = 0;
     _statusText.beforeAddLinkBlock = nil;
-    _statusText.frame = _layout.textFrame;
+    _statusText.frame = _layout.statusTextFrame;
     _statusText.dataDetectorTypes = MLDataDetectorTypeAll;
      WBStatusCell __weak *weakself = self;
     
@@ -129,7 +129,7 @@
     self.statusText.attributedText = _layout.statusAttributedText;
     if(_layout.status.retweetedStatus){
         NSMutableAttributedString *attributedStr = _layout.retweetAttributedText;
-        _retweetContentView.frame = _layout.retweetStatusFrame;
+        _retweetContentView.frame = _layout.retweetContentFrame;
         self.retweetText.numberOfLines = 0;
         self.retweetText.attributedText = attributedStr;
         

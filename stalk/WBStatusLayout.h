@@ -26,11 +26,10 @@
 @property (nonatomic, copy) FGLTStatus *status;
 @property (nonatomic, strong) NSMutableAttributedString *statusAttributedText;
 @property (nonatomic, strong) NSMutableAttributedString *retweetAttributedText;
-@property (nonatomic) CGRect textFrame;
+@property (nonatomic) CGRect statusTextFrame;
 @property (nonatomic) CGRect pictureFrame;
-@property (nonatomic) CGRect retweetStatusFrame;
+@property (nonatomic) CGRect retweetContentFrame;
 @property (nonatomic) CGFloat cellHeight;
-//@property (nonatomic) CGRect sepratorLineFrame;
 
 + (NSArray *)statusLayoutsWithStatuses:(NSArray *)FGLTStatus;
 - (void)layout;

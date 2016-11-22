@@ -7,7 +7,6 @@
 //
 
 #import "EmotionHelper.h"
-#import "WBHttpRequest+WeiboEmotion.h"
 #import "AppDelegate.h"
 #import "Emotion.h"
 

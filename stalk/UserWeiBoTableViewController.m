@@ -11,7 +11,7 @@
 #import "FGLTStatus.h"
 #import "AppDelegate.h"
 #import "WBStatusCell.h"
-#import "WBHttpRequest+FGLTWeiboStatus.h"
+#import "WBHttpRequest+STalk.h"
 #import "WBRequestQueue.h"
 
 @interface UserWeiBoTableViewController ()
