@@ -1,17 +1,17 @@
 //
-//  FGLTStatus.m
+//  WBStatus.m
 //  stalk
 //
 //  Created by Coding on 11/11/2016.
 //  Copyright © 2016 Coding. All rights reserved.
 //
 
-#import "FGLTStatus.h"
-#import "FGLTUser.h"
+#import "WBStatus.h"
+#import "WBUser.h"
 
-@implementation FGLTStatus
+@implementation WBStatus
 + (instancetype)statusWithDict:(NSDictionary *) dict {
-    FGLTStatus *aStatus = [[FGLTStatus alloc] init];
+    WBStatus *aStatus = [[WBStatus alloc] init];
     aStatus.createdAt = [dict objectForKey:@"created_at"];
     aStatus.statusId = [dict objectForKey:@"id"];
     aStatus.statusMId = [dict objectForKey:@"mid"];
@@ -38,11 +38,11 @@
         aStatus.originalPic = [dict objectForKey:@"original_pic"];
     }
     if ([dict objectForKey:@"user"] != nil) {
-        aStatus.user = [FGLTUser userWithDict:[dict objectForKey:@"user"]];
+        aStatus.user = [WBUser userWithDict:[dict objectForKey:@"user"]];
     }
     aStatus.userId = [dict objectForKey:@"user_id"];
     if ([dict objectForKey:@"retweeted_status"] != nil) {
-        aStatus.retweetedStatus = [FGLTStatus statusWithDict:[dict objectForKey:@"retweeted_status"]];
+        aStatus.retweetedStatus = [WBStatus statusWithDict:[dict objectForKey:@"retweeted_status"]];
     }
     aStatus.repostsCount = [[dict objectForKey:@"reposts_count"] intValue];
     aStatus.commentsCount = [[dict objectForKey:@"comments_count"] intValue];
@@ -58,7 +58,7 @@
 + (NSMutableArray *)statuesWithDict:(NSDictionary *) statues{
     NSMutableArray *array =[ NSMutableArray array];
     for(NSDictionary *dict in statues){
-        FGLTStatus *status = [FGLTStatus statusWithDict:dict];
+        WBStatus *status = [WBStatus statusWithDict:dict];
         [array addObject:status];
     }
     
@@ -66,7 +66,7 @@
 }
 
 //- (instancetype)copyWithZone:(NSZone *)zone{
-//    FGLTStatus *aStatus = [[FGLTStatus alloc] init];
+//    WBStatus *aStatus = [[WBStatus alloc] init];
 //    aStatus.createdAt = self.createdAt;
 //    aStatus.statusId = self.statusId;
 //    aStatus.statusMId =self.statusMId;
@@ -93,11 +93,11 @@
 //        aStatus.originalPic = [dict objectForKey:@"original_pic"];
 //    }
 //    if ([dict objectForKey:@"user"] != nil) {
-//        aStatus.user = [FGLTUser userWithDict:[dict objectForKey:@"user"]];
+//        aStatus.user = [WBUser userWithDict:[dict objectForKey:@"user"]];
 //    }
 //    aStatus.userId = [dict objectForKey:@"user_id"];
 //    if ([dict objectForKey:@"retweeted_status"] != nil) {
-//        aStatus.retweetedStatus = [FGLTStatus statusWithDict:[dict objectForKey:@"retweeted_status"]];
+//        aStatus.retweetedStatus = [WBStatus statusWithDict:[dict objectForKey:@"retweeted_status"]];
 //    }
 //    aStatus.repostsCount = [[dict objectForKey:@"reposts_count"] intValue];
 //    aStatus.commentsCount = [[dict objectForKey:@"comments_count"] intValue];

@@ -7,7 +7,7 @@
 //
 
 #import "UserViewController.h"
-#import "FGLTUser.h"
+#import "WBUser.h"
 #import "WBRequestQueue.h"
 #import "AppDelegate.h"
 #import "WBHttpRequest+STalk.h"
@@ -39,7 +39,7 @@
     // Dispose of any resources that can be recreated.
 }
 
-//- (void)setUser:(FGLTUser *)user{
+//- (void)setUser:(WBUser *)user{
 //    _user = user;
 //    self.title = user.screenName;
 ////    _screenName.text = _user.screenName;
@@ -54,7 +54,7 @@
 //- (void)setUserName:(NSString *)screenName{
 //    AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
 //    [WBHttpRequest requestForUserWithAccessToken:appDelegate.wbAuthorizeResponse.accessToken screen_name:screenName queue:[WBRequestQueue queueForWBRequest] withCompletionHandler:^(WBHttpRequest *httpRequest, id result, NSError *error) {
-//        FGLTUser *user = [FGLTUser userWithDict:result];
+//        WBUser *user = [WBUser userWithDict:result];
 //        dispatch_async(dispatch_get_main_queue(), ^{
 //            if(!user){
 //                [self.navigationController popViewControllerAnimated:YES];

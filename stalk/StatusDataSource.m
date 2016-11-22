@@ -34,7 +34,7 @@
     NSDictionary *parms = @{@"count":[NSString stringWithFormat:@"%d",100]};
     [WBHttpRequest requestForStatusesOfPath:@"friends_timeline" withAccessToken:appDelegate.wbAuthorizeResponse.accessToken andOtherProperties:parms queue:[WBRequestQueue queueForWBRequest] withCompletionHandler:^(WBHttpRequest *httpRequest, id result, NSError *error) {
         NSDictionary *dict = [result objectForKey:@"statuses"];
-        _statusLayoutList = [WBStatusLayout statusLayoutsWithStatuses:[FGLTStatus statuesWithDict:dict]];
+        _statusLayoutList = [WBStatusLayout statusLayoutsWithStatuses:[WBStatus statuesWithDict:dict]];
         handler(error);
     }];
 }
@@ -44,12 +44,12 @@
     AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
     [WBHttpRequest requestForStatusesAboutTopic:topic withAccessToken:appDelegate.wbAuthorizeResponse.accessToken andOtherProperties:nil queue:[WBRequestQueue queueForWBRequest] withCompletionHandler:^(WBHttpRequest *httpRequest, id result, NSError *error) {
         NSDictionary *dict = [result objectForKey:@"statuses"];
-        _statusLayoutList = [WBStatusLayout statusLayoutsWithStatuses:[FGLTStatus statuesWithDict:dict]];
+        _statusLayoutList = [WBStatusLayout statusLayoutsWithStatuses:[WBStatus statuesWithDict:dict]];
         handler(error);
     }];
 }
 
-- (WBStatusLayout *)statusLayoutAtIndex:(NSInteger)index{
+- (WBStatusLayout *)objectAtIndex:(NSInteger)index{
     return _statusLayoutList[index];
 }
 

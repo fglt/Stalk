@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "FGLTStatus.h"
+#import "WBStatus.h"
 #import "WBStatusLayout.h"
 #import "STalkTextView.h"
 @class WBStatusCell;

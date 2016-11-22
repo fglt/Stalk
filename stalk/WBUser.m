@@ -1,17 +1,17 @@
 //
-//  FGLTUser.m
+//  WBUser.m
 //  stalk
 //
 //  Created by Coding on 11/11/2016.
 //  Copyright © 2016 Coding. All rights reserved.
 //
 
-#import "FGLTUser.h"
-#import "FGLTStatus.h"
+#import "WBUser.h"
+#import "WBStatus.h"
 
-@implementation FGLTUser
+@implementation WBUser
 +(instancetype) userWithDict:(NSDictionary *) dic {
-    FGLTUser *user = [[FGLTUser alloc] init];
+    WBUser *user = [[WBUser alloc] init];
     user.userId = [dic objectForKey:@"id"];
     if(user.userId.intValue==0) return nil;
     if ([dic objectForKey:@"screen_name"] != nil && ![[dic objectForKey:@"screen_name"] isEqualToString:@""] ) {
@@ -40,7 +40,7 @@
     user.verified = [[dic objectForKey:@"verified"] boolValue];
     user.remark = [dic objectForKey:@"remark"];
     if ([dic objectForKey:@"status"] != nil) {
-        user.status = [FGLTStatus statusWithDict:[dic objectForKey:@"status"]];
+        user.status = [WBStatus statusWithDict:[dic objectForKey:@"status"]];
     }
     user.statusId = [dic objectForKey:@"status_id"];
     user.allowAllComment = [[dic objectForKey:@"allow_all_comment"] boolValue];

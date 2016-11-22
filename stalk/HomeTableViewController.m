@@ -7,8 +7,8 @@
 //
 
 #import "HomeTableViewController.h"
-#import "FGLTUser.h"
-#import "FGLTStatus.h"
+#import "WBUser.h"
+#import "WBStatus.h"
 #import "AppDelegate.h"
 #import "WBStatusCell.h"
 #import "WBStatusLayout.h"
@@ -25,7 +25,6 @@
 #import "TopicController.h"
 
 @interface HomeTableViewController ()<WBStatusCellDelegate,SFSafariViewControllerDelegate>
-@property (nonatomic, strong) NSArray *statuesList;
 @property (nonatomic, strong) StatusDataSource *dataSource;
 @end
 
@@ -124,7 +123,7 @@
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
 
-    return [_dataSource statusLayoutAtIndex:indexPath.row].cellHeight + CellPadding;
+    return [_dataSource objectAtIndex :indexPath.row].height + CellPadding;
 }
 
 #pragma mark - cellDelegate
@@ -142,7 +141,7 @@
             NSString *screenName = [link.linkValue substringFromIndex:1];
             
             [WBHttpRequest requestForUserWithAccessToken:appDelegate.wbAuthorizeResponse.accessToken screen_name:screenName queue:[WBRequestQueue queueForWBRequest] withCompletionHandler:^(WBHttpRequest *httpRequest, id result, NSError *error) {
-                FGLTUser *user = [FGLTUser userWithDict:result];
+                WBUser *user = [WBUser userWithDict:result];
                 dispatch_async(dispatch_get_main_queue(), ^{
                     if(!user){
                         NSString *title = @"提示";
@@ -180,18 +179,15 @@
 
 - (void)cellStatusIsClicked:(WBStatusCell *)cell{
     StatusDetailViewController *detailViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"StatusDetailViewController"];
-    NSInteger selectedIndex = [[self.tableView indexPathForSelectedRow] row];
-    WBStatusLayout *layout = [self.statuesList objectAtIndex:selectedIndex];;
-    detailViewController.layout = layout;
+    detailViewController.layout = cell.layout;
     detailViewController.title = @"微博正文";
     [self.navigationController pushViewController:detailViewController animated:YES];
 }
 
 - (void)cellRetweetIsClicked:(WBStatusCell *)cell{
     StatusDetailViewController *detailViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"StatusDetailViewController"];
-    NSInteger selectedIndex = [[self.tableView indexPathForSelectedRow] row];
-    WBStatusLayout *layout = [self.statuesList objectAtIndex:selectedIndex];;
-    detailViewController.layout = layout;
+    WBStatus *status = cell.layout.status.retweetedStatus;
+    detailViewController.layout = [[WBStatusLayout alloc] initWithStatus:status];
     detailViewController.title = @"微博正文";
     [self.navigationController pushViewController:detailViewController animated:YES];
 

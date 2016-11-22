@@ -7,10 +7,10 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "FGLTStatus.h"
-@class FGLTStatus;
+#import "WBStatus.h"
+@class WBStatus;
 #define PADDING 10
-#define SIZE_GAP_IMG 5
+#define SIZE_GAP_IMG 8
 #define ICONWIDTH 50
 #define SIZE_IMAGE 120
 #define SIZE_FONT_CONTENT 19
@@ -21,16 +21,29 @@
 #define kWBCellHighlightColor UIColorHex(f0f0f0)      // Cell高亮时灰色
 #define kWBCellInnerViewColor UIColorHex(f7f7f7)      //retweetContentView 背景色
 
+#define kRegexHighlightViewTypeURL @"url"
+#define kRegexHighlightViewTypeAccount @"account"
+#define kRegexHighlightViewTypeTopic @"topic"
+#define kRegexHighlightViewTypeEmoji @"emoji"
+
+#define URLRegular @"(http|https)://(t.cn/|weibo.com/|m.weibo.cn/)+(([a-zA-Z0-9/])*)"
+#define EmojiRegular @"(\\[\\w+\\])"
+#define AccountRegular @"@[\u4e00-\u9fa5a-zA-Z0-9_-]{2,30}"
+#define TopicRegular @"#[^#]+#"
+
 @interface WBStatusLayout : NSObject
 
-@property (nonatomic, copy) FGLTStatus *status;
+@property (nonatomic, copy) WBStatus *status;
 @property (nonatomic, strong) NSMutableAttributedString *statusAttributedText;
 @property (nonatomic, strong) NSMutableAttributedString *retweetAttributedText;
 @property (nonatomic) CGRect statusTextFrame;
-@property (nonatomic) CGRect pictureFrame;
+@property (nonatomic) CGRect statusPictureFrame;
 @property (nonatomic) CGRect retweetContentFrame;
-@property (nonatomic) CGFloat cellHeight;
+@property (nonatomic) CGRect retweetTextFrame;
+@property (nonatomic) CGRect retweetPicFrame;
+@property (nonatomic) CGFloat height;
 
-+ (NSMutableArray *)statusLayoutsWithStatuses:(NSArray *)FGLTStatus;
+- (instancetype)initWithStatus:(WBStatus *)status;
++ (NSMutableArray *)statusLayoutsWithStatuses:(NSArray *)WBStatus;
 - (void)layout;
 @end

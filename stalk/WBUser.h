@@ -1,5 +1,5 @@
 //
-//  FGLTUser.h
+//  WBUser.h
 //  stalk
 //
 //  Created by Coding on 11/11/2016.
@@ -7,9 +7,9 @@
 //
 
 #import <Foundation/Foundation.h>
-@class FGLTStatus;
+@class WBStatus;
 
-@interface FGLTUser : NSObject
+@interface WBUser : NSObject
 /**
  *	用户ID
  */
@@ -139,7 +139,7 @@
 /**
  *	用户的最近一条微博信息字段 详细
  */
-@property (nonatomic, retain)FGLTStatus *status;
+@property (nonatomic, retain)WBStatus *status;
 
 
 /**

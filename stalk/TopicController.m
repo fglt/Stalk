@@ -60,6 +60,6 @@
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     
-    return [_dataSource statusLayoutAtIndex:indexPath.row].cellHeight;
+    return [_dataSource objectAtIndex:indexPath.row].height;
 }
 @end

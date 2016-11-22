@@ -17,6 +17,6 @@ typedef void (^LoadDataCompletionHandler)(NSError *error);
 - (instancetype)initWithCellIdentifer:(NSString *)identifer block:(ConfigureCellBlock)block;
 - (void)loadDataWithCompletionHandler:(LoadDataCompletionHandler)handler;
 - (void)loadDataAboutTopic:(NSString *)topic completionHandler:(LoadDataCompletionHandler)handler;
-- (WBStatusLayout *)statusLayoutAtIndex:(NSInteger)index;
+- (WBStatusLayout *)objectAtIndex:(NSInteger)index;
 - (void)addStatus:(NSArray *)statusList;
 @end

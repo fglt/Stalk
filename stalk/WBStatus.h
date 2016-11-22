@@ -1,5 +1,5 @@
 //
-//  FGLTStatus.h
+//  WBStatus.h
 //  stalk
 //
 //  Created by Coding on 11/11/2016.
@@ -9,9 +9,9 @@
 #import <Foundation/Foundation.h>
 
 
-@class FGLTUser;
+@class WBUser;
 
-@interface FGLTStatus : NSObject
+@interface WBStatus : NSObject
 /**
  *	微博创建时间
  */
@@ -116,7 +116,7 @@
 /**
  *	微博作者的用户信息字段
  */
-@property (nonatomic, retain)FGLTUser *user;
+@property (nonatomic, retain)WBUser *user;
 
 
 /**
@@ -134,7 +134,7 @@
 /**
  *	被转发的原微博信息字段，当该微博为转发微博时返回
  */
-@property (nonatomic, retain)FGLTStatus *retweetedStatus;
+@property (nonatomic, retain)WBStatus *retweetedStatus;
 
 
 /**

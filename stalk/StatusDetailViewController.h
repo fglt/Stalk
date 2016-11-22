@@ -10,5 +10,5 @@
 @class WBStatusLayout;
 
 @interface StatusDetailViewController : UIViewController
-@property (nonatomic, weak) WBStatusLayout *layout;
+@property (nonatomic, strong) WBStatusLayout *layout;
 @end

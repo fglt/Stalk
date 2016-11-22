@@ -24,8 +24,8 @@
 		171BCCDC1DD4B8AB009FF89E /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 171BCCDB1DD4B8AB009FF89E /* CoreGraphics.framework */; };
 		171BCCDE1DD4B8B6009FF89E /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 171BCCDD1DD4B8B6009FF89E /* libsqlite3.tbd */; };
 		171BCCE01DD4B8CF009FF89E /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 171BCCDF1DD4B8CF009FF89E /* libz.tbd */; };
-		171BCCE41DD60210009FF89E /* FGLTUser.m in Sources */ = {isa = PBXBuildFile; fileRef = 171BCCE31DD60210009FF89E /* FGLTUser.m */; };
-		171BCCE71DD60245009FF89E /* FGLTStatus.m in Sources */ = {isa = PBXBuildFile; fileRef = 171BCCE61DD60245009FF89E /* FGLTStatus.m */; };
+		171BCCE41DD60210009FF89E /* WBUser.m in Sources */ = {isa = PBXBuildFile; fileRef = 171BCCE31DD60210009FF89E /* WBUser.m */; };
+		171BCCE71DD60245009FF89E /* WBStatus.m in Sources */ = {isa = PBXBuildFile; fileRef = 171BCCE61DD60245009FF89E /* WBStatus.m */; };
 		171BCCEA1DD60E71009FF89E /* HomeTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 171BCCE91DD60E71009FF89E /* HomeTableViewController.m */; };
 		171BCCF01DD61C57009FF89E /* WBAuthorizeResponse+copy.m in Sources */ = {isa = PBXBuildFile; fileRef = 171BCCEF1DD61C57009FF89E /* WBAuthorizeResponse+copy.m */; };
 		171BCCF81DD698F3009FF89E /* constant.m in Sources */ = {isa = PBXBuildFile; fileRef = 171BCCF71DD698F3009FF89E /* constant.m */; };
@@ -77,10 +77,10 @@
 		171BCCDD1DD4B8B6009FF89E /* libsqlite3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.tbd; path = usr/lib/libsqlite3.tbd; sourceTree = SDKROOT; };
 		171BCCDF1DD4B8CF009FF89E /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
 		171BCCE11DD4B93B009FF89E /* stalk-prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "stalk-prefix.pch"; sourceTree = "<group>"; };
-		171BCCE21DD60210009FF89E /* FGLTUser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FGLTUser.h; sourceTree = "<group>"; };
-		171BCCE31DD60210009FF89E /* FGLTUser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FGLTUser.m; sourceTree = "<group>"; };
-		171BCCE51DD60245009FF89E /* FGLTStatus.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FGLTStatus.h; sourceTree = "<group>"; };
-		171BCCE61DD60245009FF89E /* FGLTStatus.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FGLTStatus.m; sourceTree = "<group>"; };
+		171BCCE21DD60210009FF89E /* WBUser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WBUser.h; sourceTree = "<group>"; };
+		171BCCE31DD60210009FF89E /* WBUser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WBUser.m; sourceTree = "<group>"; };
+		171BCCE51DD60245009FF89E /* WBStatus.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WBStatus.h; sourceTree = "<group>"; };
+		171BCCE61DD60245009FF89E /* WBStatus.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WBStatus.m; sourceTree = "<group>"; };
 		171BCCE81DD60E71009FF89E /* HomeTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HomeTableViewController.h; sourceTree = "<group>"; };
 		171BCCE91DD60E71009FF89E /* HomeTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HomeTableViewController.m; sourceTree = "<group>"; };
 		171BCCEE1DD61C57009FF89E /* WBAuthorizeResponse+copy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "WBAuthorizeResponse+copy.h"; sourceTree = "<group>"; };
@@ -263,10 +263,10 @@
 		171BCD131DD70277009FF89E /* modal */ = {
 			isa = PBXGroup;
 			children = (
-				171BCCE21DD60210009FF89E /* FGLTUser.h */,
-				171BCCE31DD60210009FF89E /* FGLTUser.m */,
-				171BCCE51DD60245009FF89E /* FGLTStatus.h */,
-				171BCCE61DD60245009FF89E /* FGLTStatus.m */,
+				171BCCE21DD60210009FF89E /* WBUser.h */,
+				171BCCE31DD60210009FF89E /* WBUser.m */,
+				171BCCE51DD60245009FF89E /* WBStatus.h */,
+				171BCCE61DD60245009FF89E /* WBStatus.m */,
 				171BCD1B1DD7F666009FF89E /* WBStatusLayout.h */,
 				171BCD1C1DD7F666009FF89E /* WBStatusLayout.m */,
 				171BCD2A1DDADA38009FF89E /* Emotion.h */,
@@ -431,7 +431,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				171BCCE71DD60245009FF89E /* FGLTStatus.m in Sources */,
+				171BCCE71DD60245009FF89E /* WBStatus.m in Sources */,
 				171BCCFB1DD69BE3009FF89E /* WeiBoTabBarController.m in Sources */,
 				171BCD2C1DDADA38009FF89E /* Emotion.m in Sources */,
 				1741E66E1DE1AB6A00C887D0 /* WBRequestQueue.m in Sources */,
@@ -441,7 +441,7 @@
 				171BCD0C1DD7025A009FF89E /* NSString+Additions.m in Sources */,
 				177B20F71DE43F11005A1438 /* APPHelper.m in Sources */,
 				177B20F11DE43650005A1438 /* TopicController.m in Sources */,
-				171BCCE41DD60210009FF89E /* FGLTUser.m in Sources */,
+				171BCCE41DD60210009FF89E /* WBUser.m in Sources */,
 				171BCD521DDB4D5E009FF89E /* STalkTextView.m in Sources */,
 				17FA23001DE3CE0C00617651 /* WBHttpRequest+STalk.m in Sources */,
 				171BCCA81DD4B6FF009FF89E /* AppDelegate.m in Sources */,

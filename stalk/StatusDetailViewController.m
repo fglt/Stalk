@@ -7,16 +7,25 @@
 //
 
 #import "StatusDetailViewController.h"
+#import "WBStatusCell.h"
 
 @interface StatusDetailViewController ()
-
+@property (nonatomic, strong) WBStatusView *statusView;
+@property (nonatomic, strong) UIView *contentView;
 @end
 
 @implementation StatusDetailViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
+    _statusView  = [WBStatusView new];
+    [_statusView setWithLayout:_layout];
+    CGFloat width = MIN( [UIScreen mainScreen].bounds.size.width, MAX_SIZE_WIDTH);
+    CGPoint origin = CGPointMake(([UIScreen mainScreen].bounds.size.width - width)/2, CGRectGetMaxY(self.navigationController.navigationBar.frame));
+    CGSize size = CGSizeMake(width, _layout.height);
+    _contentView = [[UIView alloc] initWithFrame:(CGRect){origin, size}];
+    [_contentView addSubview:_statusView];
+    [self.view addSubview:_contentView];
 }
 
 - (void)didReceiveMemoryWarning {

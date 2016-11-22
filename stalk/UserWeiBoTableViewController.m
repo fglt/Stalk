@@ -7,8 +7,8 @@
 //
 
 #import "UserWeiBoTableViewController.h"
-#import "FGLTUser.h"
-#import "FGLTStatus.h"
+#import "WBUser.h"
+#import "WBStatus.h"
 #import "AppDelegate.h"
 #import "WBStatusCell.h"
 #import "WBHttpRequest+STalk.h"
@@ -30,7 +30,7 @@
     [WBHttpRequest requestForStatusesOfPath:@"user_timeline" withAccessToken:appDelegate.wbAuthorizeResponse.accessToken andOtherProperties:nil queue:[WBRequestQueue queueForWBRequest] withCompletionHandler:^(WBHttpRequest *httpRequest, id result, NSError *error) {
         NSDictionary *dict = [result objectForKey:@"statuses"];
         
-        self.statuesList = [WBStatusLayout statusLayoutsWithStatuses:[FGLTStatus statuesWithDict:dict]];
+        self.statuesList = [WBStatusLayout statusLayoutsWithStatuses:[WBStatus statuesWithDict:dict]];
         dispatch_async(dispatch_get_main_queue(), ^{
             [self.tableView reloadData];
         });
@@ -72,8 +72,8 @@
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     
-    WBStatusLayout *info = _statuesList[indexPath.row];
-    return info.cellHeight;
+    WBStatusLayout *layout = _statuesList[indexPath.row];
+    return layout.height;
 }
 
 /*

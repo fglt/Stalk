@@ -7,9 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
-@class FGLTUser;
+@class WBUser;
 
 @interface UserViewController : UIViewController
-@property (nonatomic, strong) FGLTUser *user;
+@property (nonatomic, strong) WBUser *user;
 
 @end

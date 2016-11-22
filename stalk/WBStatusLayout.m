@@ -1,4 +1,4 @@
-//
+ //
 //  WBStatusLayout.m
 //  stalk
 //
@@ -7,29 +7,29 @@
 //
 
 #import "WBStatusLayout.h"
-#import "UIView+Additions.h"
 #import "UIScreen+Additions.h"
 #import "NSString+Additions.h"
-#import "FGLTStatus.h"
-#import "FGLTUser.h"
+#import "WBStatus.h"
+#import "WBUser.h"
 #import "STalkTextAttachment.h"
-
-
-#define URLRegular @"(http|https)://(t.cn/|weibo.com/|m.weibo.cn/)+(([a-zA-Z0-9/])*)"
-#define EmojiRegular @"(\\[\\w+\\])"
-#define AccountRegular @"@[\u4e00-\u9fa5a-zA-Z0-9_-]{2,30}"
-#define TopicRegular @"#[^#]+#"
 
 @implementation WBStatusLayout
 
-- (void)setStatus:(FGLTStatus *)status{
+- (void)setStatus:(WBStatus *)status{
     _status = status;
     [self layout];
 }
 
+- (instancetype)initWithStatus:(WBStatus *)status{
+    self = [super init];
+    _status = status;
+    [self layout];
+    return self;
+}
+
 + (NSMutableArray *)statusLayoutsWithStatuses:(NSArray *)statuses{
     NSMutableArray *array = [NSMutableArray arrayWithCapacity:statuses.count];
-    for(FGLTStatus *status in statuses){
+    for(WBStatus *status in statuses){
         WBStatusLayout *info = [[WBStatusLayout alloc] init];
         info.status = status;
         [array addObject:info];
@@ -47,6 +47,7 @@
 {
     CGFloat cellWidth = MIN( [UIScreen mainScreen].bounds.size.width, MAX_SIZE_WIDTH);
     CGFloat viewWidth = cellWidth - (PADDING<<1);
+    CGFloat picHeight=0;
     UIFont *font = [UIFont systemFontOfSize:SIZE_FONT_CONTENT];
     NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
     style.alignment = NSTextAlignmentLeft;
@@ -67,7 +68,8 @@
     CGSize textSize = [self sizeWithText:attributedStr maxSize:CGSizeMake(viewWidth, MAXFLOAT)];
 
     self.statusTextFrame = CGRectMake(PADDING, ICONWIDTH + PADDING * 2, viewWidth, textSize.height);
-
+    _height = CGRectGetMaxY(_statusTextFrame);
+    
     if(_status.retweetedStatus){
         UIFont *font = [UIFont systemFontOfSize:SIZE_FONT_CONTENT-1];
         style.minimumLineHeight = font.lineHeight;
@@ -81,25 +83,38 @@
         self.retweetAttributedText = attributedStr;
         //文字内容
         CGSize retweetSize = [self sizeWithText:attributedStr maxSize:CGSizeMake(viewWidth, MAXFLOAT)];
-        self.retweetContentFrame = CGRectMake(0, CGRectGetMaxY(self.statusTextFrame) + PADDING, cellWidth, retweetSize.height);
-    }
-    
-    u_long count= _status.retweetedStatus.thumbnailPic.count>0 ? :_status.thumbnailPic.count;
-    
-    if(count>0 ){
-        
-        if(_status.retweetedStatus){
-            self.pictureFrame = CGRectMake(PADDING, CGRectGetMaxY( self.retweetContentFrame) + PADDING, viewWidth,  SIZE_IMAGE);
+        self.retweetTextFrame =CGRectMake(PADDING, 0, viewWidth, retweetSize.height);
+       
+        picHeight = [self heightForPic:_status.retweetedStatus.thumbnailPic.count];
+        self.retweetPicFrame = CGRectMake(PADDING, CGRectGetMaxY(self.retweetTextFrame)+PADDING, viewWidth, picHeight);
+        if(picHeight>0){
+            self.retweetContentFrame = CGRectMake(0, CGRectGetMaxY(self.statusTextFrame) + PADDING, cellWidth, retweetSize.height + PADDING + picHeight);
         }else{
-            self.pictureFrame = CGRectMake(PADDING, CGRectGetMaxY( self.statusTextFrame) + PADDING, cellWidth, SIZE_IMAGE);
+            self.retweetContentFrame = CGRectMake(0, CGRectGetMaxY(self.statusTextFrame) + PADDING, cellWidth, retweetSize.height);
         }
-        _cellHeight = CGRectGetMaxY(self.pictureFrame) + PADDING;
-    }else if(_status.retweetedStatus){
-        _cellHeight = CGRectGetMaxY(self.retweetContentFrame) + PADDING;
-    }else{
-        _cellHeight = CGRectGetMaxY(self.statusTextFrame) + PADDING;
+        _height += self.retweetContentFrame.size.height +PADDING;
     }
-    _cellHeight = ceil(_cellHeight);
+    if(picHeight ==0){
+        picHeight = [self heightForPic:_status.thumbnailPic.count];
+        if(picHeight>0){
+            if(_status.retweetedStatus){
+                self.statusPictureFrame = CGRectMake(PADDING, CGRectGetMaxY( self.retweetContentFrame) + PADDING, viewWidth,  picHeight);
+            }else{
+                self.statusPictureFrame = CGRectMake(PADDING, CGRectGetMaxY( self.statusTextFrame) + PADDING, viewWidth,  picHeight);
+            }
+            _height += self.statusPictureFrame.size.height + PADDING;
+        }
+    }
+    
+    _height += PADDING;
+    _height = ceil(_height);
+}
+
+- (CGFloat) heightForPic:(NSUInteger) count{
+    if(count ==0) return 0;
+    if(count == 1) return SIZE_IMAGE*2;
+    count--;
+    return count/3 * SIZE_IMAGE +SIZE_IMAGE + count/3 *SIZE_GAP_IMG;
 }
 
 - (NSMutableAttributedString *)replaceEmotion:(NSMutableAttributedString *)coloredString{
