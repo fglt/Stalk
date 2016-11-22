@@ -266,9 +266,8 @@
     CGFloat startX = ( [UIScreen mainScreen].bounds.size.width-width)/2;
     frame.origin.x += startX;
     frame.size.width -= 2 * startX;
-    
+    frame.size.height -= CellPadding;
     [super setFrame:frame];
-    
 }
 
 + (instancetype)cellWithTableView:(UITableView *)tableView identifier:(NSString *)identifier

@@ -124,7 +124,7 @@
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
 
-    return [_dataSource statusLayoutAtIndex:indexPath.row].cellHeight;
+    return [_dataSource statusLayoutAtIndex:indexPath.row].cellHeight + CellPadding;
 }
 
 #pragma mark - cellDelegate

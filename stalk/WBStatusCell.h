@@ -13,7 +13,7 @@
 @class WBStatusCell;
 @class MLLink;
 
-
+#define CellPadding 10;
 
 @protocol WBStatusCellDelegate <NSObject>
 @optional
