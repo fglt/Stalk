@@ -15,7 +15,7 @@
 #define SIZE_IMAGE 120
 #define SIZE_FONT_CONTENT 19
 #define SIZE_FONT_SUBCONTENT (SIZE_FONT_CONTENT-1)
-#define MAX_SIZE_WIDTH 600
+#define  CELL_WIDTH (MIN([UIScreen mainScreen].bounds.size.width,[UIScreen mainScreen].bounds.size.height) -30)
 
 #define kWBCellBackgroundColor UIColorHex(f2f2f2)    // Cell背景灰色
 #define kWBCellHighlightColor UIColorHex(f0f0f0)      // Cell高亮时灰色

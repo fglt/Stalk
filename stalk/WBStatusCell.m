@@ -7,7 +7,7 @@
 //
 
 #import "WBStatusCell.h"
-#import "UIScreen+Additions.h"
+//#import "UIScreen+Additions.h"
 //#import "NSString+Additions.h"
 #import "WBStatus.h"
 #import "WBUser.h"
@@ -38,10 +38,9 @@
 
 - (instancetype)init{
     self = [super init];
-    CGFloat cellWidth = MIN( [UIScreen mainScreen].bounds.size.width, MAX_SIZE_WIDTH);
     _contentView = [UIView new];
-    self.width = cellWidth;
-    _contentView.width = cellWidth;
+    self.width = CELL_WIDTH;
+    _contentView.width = CELL_WIDTH;
     //头像
     _icon = [[UIImageView alloc] init];
     [self.contentView addSubview:_icon];
@@ -253,8 +252,7 @@
 @implementation WBStatusCell
 
 - (void)setFrame:(CGRect)frame {
-    CGFloat width = MIN( [UIScreen mainScreen].bounds.size.width, MAX_SIZE_WIDTH);
-    CGFloat startX = ( [UIScreen mainScreen].bounds.size.width-width)/2;
+    CGFloat startX = ( [UIScreen mainScreen].bounds.size.width-CELL_WIDTH)/2;
     frame.origin.x += startX;
     frame.size.width -= 2 * startX;
     frame.size.height -= CellPadding;

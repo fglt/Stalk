@@ -20,9 +20,8 @@
     [super viewDidLoad];
     _statusView  = [WBStatusView new];
     [_statusView setWithLayout:_layout];
-    CGFloat width = MIN( [UIScreen mainScreen].bounds.size.width, MAX_SIZE_WIDTH);
-    CGPoint origin = CGPointMake(([UIScreen mainScreen].bounds.size.width - width)/2, CGRectGetMaxY(self.navigationController.navigationBar.frame));
-    CGSize size = CGSizeMake(width, _layout.height);
+    CGPoint origin = CGPointMake(([UIScreen mainScreen].bounds.size.width - CELL_WIDTH)/2, CGRectGetMaxY(self.navigationController.navigationBar.frame));
+    CGSize size = CGSizeMake(CELL_WIDTH, _layout.height);
     _contentView = [[UIView alloc] initWithFrame:(CGRect){origin, size}];
     [_contentView addSubview:_statusView];
     [self.view addSubview:_contentView];

@@ -7,7 +7,7 @@
 //
 
 #import "WBStatusLayout.h"
-#import "UIScreen+Additions.h"
+//#import "UIScreen+Additions.h"
 #import "NSString+Additions.h"
 #import "WBStatus.h"
 #import "WBUser.h"
@@ -45,8 +45,7 @@
 
 - (void)layout
 {
-    CGFloat cellWidth = MIN( [UIScreen mainScreen].bounds.size.width, MAX_SIZE_WIDTH);
-    CGFloat viewWidth = cellWidth - (PADDING<<1);
+    CGFloat viewWidth = CELL_WIDTH - (PADDING<<1);
     CGFloat picHeight=0;
     UIFont *font = [UIFont systemFontOfSize:SIZE_FONT_CONTENT];
     NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
@@ -88,9 +87,9 @@
         picHeight = [self heightForPic:_status.retweetedStatus.thumbnailPic.count];
         self.retweetPicFrame = CGRectMake(PADDING, CGRectGetMaxY(self.retweetTextFrame)+PADDING, viewWidth, picHeight);
         if(picHeight>0){
-            self.retweetContentFrame = CGRectMake(0, CGRectGetMaxY(self.statusTextFrame) + PADDING, cellWidth, retweetSize.height + PADDING + picHeight);
+            self.retweetContentFrame = CGRectMake(0, CGRectGetMaxY(self.statusTextFrame) + PADDING, CELL_WIDTH, retweetSize.height + PADDING + picHeight);
         }else{
-            self.retweetContentFrame = CGRectMake(0, CGRectGetMaxY(self.statusTextFrame) + PADDING, cellWidth, retweetSize.height);
+            self.retweetContentFrame = CGRectMake(0, CGRectGetMaxY(self.statusTextFrame) + PADDING, CELL_WIDTH, retweetSize.height);
         }
         _height += self.retweetContentFrame.size.height +PADDING;
     }
