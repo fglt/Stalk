@@ -11,6 +11,7 @@
 #define kPadding 20
 #define kHiColor [UIColor colorWithRGBHex:0x2dd6b8]
 
+typedef  void (^DissmissCompletion)();
 
 @interface YYPhotoGroupItem()<NSCopying>
 @property (nonatomic, readonly) UIImage *thumbImage;
@@ -243,6 +244,7 @@
 
 @property (nonatomic, strong) UIPanGestureRecognizer *panGesture;
 @property (nonatomic, assign) CGPoint panGestureBeginPoint;
+@property (nonatomic, strong) DissmissCompletion dissmissCompletion;
 @end
 
 @implementation YYPhotoGroupView
@@ -403,10 +405,6 @@
     
     [UIView setAnimationsEnabled:YES];
     _fromNavigationBarHidden = [UIApplication sharedApplication].statusBarHidden;
-#warning setStatusBarHidden
-//    [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:animated ? UIStatusBarAnimationFade : UIStatusBarAnimationNone];
-    
-    
     YYPhotoGroupCell *cell = [self cellForPage:self.currentPage];
     YYPhotoGroupItem *item = _groupItems[self.currentPage];
     
@@ -481,6 +479,18 @@
     }
 }
 
+- (void)presentFromImageView:(UIView *)fromView
+                 toContainer:(UIView *)toContainer
+                    animated:(BOOL)animated
+                  completion:(void (^)(void))completion
+           dismissCompletion:(void (^)(void))dismiss {
+    _dissmissCompletion = dismiss;
+    [self presentFromImageView:fromView
+                   toContainer:toContainer
+                      animated:animated
+                    completion:completion];
+ }
+
 - (UIViewController*)viewController {
     for (UIView* next = [self superview]; next; next = next.superview) {
         UIResponder* nextResponder = [next nextResponder];
@@ -493,10 +503,6 @@
 
 - (void)dismissAnimated:(BOOL)animated completion:(void (^)(void))completion {
     [UIView setAnimationsEnabled:YES];
-//    UIViewController *controller = [self viewController];
-//    [controller prefersStatusBarHidden];
-#warning setStatusBarHidden
-//    [[UIApplication sharedApplication] setStatusBarHidden:_fromNavigationBarHidden withAnimation:animated ? UIStatusBarAnimationFade : UIStatusBarAnimationNone];
     NSInteger currentPage = self.currentPage;
     YYPhotoGroupCell *cell = [self cellForPage:currentPage];
     YYPhotoGroupItem *item = _groupItems[currentPage];
@@ -584,11 +590,10 @@
         }];
     }];
     
-    
 }
 
 - (void)dismiss {
-    [self dismissAnimated:YES completion:nil];
+    [self dismissAnimated:YES completion:_dissmissCompletion];
 }
 
 
@@ -814,8 +819,6 @@
             if (fabs(v.y) > 1000 || fabs(deltaY) > 120) {
                 [self cancelAllImageLoad];
                 _isPresented = NO;
-#warning setStatusBarHidden
-//                [[UIApplication sharedApplication] setStatusBarHidden:_fromNavigationBarHidden withAnimation:UIStatusBarAnimationFade];
                 
                 BOOL moveToTop = (v.y < - 50 || (v.y < 50 && deltaY < 0));
                 CGFloat vy = fabs(v.y);

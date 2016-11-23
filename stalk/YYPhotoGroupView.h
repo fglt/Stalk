@@ -34,6 +34,12 @@
                     animated:(BOOL)animated
                   completion:(void (^)(void))completion;
 
+- (void)presentFromImageView:(UIView *)fromView
+                 toContainer:(UIView *)container
+                    animated:(BOOL)animated
+                  completion:(void (^)(void))completion
+           dismissCompletion:(void (^)(void))dismiss;
+
 - (void)dismissAnimated:(BOOL)animated completion:(void (^)(void))completion;
 - (void)dismiss;
 @end

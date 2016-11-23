@@ -166,7 +166,11 @@
     }
     
     YYPhotoGroupView *v = [[YYPhotoGroupView alloc] initWithGroupItems:items];
-    [v presentFromImageView:fromView toContainer:self.navigationController.view animated:YES completion:nil];
+    self.tabBarController.tabBar.hidden = YES;
+    [v presentFromImageView:fromView toContainer:self.navigationController.view animated:YES completion:nil dismissCompletion:^{
+         self.tabBarController.tabBar.hidden = NO;
+    }];
+   
 }
 
 - (void)cell:(WBStatusCell *)cell didClickLink:(MLLink *)link
