@@ -20,15 +20,7 @@
 #import "AppDelegate.h"
 
 @interface WBStatusView()
-@property (nonatomic, strong) UIView *contentView;
-@property (nonatomic, strong) UIImageView *icon;
-@property (nonatomic, strong) UILabel *name;
-@property (nonatomic, strong) UILabel *from;
-@property (nonatomic, strong) MLLinkLabel *statusText;
-@property (nonatomic, strong) UIView *pictureHolder;
-@property (nonatomic, strong) UIView *retweetPictureHolder;
-@property (nonatomic, strong) MLLinkLabel *retweetText;
-@property (nonatomic, strong) UIView *retweetContentView;
+
 
 @end
 
@@ -84,6 +76,12 @@
     _icon.imageURL =[NSURL URLWithString:layout.status.user.avatarLarge];
     _name.text =layout.status.user.screenName;
     _from.text = [NSString stringWithFormat:@"%@ 来自%@", [layout.status.createdAt substringToIndex:11], [ self sourceWithString:layout.status.source]];
+    [self layoutStatusTextWithLayout:layout];
+    [self layoutRetweetWithLayout:layout];
+    [self addPicViewWithLayout:layout];
+}
+
+- (void)layoutStatusTextWithLayout:(WBStatusLayout *)layout{
     _statusText.numberOfLines = 0;
     _statusText.beforeAddLinkBlock = nil;
     _statusText.frame = layout.statusTextFrame;
@@ -91,30 +89,36 @@
     __weak WBStatusView * weakSelf = self;
     [self.statusText setDidClickLinkBlock:^(MLLink *link, NSString *linkText, MLLinkLabel *label) {
         
-        [weakSelf.statusCell.delegate cellLinkIsClicked:weakSelf.statusCell :link];
+        [weakSelf.statusCell.delegate cell:weakSelf.statusCell didClickLink:link];
     }];
     self.statusText.attributedText = layout.statusAttributedText;
+
+}
+
+- (void)layoutRetweetWithLayout:(WBStatusLayout *)layout{
     if(layout.status.retweetedStatus){
+        __weak WBStatusView * weakSelf = self;
         NSMutableAttributedString *attributedStr = layout.retweetAttributedText;
         _retweetContentView.frame = layout.retweetContentFrame;
         self.retweetText.numberOfLines = 0;
         self.retweetText.attributedText = attributedStr;
-        
         self.retweetText.frame = layout.retweetTextFrame;
         self.retweetText.dataDetectorTypes = MLDataDetectorTypeAll;
         [self.retweetText setDidClickLinkBlock:^(MLLink *link, NSString *linkText, MLLinkLabel *label) {
-            [weakSelf.statusCell.delegate cellLinkIsClicked:weakSelf.statusCell :link];
+            [weakSelf.statusCell.delegate cell:weakSelf.statusCell didClickLink:link];
         }];
     }else{
         _retweetContentView.frame = CGRectZero;
         _retweetText.frame = CGRectZero;
         _retweetText.text = nil;
     }
-    
+
+}
+
+- (void)addPicViewWithLayout:(WBStatusLayout *)layout{
     NSArray *urls;
     WBStatus *status;
     UIView *picview;
-    
     
     for(UIView *view in _pictureHolder.subviews){
         [view removeFromSuperview];
@@ -124,6 +128,7 @@
     for(UIView *view in _retweetPictureHolder.subviews){
         [view removeFromSuperview];
     }
+    
     if(layout.retweetPicFrame.size.height>0){
         status = layout.status.retweetedStatus;
         urls = layout.status.retweetedStatus.thumbnailPic;
@@ -140,31 +145,41 @@
     if(urls.count>0){
         NSURL *baseURL = [NSURL URLWithString:[self imageFilePath:status.bmiddlePic]];
         if(urls.count ==1){
-            UIImageView *thumbView = [[UIImageView alloc] init];
+            UIImageView *thumbView = [self _newImageViewWithTag:0];
             [picview addSubview:thumbView];
-            thumbView.contentMode = UIViewContentModeScaleAspectFill;
-            thumbView.backgroundColor = [UIColor lightGrayColor];
-            thumbView.tag = 0;
-            thumbView.clipsToBounds = YES;
-            
             thumbView.frame = CGRectMake(0,0, self.statusText.width*2/3, SIZE_IMAGE<<1);
             NSURL *url= [NSURL URLWithString:[self imageName:urls[0]] relativeToURL:baseURL];
             thumbView.imageURL = url;
+            UITapGestureRecognizer *recognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapImageGesture:)];
+            [thumbView addGestureRecognizer:recognizer];
         }else{
-        for (NSInteger i=0; i<urls.count&& i<9; i++) {
-            UIImageView *thumbView = [[UIImageView alloc] init];
-            [picview addSubview:thumbView];
-            thumbView.contentMode = UIViewContentModeScaleAspectFill;
-            thumbView.backgroundColor = [UIColor lightGrayColor];
-            thumbView.tag = UIViewContentModeScaleAspectFill;
-            thumbView.clipsToBounds = YES;
-        
-            thumbView.frame = CGRectMake(i%3*(SIZE_GAP_IMG+imgWidth), i/3*(SIZE_GAP_IMG+SIZE_IMAGE), imgWidth, SIZE_IMAGE);
-            NSURL *url= [NSURL URLWithString:[self imageName:urls[i]] relativeToURL:baseURL];
-            thumbView.imageURL = url;
-        }
+            for (NSInteger i=0; i<urls.count&& i<9; i++) {
+                UIImageView *thumbView = [self _newImageViewWithTag:i];;
+                [picview addSubview:thumbView];
+                thumbView.frame = CGRectMake(i%3*(SIZE_GAP_IMG+imgWidth), i/3*(SIZE_GAP_IMG+SIZE_IMAGE), imgWidth, SIZE_IMAGE);
+                NSURL *url= [NSURL URLWithString:[self imageName:urls[i]] relativeToURL:baseURL];
+                thumbView.imageURL = url;
+                UITapGestureRecognizer *recognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapImageGesture:)];
+                [thumbView addGestureRecognizer:recognizer];
+            }
         }
     }
+
+}
+
+- (UIImageView *)_newImageViewWithTag:(NSUInteger)tag{
+    UIImageView *thumbView = [[UIImageView alloc] init];
+    thumbView.contentMode = UIViewContentModeScaleAspectFill;
+    thumbView.backgroundColor = [UIColor lightGrayColor];
+    thumbView.tag = tag;
+    thumbView.userInteractionEnabled = YES;
+    thumbView.clipsToBounds = YES;
+    return thumbView;
+}
+
+- (void)tapImageGesture:(UIGestureRecognizer *)recognizer{
+    NSLog(@"图片 %ld 被点击",recognizer.view.tag );
+    [self.statusCell.delegate cell:self.statusCell didClickImageAt:recognizer.view.tag];
 }
 
 - (NSString *) sourceWithString:(NSString *)source{
@@ -218,14 +233,14 @@
     CGPoint location = [touch locationInView:self];
     [self touchesRestoreBackgroundColor];
     if (_touchRetweetView) {
-        if ([_statusCell.delegate respondsToSelector:@selector(cellRetweetIsClicked:)]) {
-            [_statusCell.delegate cellRetweetIsClicked:_statusCell];
+        if ([_statusCell.delegate respondsToSelector:@selector(cellDidClickRetweet:)]) {
+            [_statusCell.delegate cellDidClickRetweet:_statusCell];
         }
     } else {
         if(CGRectContainsPoint(_icon.frame, location) || CGRectContainsPoint(_name.frame, location)){
-            [_statusCell.delegate cellUserIsClicked:_statusCell];
+            [_statusCell.delegate cellDidClickUser:_statusCell];
         }else{
-            [_statusCell.delegate cellStatusIsClicked:_statusCell];
+            [_statusCell.delegate cellDidClick:_statusCell];
         }
     }
 }

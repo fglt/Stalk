@@ -23,6 +23,7 @@
 #import "YYFPSLabel.h"
 #import "StatusDataSource.h"
 #import "TopicController.h"
+#import "YYPhotoGroupView.h"
 
 @interface HomeTableViewController ()<WBStatusCellDelegate,SFSafariViewControllerDelegate>
 @property (nonatomic, strong) StatusDataSource *dataSource;
@@ -127,7 +128,48 @@
 }
 
 #pragma mark - cellDelegate
-- (void)cellLinkIsClicked:(WBStatusCell *)cell :(MLLink *)link
+
+- (void)cell:(WBStatusCell *)cell didClickImageAt:(NSUInteger)index{
+    UIView *fromView = nil;
+    NSMutableArray *items = [NSMutableArray new];
+    
+    WBStatus *status;
+    NSArray *urls = status.retweetedStatus ? status.retweetedStatus.thumbnailPic:status.thumbnailPic;
+    NSArray *picviews;
+    if(cell.layout.status.retweetedStatus){
+        status = cell.layout.status.retweetedStatus;
+        urls = cell.layout.status.retweetedStatus.thumbnailPic;
+        picviews = cell.statusView.retweetPictureHolder.subviews;
+
+    }else{
+        status = cell.layout.status;
+        urls = cell.layout.status.thumbnailPic;
+        picviews = cell.statusView.pictureHolder.subviews;
+    }
+
+    for (NSUInteger i = 0, max = picviews.count; i < max; i++) {
+        UIView *imgView = picviews[i];
+
+        YYPhotoGroupItem *item = [YYPhotoGroupItem new];
+        item.thumbView = imgView;
+        item.largeImageURL = status.pictures[i].original.url;
+        [[YYWebImageManager sharedManager] requestImageWithURL:item.largeImageURL options:YYWebImageOptionAvoidSetImage progress:nil transform:nil completion:^(UIImage * _Nullable image, NSURL * _Nonnull url, YYWebImageFromType from, YYWebImageStage stage, NSError * _Nullable error) {
+            item.largeImageSize = image.size;
+            
+        }];
+        
+        //item.largeImageSize = CGSizeMake(800 , 450);
+        [items addObject:item];
+        if (i == index) {
+            fromView = imgView;
+        }
+    }
+    
+    YYPhotoGroupView *v = [[YYPhotoGroupView alloc] initWithGroupItems:items];
+    [v presentFromImageView:fromView toContainer:self.navigationController.view animated:YES completion:nil];
+}
+
+- (void)cell:(WBStatusCell *)cell didClickLink:(MLLink *)link
 {
     AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
     
@@ -177,14 +219,14 @@
     }
 }
 
-- (void)cellStatusIsClicked:(WBStatusCell *)cell{
+- (void)cellDidClick:(WBStatusCell *)cell;{
     StatusDetailViewController *detailViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"StatusDetailViewController"];
     detailViewController.layout = cell.layout;
     detailViewController.title = @"微博正文";
     [self.navigationController pushViewController:detailViewController animated:YES];
 }
 
-- (void)cellRetweetIsClicked:(WBStatusCell *)cell{
+- (void)cellDidClickRetweet:(WBStatusCell *)cell;{
     StatusDetailViewController *detailViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"StatusDetailViewController"];
     WBStatus *status = cell.layout.status.retweetedStatus;
     detailViewController.layout = [[WBStatusLayout alloc] initWithStatus:status];
@@ -192,7 +234,7 @@
     [self.navigationController pushViewController:detailViewController animated:YES];
 
 }
-- (void)cellUserIsClicked:(WBStatusCell *)cell{
+- (void)cellDidClickUser:(WBStatusCell *)cell{
     UserViewController *userViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"UserViewController"];
     userViewController.user =  cell.layout.status.user;
     [self.navigationController pushViewController:userViewController animated:YES];

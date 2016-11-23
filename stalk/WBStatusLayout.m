@@ -92,8 +92,7 @@
             self.retweetContentFrame = CGRectMake(0, CGRectGetMaxY(self.statusTextFrame) + PADDING, CELL_WIDTH, retweetSize.height);
         }
         _height += self.retweetContentFrame.size.height +PADDING;
-    }
-    if(picHeight ==0){
+    } else{
         picHeight = [self heightForPic:_status.thumbnailPic.count];
         if(picHeight>0){
             if(_status.retweetedStatus){
@@ -104,7 +103,6 @@
             _height += self.statusPictureFrame.size.height + PADDING;
         }
     }
-    
     _height += PADDING;
     _height = ceil(_height);
 }

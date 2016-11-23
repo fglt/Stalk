@@ -51,8 +51,33 @@
     NSDictionary *visibleDic = [dict objectForKey:@"visible"];
     aStatus.visibleType = [visibleDic objectForKey:@"type"];
     aStatus.visibleListId = [visibleDic objectForKey:@"list_id"];
-    return aStatus;
+    
+    NSURL *middleBaseURL;
+    NSURL *orginBaseURL;
+    if(aStatus.bmiddlePic){
+        middleBaseURL = [NSURL URLWithString:[aStatus imageFilePath:aStatus.bmiddlePic]];
+    }
+    if(aStatus.originalPic){
+        orginBaseURL = [NSURL URLWithString:[aStatus imageFilePath:aStatus.originalPic]];
+    }
 
+    for(NSString *str in aStatus.thumbnailPic){
+        WBPicture *picture = [WBPicture new];
+        WBPictureMetadata *thumbmeta = [WBPictureMetadata new];
+        thumbmeta.url = [NSURL URLWithString:str];
+        picture.thumbnail = thumbmeta;
+        if(aStatus.bmiddlePic){
+            WBPictureMetadata *middlemeta = [WBPictureMetadata new];
+            middlemeta.url = [NSURL URLWithString:[aStatus imageName:str] relativeToURL:middleBaseURL];
+            picture.bmiddle = middlemeta;
+        }
+        if(aStatus.originalPic){
+            WBPictureMetadata *originmeta = [WBPictureMetadata new];
+            originmeta.url = [NSURL URLWithString:[aStatus imageName:str] relativeToURL:orginBaseURL];
+            picture.original = originmeta;
+        }
+    }
+    return aStatus;
 }
 
 + (NSMutableArray *)statuesWithDict:(NSDictionary *) statues{
@@ -65,6 +90,25 @@
     return array;
 }
 
+- (NSString *)imageFilePath:(NSString *)urlstr{
+    u_long i = urlstr.length-1;
+    for(; i>0; i--){
+        if([urlstr characterAtIndex:i] == '/'){
+            break;
+        }
+    }
+    return [urlstr substringToIndex:i+1];
+}
+
+- (NSString *)imageName:(NSString *)urlstr{
+    u_long i = urlstr.length-1;
+    for(; i>0; i--){
+        if([urlstr characterAtIndex:i] == '/'){
+            break;
+        }
+    }
+    return [urlstr substringFromIndex:i+1];
+}
 //- (instancetype)copyWithZone:(NSZone *)zone{
 //    WBStatus *aStatus = [[WBStatus alloc] init];
 //    aStatus.createdAt = self.createdAt;

@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-
+#import "WBPicture.h"
 
 @class WBUser;
 
@@ -147,6 +147,8 @@
  *	微博的可见性及指定可见分组信息,list_id为分组的组号
  */
 @property (nonatomic, copy)NSString *visibleListId;
+
+@property (nonatomic, strong) NSArray<WBPicture *> *pictures;
 
 + (instancetype) statusWithDict:(NSDictionary *) dict;
 + (NSMutableArray *)statuesWithDict:(NSDictionary *) statues;
