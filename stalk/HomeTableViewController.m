@@ -33,10 +33,31 @@
     NSMutableArray *needLoadArr;
     BOOL scrollToToping;
     YYFPSLabel *_fpsLabel;
+    YYPhotoGroupView *picBrower;
+}
+- (void)viewDidAppear:(BOOL)animated{
+    [super viewDidAppear:animated];
+//
+//    [self.navigationController.navigationBar setBackgroundImage:[UIImage imageNamed:@"clear247.png"] forBarMetrics:UIBarMetricsDefault];
+    self.navigationController.navigationBar.translucent = NO;
+    self.navigationController.navigationBar.barStyle = UIBarStyleDefault;
+}
+
+- (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
+{
+    
+    [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
+        if(picBrower){
+            picBrower.center = picBrower.superview.center;
+        }
+        //        NSLog(@"%@",NSStringFromCGPoint(CGPointApplyAffineTransform(center, transform) ));
+    } completion:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
+    }];
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+
     [self.tableView setSeparatorInset:UIEdgeInsetsZero];
     [self.tableView setLayoutMargins:UIEdgeInsetsZero];
     self.tableView.delegate = self;
@@ -133,17 +154,13 @@
     UIView *fromView = nil;
     NSMutableArray *items = [NSMutableArray new];
     
-    WBStatus *status;
-    NSArray *urls = status.retweetedStatus ? status.retweetedStatus.thumbnailPic:status.thumbnailPic;
-    NSArray *picviews;
-    if(cell.layout.status.retweetedStatus){
-        status = cell.layout.status.retweetedStatus;
-        urls = cell.layout.status.retweetedStatus.thumbnailPic;
-        picviews = cell.statusView.retweetPictureHolder.subviews;
+    WBStatus *status = cell.layout.status;
 
+    NSArray *picviews;
+    if(status.retweetedStatus){
+        status = cell.layout.status.retweetedStatus;
+        picviews = cell.statusView.retweetPictureHolder.subviews;
     }else{
-        status = cell.layout.status;
-        urls = cell.layout.status.thumbnailPic;
         picviews = cell.statusView.pictureHolder.subviews;
     }
 
@@ -155,20 +172,19 @@
         item.largeImageURL = status.pictures[i].original.url;
         [[YYWebImageManager sharedManager] requestImageWithURL:item.largeImageURL options:YYWebImageOptionAvoidSetImage progress:nil transform:nil completion:^(UIImage * _Nullable image, NSURL * _Nonnull url, YYWebImageFromType from, YYWebImageStage stage, NSError * _Nullable error) {
             item.largeImageSize = image.size;
-            
         }];
-        
-        //item.largeImageSize = CGSizeMake(800 , 450);
         [items addObject:item];
         if (i == index) {
             fromView = imgView;
         }
+        
     }
-    
-    YYPhotoGroupView *v = [[YYPhotoGroupView alloc] initWithGroupItems:items];
+    self.navigationController.navigationBar.hidden = YES;
+    picBrower = [[YYPhotoGroupView alloc] initWithGroupItems:items];
     self.tabBarController.tabBar.hidden = YES;
-    [v presentFromImageView:fromView toContainer:self.navigationController.view animated:YES completion:nil dismissCompletion:^{
-         self.tabBarController.tabBar.hidden = NO;
+    [picBrower presentFromImageView:fromView toContainer:self.navigationController.view animated:YES completion:nil dismissCompletion:^{
+       // self.tabBarController.tabBar.hidden = NO;
+        self.navigationController.navigationBar.hidden = NO;
     }];
    
 }
@@ -204,6 +220,7 @@
                     }else{
                         UserViewController *userViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"UserViewController"];
                         userViewController.user = user;
+                        userViewController.hidesBottomBarWhenPushed = YES;
                         userViewController.title = user.screenName;
                         [self.navigationController pushViewController:userViewController animated:YES];
                     }
@@ -211,13 +228,13 @@
             }];
             break;
         }
-        case MLLinkTypeHashtag:{
-            NSString *topic = [link.linkValue substringWithRange:NSMakeRange(1, link.linkValue.length-1)];
-            TopicController *controller = [[TopicController alloc]init];
-            controller.topic = topic;
-            [self.navigationController pushViewController:controller animated:YES];
-        }
-            break;
+//        case MLLinkTypeHashtag:{
+//            NSString *topic = [link.linkValue substringWithRange:NSMakeRange(1, link.linkValue.length-1)];
+//            TopicController *controller = [[TopicController alloc]init];
+//            controller.topic = topic;
+//            [self.navigationController pushViewController:controller animated:YES];
+//        }
+//            break;
         default:
             break;
     }

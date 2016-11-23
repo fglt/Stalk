@@ -48,8 +48,6 @@ typedef  void (^DissmissCompletion)();
 }
 @end
 
-
-
 @interface YYPhotoGroupCell : UIScrollView <UIScrollViewDelegate>
 @property (nonatomic, strong) UIView *imageContainerView;
 @property (nonatomic, strong) YYAnimatedImageView *imageView;
@@ -237,7 +235,6 @@ typedef  void (^DissmissCompletion)();
 @property (nonatomic, strong) NSMutableArray *cells;
 @property (nonatomic, strong) UIPageControl *pager;
 @property (nonatomic, assign) CGFloat pagerCurrentPage;
-@property (nonatomic, assign) BOOL fromNavigationBarHidden;
 
 @property (nonatomic, assign) NSInteger fromItemIndex;
 @property (nonatomic, assign) BOOL isPresented;
@@ -404,7 +401,6 @@ typedef  void (^DissmissCompletion)();
     [self scrollViewDidScroll:_scrollView];
     
     [UIView setAnimationsEnabled:YES];
-    _fromNavigationBarHidden = [UIApplication sharedApplication].statusBarHidden;
     YYPhotoGroupCell *cell = [self cellForPage:self.currentPage];
     YYPhotoGroupItem *item = _groupItems[self.currentPage];
     
@@ -491,16 +487,6 @@ typedef  void (^DissmissCompletion)();
                     completion:completion];
  }
 
-- (UIViewController*)viewController {
-    for (UIView* next = [self superview]; next; next = next.superview) {
-        UIResponder* nextResponder = [next nextResponder];
-        if ([nextResponder isKindOfClass:[UIViewController class]]) {
-            return (UIViewController*)nextResponder;
-        }
-    }
-    return nil;
-}
-
 - (void)dismissAnimated:(BOOL)animated completion:(void (^)(void))completion {
     [UIView setAnimationsEnabled:YES];
     NSInteger currentPage = self.currentPage;
@@ -563,6 +549,7 @@ typedef  void (^DissmissCompletion)();
     [UIView animateWithDuration:animated ? 0.2 : 0 delay:0 options:UIViewAnimationOptionBeginFromCurrentState|UIViewAnimationOptionCurveEaseOut animations:^{
         _pager.alpha = 0.0;
         _blurBackground.alpha = 0.0;
+        if (completion) completion();
         if (isFromImageClipped) {
             
             CGRect fromFrame = [fromView convertRect:fromView.bounds toView:cell];
@@ -586,7 +573,6 @@ typedef  void (^DissmissCompletion)();
         } completion:^(BOOL finished) {
             cell.imageContainerView.layer.anchorPoint = CGPointMake(0.5, 0.5);
             [self removeFromSuperview];
-            if (completion) completion();
         }];
     }];
     

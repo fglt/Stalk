@@ -60,23 +60,30 @@
     if(aStatus.originalPic){
         orginBaseURL = [NSURL URLWithString:[aStatus imageFilePath:aStatus.originalPic]];
     }
-
+    if(aStatus.thumbnailPic.count<=0) return aStatus;
+    NSMutableArray<WBPicture *> *pictures = [NSMutableArray arrayWithCapacity:aStatus.thumbnailPic.count];
     for(NSString *str in aStatus.thumbnailPic){
         WBPicture *picture = [WBPicture new];
         WBPictureMetadata *thumbmeta = [WBPictureMetadata new];
         thumbmeta.url = [NSURL URLWithString:str];
+        thumbmeta.type = [str pathExtension];
         picture.thumbnail = thumbmeta;
+        NSString *fileName = [str lastPathComponent];
         if(aStatus.bmiddlePic){
             WBPictureMetadata *middlemeta = [WBPictureMetadata new];
-            middlemeta.url = [NSURL URLWithString:[aStatus imageName:str] relativeToURL:middleBaseURL];
+            middlemeta.url = [NSURL URLWithString:fileName relativeToURL:middleBaseURL];
+            middlemeta.type = [aStatus.bmiddlePic pathExtension];
             picture.bmiddle = middlemeta;
         }
         if(aStatus.originalPic){
             WBPictureMetadata *originmeta = [WBPictureMetadata new];
-            originmeta.url = [NSURL URLWithString:[aStatus imageName:str] relativeToURL:orginBaseURL];
+            originmeta.url = [NSURL URLWithString:fileName relativeToURL:orginBaseURL];
+            originmeta.type = [aStatus.originalPic pathExtension];
             picture.original = originmeta;
         }
+        [pictures addObject:picture];
     }
+    aStatus.pictures = [pictures copy];
     return aStatus;
 }
 
@@ -100,15 +107,15 @@
     return [urlstr substringToIndex:i+1];
 }
 
-- (NSString *)imageName:(NSString *)urlstr{
-    u_long i = urlstr.length-1;
-    for(; i>0; i--){
-        if([urlstr characterAtIndex:i] == '/'){
-            break;
-        }
-    }
-    return [urlstr substringFromIndex:i+1];
-}
+//- (NSString *)imageName:(NSString *)urlstr{
+//    u_long i = urlstr.length-1;
+//    for(; i>0; i--){
+//        if([urlstr characterAtIndex:i] == '/'){
+//            break;
+//        }
+//    }
+//    return [urlstr substringFromIndex:i+1];
+//}
 //- (instancetype)copyWithZone:(NSZone *)zone{
 //    WBStatus *aStatus = [[WBStatus alloc] init];
 //    aStatus.createdAt = self.createdAt;

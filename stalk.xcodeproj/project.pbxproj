@@ -49,6 +49,8 @@
 		177B20F71DE43F11005A1438 /* APPHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 177B20F61DE43F11005A1438 /* APPHelper.m */; };
 		177B20FA1DE527CE005A1438 /* YYPhotoGroupView.m in Sources */ = {isa = PBXBuildFile; fileRef = 177B20F91DE527CE005A1438 /* YYPhotoGroupView.m */; };
 		177B20FD1DE52CB0005A1438 /* WBPicture.m in Sources */ = {isa = PBXBuildFile; fileRef = 177B20FC1DE52CB0005A1438 /* WBPicture.m */; };
+		177B21021DE56F61005A1438 /* clear.png in Resources */ = {isa = PBXBuildFile; fileRef = 177B21011DE56F61005A1438 /* clear.png */; };
+		177B21041DE5797A005A1438 /* clear247.png in Resources */ = {isa = PBXBuildFile; fileRef = 177B21031DE5797A005A1438 /* clear247.png */; };
 		17AFD3F41DDDFABF007C7DB9 /* emotionResource.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 17AFD3F31DDDFABF007C7DB9 /* emotionResource.bundle */; };
 		17AFD3F71DDED732007C7DB9 /* StatusDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 17AFD3F61DDED732007C7DB9 /* StatusDetailViewController.m */; };
 		17FA23001DE3CE0C00617651 /* WBHttpRequest+STalk.m in Sources */ = {isa = PBXBuildFile; fileRef = 17FA22FF1DE3CE0C00617651 /* WBHttpRequest+STalk.m */; };
@@ -129,6 +131,8 @@
 		177B20F91DE527CE005A1438 /* YYPhotoGroupView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YYPhotoGroupView.m; sourceTree = "<group>"; };
 		177B20FB1DE52CB0005A1438 /* WBPicture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WBPicture.h; sourceTree = "<group>"; };
 		177B20FC1DE52CB0005A1438 /* WBPicture.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WBPicture.m; sourceTree = "<group>"; };
+		177B21011DE56F61005A1438 /* clear.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = clear.png; sourceTree = "<group>"; };
+		177B21031DE5797A005A1438 /* clear247.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = clear247.png; sourceTree = "<group>"; };
 		17AFD3F31DDDFABF007C7DB9 /* emotionResource.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = emotionResource.bundle; sourceTree = "<group>"; };
 		17AFD3F51DDED731007C7DB9 /* StatusDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StatusDetailViewController.h; sourceTree = "<group>"; };
 		17AFD3F61DDED732007C7DB9 /* StatusDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StatusDetailViewController.m; sourceTree = "<group>"; };
@@ -186,6 +190,8 @@
 		171BCCA21DD4B6FF009FF89E /* stalk */ = {
 			isa = PBXGroup;
 			children = (
+				177B21031DE5797A005A1438 /* clear247.png */,
+				177B21011DE56F61005A1438 /* clear.png */,
 				17AFD3F31DDDFABF007C7DB9 /* emotionResource.bundle */,
 				171BCD141DD70299009FF89E /* category */,
 				171BCD131DD70277009FF89E /* modal */,
@@ -381,6 +387,8 @@
 			files = (
 				171BCCB31DD4B6FF009FF89E /* LaunchScreen.storyboard in Resources */,
 				17AFD3F41DDDFABF007C7DB9 /* emotionResource.bundle in Resources */,
+				177B21021DE56F61005A1438 /* clear.png in Resources */,
+				177B21041DE5797A005A1438 /* clear247.png in Resources */,
 				171BCCB01DD4B6FF009FF89E /* Assets.xcassets in Resources */,
 				171BCCAE1DD4B6FF009FF89E /* Main.storyboard in Resources */,
 			);

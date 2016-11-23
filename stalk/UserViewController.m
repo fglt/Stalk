@@ -22,16 +22,48 @@
 
 @implementation UserViewController
 
+- (void)viewDidAppear:(BOOL)animated{
+    [super viewDidAppear:animated];
+    self.navigationController.navigationBar.translucent = YES;
+    self.navigationController.navigationBar.barStyle = UIBarStyleBlack;
+    
+    [self.navigationController.navigationBar setBackgroundImage:[UIImage imageNamed:@"clear.png"] forBarMetrics:UIBarMetricsDefault];
+}
+
+- (void)viewDidDisappear:(BOOL)animated{
+    [super viewDidDisappear:animated];
+    [self.navigationController.navigationBar setBackgroundImage:[UIImage imageNamed:@"clear247.png"] forBarMetrics:UIBarMetricsDefault];
+    self.navigationController.navigationBar.barStyle = UIBarStyleDefault;
+    self.navigationController.navigationBar.translucent = NO;
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    [self clearImage];
     self.title = _user.screenName;
+ 
     //_screenName.text = _user.screenName;
     _iconImage.layer.cornerRadius = _iconImage.frame.size.width/2;
     _iconImage.clipsToBounds =YES;
     _iconImage.imageURL = [NSURL URLWithString:_user.avatarLarge];
     _location.text = _user.location;
     _descriptions.text = _user.desc;
+}
+
+- (UIImage *)clearImage{
+    NSArray *dir = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,NSUserDomainMask, YES);
+    NSString *path = [dir[0] stringByAppendingPathComponent:@"clear.png"];
+    UIGraphicsBeginImageContextWithOptions(CGSizeMake(20, 20), NO, 0.0);
+
+    UIBezierPath *bpath = [UIBezierPath bezierPathWithRect:(CGRect){0,0,20, 20}];
+    
+    [[UIColor clearColor] set];
+    [bpath fill];
+    UIImage *snap = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    [UIImagePNGRepresentation(snap) writeToFile:path atomically:YES];
+    return snap;
 }
 
 - (void)didReceiveMemoryWarning {
