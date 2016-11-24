@@ -12,10 +12,16 @@
 
 @end
 
+
+
 @implementation WeiBoTabBarController
 
+- (BOOL) prefersStatusBarHidden{
+    return YES;
+}
 - (void)viewDidLoad {
     [super viewDidLoad];
+    [self prefersStatusBarHidden];
     // Do any additional setup after loading the view.
 }
 

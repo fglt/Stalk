@@ -11,7 +11,6 @@
 #define kPadding 20
 #define kHiColor [UIColor colorWithRGBHex:0x2dd6b8]
 
-typedef  void (^DissmissCompletion)();
 
 @interface YYPhotoGroupItem()<NSCopying>
 @property (nonatomic, readonly) UIImage *thumbImage;
@@ -48,6 +47,8 @@ typedef  void (^DissmissCompletion)();
 }
 @end
 
+
+
 @interface YYPhotoGroupCell : UIScrollView <UIScrollViewDelegate>
 @property (nonatomic, strong) UIView *imageContainerView;
 @property (nonatomic, strong) YYAnimatedImageView *imageView;
@@ -79,7 +80,6 @@ typedef  void (^DissmissCompletion)();
     _imageContainerView = [UIView new];
     _imageContainerView.clipsToBounds = YES;
     [self addSubview:_imageContainerView];
-    
     _imageView = [YYAnimatedImageView new];
     _imageView.clipsToBounds = YES;
     _imageView.backgroundColor = [UIColor colorWithWhite:1.000 alpha:0.500];
@@ -230,18 +230,17 @@ typedef  void (^DissmissCompletion)();
 @property (nonatomic, strong) UIImageView *background;
 @property (nonatomic, strong) UIImageView *blurBackground;
 
-@property (nonatomic, strong) UIView *contentView;
 @property (nonatomic, strong) UIScrollView *scrollView;
 @property (nonatomic, strong) NSMutableArray *cells;
 @property (nonatomic, strong) UIPageControl *pager;
 @property (nonatomic, assign) CGFloat pagerCurrentPage;
+@property (nonatomic, assign) BOOL fromNavigationBarHidden;
 
 @property (nonatomic, assign) NSInteger fromItemIndex;
 @property (nonatomic, assign) BOOL isPresented;
 
 @property (nonatomic, strong) UIPanGestureRecognizer *panGesture;
 @property (nonatomic, assign) CGPoint panGestureBeginPoint;
-@property (nonatomic, strong) DissmissCompletion dissmissCompletion;
 @end
 
 @implementation YYPhotoGroupView
@@ -251,7 +250,8 @@ typedef  void (^DissmissCompletion)();
     if (groupItems.count == 0) return nil;
     _groupItems = groupItems.copy;
     _blurEffectBackground = YES;
-    
+    //self.autoresizingMask = UIViewAutoresizingFlexibleHeight |UIViewAutoresizingFlexibleWidth;
+    self.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin|UIViewAutoresizingFlexibleTopMargin|UIViewAutoresizingFlexibleBottomMargin;
     NSString *model = [UIDevice currentDevice].machineModel;
     static NSMutableSet *oldDevices;
     static dispatch_once_t onceToken;
@@ -401,6 +401,10 @@ typedef  void (^DissmissCompletion)();
     [self scrollViewDidScroll:_scrollView];
     
     [UIView setAnimationsEnabled:YES];
+    _fromNavigationBarHidden = [UIApplication sharedApplication].statusBarHidden;
+//    [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:animated ? UIStatusBarAnimationFade : UIStatusBarAnimationNone];
+//    
+    
     YYPhotoGroupCell *cell = [self cellForPage:self.currentPage];
     YYPhotoGroupItem *item = _groupItems[self.currentPage];
     
@@ -475,20 +479,10 @@ typedef  void (^DissmissCompletion)();
     }
 }
 
-- (void)presentFromImageView:(UIView *)fromView
-                 toContainer:(UIView *)toContainer
-                    animated:(BOOL)animated
-                  completion:(void (^)(void))completion
-           dismissCompletion:(void (^)(void))dismiss {
-    _dissmissCompletion = dismiss;
-    [self presentFromImageView:fromView
-                   toContainer:toContainer
-                      animated:animated
-                    completion:completion];
- }
-
 - (void)dismissAnimated:(BOOL)animated completion:(void (^)(void))completion {
     [UIView setAnimationsEnabled:YES];
+    
+//    [[UIApplication sharedApplication] setStatusBarHidden:_fromNavigationBarHidden withAnimation:animated ? UIStatusBarAnimationFade : UIStatusBarAnimationNone];
     NSInteger currentPage = self.currentPage;
     YYPhotoGroupCell *cell = [self cellForPage:currentPage];
     YYPhotoGroupItem *item = _groupItems[currentPage];
@@ -540,7 +534,7 @@ typedef  void (^DissmissCompletion)();
     } else {
         _background.image = _snapshorImageHideFromView;
     }
-
+    
     
     if (isFromImageClipped) {
         [cell scrollToTopAnimated:NO];
@@ -549,7 +543,6 @@ typedef  void (^DissmissCompletion)();
     [UIView animateWithDuration:animated ? 0.2 : 0 delay:0 options:UIViewAnimationOptionBeginFromCurrentState|UIViewAnimationOptionCurveEaseOut animations:^{
         _pager.alpha = 0.0;
         _blurBackground.alpha = 0.0;
-        if (completion) completion();
         if (isFromImageClipped) {
             
             CGRect fromFrame = [fromView convertRect:fromView.bounds toView:cell];
@@ -573,13 +566,15 @@ typedef  void (^DissmissCompletion)();
         } completion:^(BOOL finished) {
             cell.imageContainerView.layer.anchorPoint = CGPointMake(0.5, 0.5);
             [self removeFromSuperview];
+            if (completion) completion();
         }];
     }];
+    
     
 }
 
 - (void)dismiss {
-    [self dismissAnimated:YES completion:_dissmissCompletion];
+    [self dismissAnimated:YES completion:nil];
 }
 
 
@@ -636,10 +631,10 @@ typedef  void (^DissmissCompletion)();
 
 
 - (void)hidePager {
-        [UIView animateWithDuration:0.3 delay:0.8 options:UIViewAnimationOptionBeginFromCurrentState | UIViewAnimationOptionCurveEaseOut animations:^{
-            _pager.alpha = 0;
-        }completion:^(BOOL finish) {
-        }];
+    [UIView animateWithDuration:0.3 delay:0.8 options:UIViewAnimationOptionBeginFromCurrentState | UIViewAnimationOptionCurveEaseOut animations:^{
+        _pager.alpha = 0;
+    }completion:^(BOOL finish) {
+    }];
 }
 
 /// enqueue invisible cells for reuse
@@ -766,7 +761,7 @@ typedef  void (^DissmissCompletion)();
     if ([activityViewController respondsToSelector:@selector(popoverPresentationController)]) {
         activityViewController.popoverPresentationController.sourceView = self;
     }
-
+    
     UIViewController *toVC = self.toContainerView.viewController;
     if (!toVC) toVC = self.viewController;
     [toVC presentViewController:activityViewController animated:YES completion:nil];

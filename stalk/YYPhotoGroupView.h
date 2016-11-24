@@ -22,7 +22,7 @@
 @property (nonatomic, readonly) NSArray *groupItems; ///< Array<YYPhotoGroupItem>
 @property (nonatomic, readonly) NSInteger currentPage;
 @property (nonatomic, assign) BOOL blurEffectBackground; ///< Default is YES
-
+@property (nonatomic, strong) UIView *contentView;
 
 - (instancetype)init UNAVAILABLE_ATTRIBUTE;
 - (instancetype)initWithFrame:(CGRect)frame UNAVAILABLE_ATTRIBUTE;
@@ -33,11 +33,7 @@
                  toContainer:(UIView *)container
                     animated:(BOOL)animated
                   completion:(void (^)(void))completion;
-- (void)presentFromImageView:(UIView *)fromView
-                 toContainer:(UIView *)container
-                    animated:(BOOL)animated
-                  completion:(void (^)(void))completion
-           dismissCompletion:(void (^)(void))dismiss;
+
 - (void)dismissAnimated:(BOOL)animated completion:(void (^)(void))completion;
 - (void)dismiss;
 @end

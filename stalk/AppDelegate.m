@@ -23,7 +23,6 @@
     [WeiboSDK enableDebugMode:YES];
     [WeiboSDK registerApp:SINA_APP_KEY];
     UIStoryboard *storyBoard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
-    
     if([AppDelegate isAuthorized]){
         self.wbAuthorizeResponse = [[WBAuthorizeResponse alloc] init];
         self.wbAuthorizeResponse.accessToken = [[NSUserDefaults standardUserDefaults] objectForKey:SINA_ACCESS_TOKEN_KEY];

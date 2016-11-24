@@ -145,18 +145,20 @@
     if(urls.count>0){
         NSURL *baseURL = [NSURL URLWithString:[self imageFilePath:status.bmiddlePic]];
         if(urls.count ==1){
-            UIImageView *thumbView = [self _newImageViewWithTag:0];
+            YYAnimatedImageView *thumbView = [self _newImageViewWithTag:0];
             [picview addSubview:thumbView];
             thumbView.frame = CGRectMake(0,0, self.statusText.width*2/3, SIZE_IMAGE<<1);
+            //thumbView.autoPlayAnimatedImage =NO;
             NSURL *url= [NSURL URLWithString:[self imageName:urls[0]] relativeToURL:baseURL];
             thumbView.imageURL = url;
             UITapGestureRecognizer *recognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapImageGesture:)];
             [thumbView addGestureRecognizer:recognizer];
         }else{
             for (NSInteger i=0; i<urls.count&& i<9; i++) {
-                UIImageView *thumbView = [self _newImageViewWithTag:i];;
+                YYAnimatedImageView *thumbView = [self _newImageViewWithTag:i];;
                 [picview addSubview:thumbView];
                 thumbView.frame = CGRectMake(i%3*(SIZE_GAP_IMG+imgWidth), i/3*(SIZE_GAP_IMG+SIZE_IMAGE), imgWidth, SIZE_IMAGE);
+                //thumbView.autoPlayAnimatedImage =NO;
                 NSURL *url= [NSURL URLWithString:[self imageName:urls[i]] relativeToURL:baseURL];
                 thumbView.imageURL = url;
                 UITapGestureRecognizer *recognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapImageGesture:)];
@@ -167,8 +169,8 @@
 
 }
 
-- (UIImageView *)_newImageViewWithTag:(NSUInteger)tag{
-    UIImageView *thumbView = [[UIImageView alloc] init];
+- (YYAnimatedImageView *)_newImageViewWithTag:(NSUInteger)tag{
+    YYAnimatedImageView *thumbView = [[YYAnimatedImageView alloc] init];
     thumbView.contentMode = UIViewContentModeScaleAspectFill;
     thumbView.backgroundColor = [UIColor lightGrayColor];
     thumbView.tag = tag;

@@ -33,7 +33,6 @@
     NSMutableArray *needLoadArr;
     BOOL scrollToToping;
     YYFPSLabel *_fpsLabel;
-    YYPhotoGroupView *picBrower;
 }
 - (void)viewDidAppear:(BOOL)animated{
     [super viewDidAppear:animated];
@@ -42,22 +41,36 @@
     self.navigationController.navigationBar.translucent = NO;
     self.navigationController.navigationBar.barStyle = UIBarStyleDefault;
 }
-
-- (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
-{
-    
-    [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
-        if(picBrower){
-            picBrower.center = picBrower.superview.center;
-        }
-        //        NSLog(@"%@",NSStringFromCGPoint(CGPointApplyAffineTransform(center, transform) ));
-    } completion:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
-    }];
-}
+//- (BOOL)prefersStatusBarHidden{
+//    return YES;
+//}
+//- (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
+//{
+//    CGAffineTransform transform = [coordinator targetTransform];
+//    CGAffineTransform invertedRotation = CGAffineTransformInvert(transform);
+//    [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
+//       
+//        if(picBrower){
+////            picBrower.transform = CGAffineTransformConcat(picBrower.transform, invertedRotation);
+////            picBrower.center =picBrower.superview.center;
+//          //  [picBrower dismiss];
+//
+//           // CGFloat width = MAX([UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height);
+//            //picBrower.frame = CGRectMake(0, 0, width, width);
+////            picBrower.center = picBrower.superview.center;
+// //           NSLog(@"%@self:@",NSStringFromCGRect(picBrower.frame));
+// //           NSLog(@"%@super:@",NSStringFromCGRect(picBrower.superview.bounds));
+//        }
+//        //        NSLog(@"%@",NSStringFromCGPoint(CGPointApplyAffineTransform(center, transform) ));
+//    } completion:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
+////        picBrower.contentView.transform =CGAffineTransformConcat(picBrower.contentView.transform, transform);
+////        [picBrower.contentView layoutSubviews];
+//    }];
+//}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-
+    [self prefersStatusBarHidden];
     [self.tableView setSeparatorInset:UIEdgeInsetsZero];
     [self.tableView setLayoutMargins:UIEdgeInsetsZero];
     self.tableView.delegate = self;
@@ -179,13 +192,9 @@
         }
         
     }
-    self.navigationController.navigationBar.hidden = YES;
-    picBrower = [[YYPhotoGroupView alloc] initWithGroupItems:items];
-    self.tabBarController.tabBar.hidden = YES;
-    [picBrower presentFromImageView:fromView toContainer:self.navigationController.view animated:YES completion:nil dismissCompletion:^{
-       // self.tabBarController.tabBar.hidden = NO;
-        self.navigationController.navigationBar.hidden = NO;
-    }];
+    
+   YYPhotoGroupView *picBrower = [[YYPhotoGroupView alloc] initWithGroupItems:items];
+    [picBrower presentFromImageView:fromView toContainer:self.tabBarController.view animated:YES completion:nil];
    
 }
 

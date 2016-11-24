@@ -307,5 +307,87 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="J3K-td-6BO" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
         </scene>
+        <!--Photo Brower View Controller-->
+        <scene sceneID="s5e-Dt-KcH">
+            <objects>
+                <viewController storyboardIdentifier="PhotoBrowerViewController" hidesBottomBarWhenPushed="YES" id="Yld-Jb-iXl" customClass="PhotoBrowerViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="Eyd-dI-OXr"/>
+                        <viewControllerLayoutGuide type="bottom" id="bS3-3u-nHu"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="9uK-YC-49p">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="M0F-y7-p8v" customClass="YYPhotoGroupView">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                                <subviews>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="BRS-XL-Ajx">
+                                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                                    </imageView>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="dp7-pi-FCE">
+                                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                                    </imageView>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="46s-Xd-Bga">
+                                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                                        <subviews>
+                                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="6RJ-9m-ycw">
+                                                <rect key="frame" x="-10" y="0.0" width="395" height="667"/>
+                                            </scrollView>
+                                        </subviews>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <constraints>
+                                            <constraint firstItem="6RJ-9m-ycw" firstAttribute="centerX" secondItem="46s-Xd-Bga" secondAttribute="centerX" id="3Wa-gK-tWk"/>
+                                            <constraint firstItem="6RJ-9m-ycw" firstAttribute="width" secondItem="46s-Xd-Bga" secondAttribute="width" constant="20" id="H6H-CP-gNm"/>
+                                            <constraint firstItem="6RJ-9m-ycw" firstAttribute="height" secondItem="46s-Xd-Bga" secondAttribute="height" id="LhF-nC-jKA"/>
+                                            <constraint firstItem="6RJ-9m-ycw" firstAttribute="centerY" secondItem="46s-Xd-Bga" secondAttribute="centerY" id="kQU-1y-RtP"/>
+                                        </constraints>
+                                    </view>
+                                </subviews>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstItem="dp7-pi-FCE" firstAttribute="height" secondItem="M0F-y7-p8v" secondAttribute="height" id="0CE-Sh-C1Q"/>
+                                    <constraint firstItem="BRS-XL-Ajx" firstAttribute="centerY" secondItem="M0F-y7-p8v" secondAttribute="centerY" id="2Fg-BU-9ry"/>
+                                    <constraint firstItem="46s-Xd-Bga" firstAttribute="centerX" secondItem="M0F-y7-p8v" secondAttribute="centerX" id="3fH-70-WMU"/>
+                                    <constraint firstItem="BRS-XL-Ajx" firstAttribute="width" secondItem="M0F-y7-p8v" secondAttribute="width" id="ECO-pR-Cd0"/>
+                                    <constraint firstItem="46s-Xd-Bga" firstAttribute="height" secondItem="M0F-y7-p8v" secondAttribute="height" id="QzE-ba-QaC"/>
+                                    <constraint firstItem="46s-Xd-Bga" firstAttribute="width" secondItem="M0F-y7-p8v" secondAttribute="width" id="Swy-th-ARO"/>
+                                    <constraint firstItem="dp7-pi-FCE" firstAttribute="centerY" secondItem="M0F-y7-p8v" secondAttribute="centerY" id="UXL-LK-edx"/>
+                                    <constraint firstItem="BRS-XL-Ajx" firstAttribute="centerX" secondItem="M0F-y7-p8v" secondAttribute="centerX" id="nKR-rX-qeP"/>
+                                    <constraint firstItem="BRS-XL-Ajx" firstAttribute="height" secondItem="M0F-y7-p8v" secondAttribute="height" id="p7B-5m-SM9"/>
+                                    <constraint firstItem="46s-Xd-Bga" firstAttribute="centerY" secondItem="M0F-y7-p8v" secondAttribute="centerY" id="qXk-Gt-Orl"/>
+                                    <constraint firstItem="dp7-pi-FCE" firstAttribute="width" secondItem="M0F-y7-p8v" secondAttribute="width" id="vCS-MR-Cs5"/>
+                                    <constraint firstItem="dp7-pi-FCE" firstAttribute="centerX" secondItem="M0F-y7-p8v" secondAttribute="centerX" id="xKW-19-pEr"/>
+                                </constraints>
+                                <connections>
+                                    <outlet property="background" destination="BRS-XL-Ajx" id="LXz-Q2-zPm"/>
+                                    <outlet property="blurBackground" destination="dp7-pi-FCE" id="yao-w7-dNK"/>
+                                    <outlet property="contentView" destination="46s-Xd-Bga" id="FKx-Uk-oRb"/>
+                                    <outlet property="scrollView" destination="6RJ-9m-ycw" id="DQJ-me-ZZU"/>
+                                </connections>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstAttribute="trailing" secondItem="M0F-y7-p8v" secondAttribute="trailing" id="5NA-HY-HXZ"/>
+                            <constraint firstItem="M0F-y7-p8v" firstAttribute="top" secondItem="9uK-YC-49p" secondAttribute="top" id="Fcy-Hv-zvw"/>
+                            <constraint firstItem="M0F-y7-p8v" firstAttribute="leading" secondItem="9uK-YC-49p" secondAttribute="leading" id="I6Z-bB-uMN"/>
+                            <constraint firstAttribute="bottom" secondItem="M0F-y7-p8v" secondAttribute="bottom" id="uzt-fd-SgX"/>
+                        </constraints>
+                        <connections>
+                            <outlet property="background" destination="BRS-XL-Ajx" id="fu2-Um-EAJ"/>
+                            <outlet property="blurBackground" destination="dp7-pi-FCE" id="wBe-HG-rfs"/>
+                            <outlet property="contentView" destination="46s-Xd-Bga" id="IOV-WK-Sye"/>
+                            <outlet property="scrollView" destination="6RJ-9m-ycw" id="2CP-yx-2FS"/>
+                        </connections>
+                    </view>
+                    <extendedEdge key="edgesForExtendedLayout" bottom="YES"/>
+                    <connections>
+                        <outlet property="photoGroup" destination="M0F-y7-p8v" id="5ps-F6-qeC"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="hGN-jF-CAH" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+        </scene>
     </scenes>
 </document>
