@@ -164,7 +164,9 @@
     
     UIImage *image = _imageView.image;
     if (image.size.height / image.size.width > self.height / self.width) {
-        _imageContainerView.height = floor(image.size.height / (image.size.width / self.width));
+        _imageContainerView.height = self.height;
+        _imageContainerView.width = self.height *image.size.width/image.size.height;
+        _imageContainerView.centerX = self.width / 2;
     } else {
         CGFloat height = image.size.height / image.size.width * self.width;
         if (height < 1 || isnan(height)) height = self.height;
@@ -175,7 +177,7 @@
     if (_imageContainerView.height > self.height && _imageContainerView.height - self.height <= 1) {
         _imageContainerView.height = self.height;
     }
-    self.contentSize = CGSizeMake(self.width, MAX(_imageContainerView.height, self.height));
+    self.contentSize = CGSizeMake(_imageContainerView.width, MAX(_imageContainerView.height, self.height));
     [self scrollRectToVisible:self.bounds animated:NO];
     
     if (_imageContainerView.height <= self.height) {
@@ -444,7 +446,6 @@
             [self scrollViewDidScroll:_scrollView];
             _scrollView.userInteractionEnabled = YES;
             [self hidePager];
-            if (completion) completion();
         }];
         
     } else {
@@ -473,7 +474,6 @@
                 [self scrollViewDidScroll:_scrollView];
                 _scrollView.userInteractionEnabled = YES;
                 [self hidePager];
-                if (completion) completion();
             }];
         }];
     }

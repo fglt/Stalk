@@ -51,7 +51,6 @@
 		177B20FD1DE52CB0005A1438 /* WBPicture.m in Sources */ = {isa = PBXBuildFile; fileRef = 177B20FC1DE52CB0005A1438 /* WBPicture.m */; };
 		177B21021DE56F61005A1438 /* clear.png in Resources */ = {isa = PBXBuildFile; fileRef = 177B21011DE56F61005A1438 /* clear.png */; };
 		177B21041DE5797A005A1438 /* clear247.png in Resources */ = {isa = PBXBuildFile; fileRef = 177B21031DE5797A005A1438 /* clear247.png */; };
-		177B21071DE6D53B005A1438 /* PhotoBrowerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 177B21061DE6D53B005A1438 /* PhotoBrowerViewController.m */; };
 		17AFD3F41DDDFABF007C7DB9 /* emotionResource.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 17AFD3F31DDDFABF007C7DB9 /* emotionResource.bundle */; };
 		17AFD3F71DDED732007C7DB9 /* StatusDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 17AFD3F61DDED732007C7DB9 /* StatusDetailViewController.m */; };
 		17FA23001DE3CE0C00617651 /* WBHttpRequest+STalk.m in Sources */ = {isa = PBXBuildFile; fileRef = 17FA22FF1DE3CE0C00617651 /* WBHttpRequest+STalk.m */; };
@@ -134,8 +133,6 @@
 		177B20FC1DE52CB0005A1438 /* WBPicture.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WBPicture.m; sourceTree = "<group>"; };
 		177B21011DE56F61005A1438 /* clear.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = clear.png; sourceTree = "<group>"; };
 		177B21031DE5797A005A1438 /* clear247.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = clear247.png; sourceTree = "<group>"; };
-		177B21051DE6D53B005A1438 /* PhotoBrowerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PhotoBrowerViewController.h; sourceTree = "<group>"; };
-		177B21061DE6D53B005A1438 /* PhotoBrowerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PhotoBrowerViewController.m; sourceTree = "<group>"; };
 		17AFD3F31DDDFABF007C7DB9 /* emotionResource.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = emotionResource.bundle; sourceTree = "<group>"; };
 		17AFD3F51DDED731007C7DB9 /* StatusDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StatusDetailViewController.h; sourceTree = "<group>"; };
 		17AFD3F61DDED732007C7DB9 /* StatusDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StatusDetailViewController.m; sourceTree = "<group>"; };
@@ -226,8 +223,6 @@
 				177B20F31DE43CB0005A1438 /* SendStatusViewController.m */,
 				177B20F51DE43F11005A1438 /* APPHelper.h */,
 				177B20F61DE43F11005A1438 /* APPHelper.m */,
-				177B21051DE6D53B005A1438 /* PhotoBrowerViewController.h */,
-				177B21061DE6D53B005A1438 /* PhotoBrowerViewController.m */,
 			);
 			path = stalk;
 			sourceTree = "<group>";
@@ -470,7 +465,6 @@
 				17FA23001DE3CE0C00617651 /* WBHttpRequest+STalk.m in Sources */,
 				171BCCA81DD4B6FF009FF89E /* AppDelegate.m in Sources */,
 				171BCCF01DD61C57009FF89E /* WBAuthorizeResponse+copy.m in Sources */,
-				177B21071DE6D53B005A1438 /* PhotoBrowerViewController.m in Sources */,
 				171BCD0D1DD7025A009FF89E /* UIScreen+Additions.m in Sources */,
 				1741E6741DE1DEBD00C887D0 /* YYFPSLabel.m in Sources */,
 				17AFD3F71DDED732007C7DB9 /* StatusDetailViewController.m in Sources */,
