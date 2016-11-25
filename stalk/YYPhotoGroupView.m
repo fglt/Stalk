@@ -48,8 +48,7 @@
 @end
 
 
-
-@interface YYPhotoGroupCell : UIScrollView <UIScrollViewDelegate>
+@interface YYPhotoGroupCell :UIScrollView<UIScrollViewDelegate>
 @property (nonatomic, strong) UIView *imageContainerView;
 @property (nonatomic, strong) YYAnimatedImageView *imageView;
 @property (nonatomic, assign) NSInteger page;
@@ -105,10 +104,14 @@
 
 - (void)layoutSubviews {
     [super layoutSubviews];
-    [self resizeSubviewSize];
-    
+    /***
+     ***[self resizeSubviewSize];
+     ***这个函数不能放到layoutSubviews中;因为缩放会使得layoutSubviews被调用，这样导致子View的大小不能变化，
+     ***也就是不能缩放，当旋转时，应该在其他被触发的函数中调用resizeSubviewSize，比如父View的
+     ***layoutSubviews中调用，同时还要设置缩放为默认值即1.0；
+     ***/
+    //[self resizeSubviewSize];
     _progressLayer.center = CGPointMake(self.width / 2, self.height / 2);
-    
 }
 
 - (void)setItem:(YYPhotoGroupItem *)item {
@@ -233,8 +236,9 @@
 
 @property (nonatomic, strong) UIScrollView *scrollView;
 @property (nonatomic, strong) NSMutableArray *cells;
-@property (nonatomic, strong) UIPageControl *pager;
-
+//@property (nonatomic, strong) UIPageControl *pager;
+@property (nonatomic, strong) UILabel *indexLabel;
+@property (nonatomic) NSUInteger currentIndex;
 @property (nonatomic, assign) NSInteger fromItemIndex;
 @property (nonatomic, assign) BOOL isPresented;
 
@@ -291,16 +295,24 @@
     _scrollView.delaysContentTouches = NO;
     _scrollView.canCancelContentTouches = YES;
     
-    _pager = [[UIPageControl alloc] init];
-    _pager.hidesForSinglePage = YES;
-    _pager.userInteractionEnabled = NO;
-    _pager.width = self.width - 36;
-    _pager.height = 10;
-    _pager.center = CGPointMake(self.width / 2, self.height - 18);
+    _indexLabel = [UILabel new];
+    _indexLabel.width = 80;
+    _indexLabel.height = 40;
+    _indexLabel.textColor = [UIColor whiteColor];
+    _indexLabel.font = [UIFont boldSystemFontOfSize:16];
+    _indexLabel.center = CGPointMake(self.width / 2, self.height - 30);
+    
+//    _pager = [[UIPageControl alloc] init];
+//    _pager.hidesForSinglePage = YES;
+//    _pager.userInteractionEnabled = NO;
+//    _pager.width = 120;
+//    _pager.height = 10;
+//    _pager.center = CGPointMake(self.width / 2, self.height - 18);
 
     [self addSubview:_contentView];
     [_contentView addSubview:_scrollView];
-    [_contentView addSubview:_pager];
+//    [_contentView addSubview:_pager];
+    [_contentView addSubview:_indexLabel];
     
     return self;
 }
@@ -308,18 +320,23 @@
 - (void)layoutSubviews{
     [super layoutSubviews];
     CGPoint c = CGPointMake(self.bounds.size.width/2, self.bounds.size.height/2);
-    _pager.center = CGPointMake(self.width / 2, self.height - 18);
+    
 
     _rotation = YES;
+    
     _contentView.frame = self.bounds;
     _contentView.center = c;
-    _scrollView.contentOffset = CGPointMake(_pager.currentPage *_scrollView.width, _scrollView.contentOffset.y);
+    //_pager.center = CGPointMake(self.width / 2, self.height - 18);
+    _indexLabel.center =  CGPointMake(self.width / 2, self.height - 30);
+    _scrollView.contentOffset = CGPointMake(_currentIndex *_scrollView.width, _scrollView.contentOffset.y);
     _scrollView.contentSize = CGSizeMake(_scrollView.width * self.groupItems.count, _scrollView.height);
     for (int i=0; i<_cells.count; i++){
-        UIView *cell = _cells[i];
+        YYPhotoGroupCell *cell = (YYPhotoGroupCell *)_cells[i];
         cell.frame = self.bounds;
+        cell.zoomScale = 1;
+        [cell resizeSubviewSize];
     }
-    
+
     for (int i=0; i<_scrollView.subviews.count; i++){
         YYPhotoGroupCell *cell = (YYPhotoGroupCell *) _scrollView.subviews[i];
         cell.origin = CGPointMake(_scrollView.width * cell.page + kPadding / 2, 0);
@@ -346,18 +363,19 @@
     }
     if (page == -1) page = 0;
     _fromItemIndex = page;
-
+    self.currentIndex = page;
+   // _indexLabel.text = [NSString stringWithFormat:@"%ld /%ld", _currentIndex,_groupItems.count];
     self.size = _toContainerView.size;
-    self.pager.alpha = 0;
-    self.pager.numberOfPages = self.groupItems.count;
-    self.pager.currentPage = page;
+//    self.pager.alpha = 0;
+//    self.pager.numberOfPages = self.groupItems.count;
+//    self.pager.currentPage = page;
     [_toContainerView addSubview:self];
     self.translatesAutoresizingMaskIntoConstraints = NO;
     [_toContainerView addConstraint:[NSLayoutConstraint constraintWithItem:self attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:_toContainerView attribute:NSLayoutAttributeWidth multiplier:1 constant:0]];
     [_toContainerView addConstraint:[NSLayoutConstraint constraintWithItem:self attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:_toContainerView attribute:NSLayoutAttributeHeight multiplier:1 constant:0]];
     
     _scrollView.contentSize = CGSizeMake(_scrollView.width * self.groupItems.count, _scrollView.height);
-    [_scrollView scrollRectToVisible:CGRectMake(_scrollView.width * _pager.currentPage, 0, _scrollView.width, _scrollView.height) animated:NO];
+    [_scrollView scrollRectToVisible:CGRectMake(_scrollView.width * _currentIndex, 0, _scrollView.width, _scrollView.height) animated:NO];
     
     /**bug:下面这一句必须有，否则下面的cell为空，点击第一张图片就不会有下面对应的动画效果;
            因为上面的[_scrollView scrollRectToVisible:CGRectMake(_scrollView.width * _pager.currentPage, 0, _scrollView.width, _scrollView.height) animated:NO];这一句在点击第一张图片时，不会触发——scrollView的contentoffset改变就不会自动触发scrollViewDidScroll 这个函数
@@ -394,88 +412,17 @@
     }completion:^(BOOL finished) {
         [UIView animateWithDuration:oneTime delay:0 options:UIViewAnimationOptionBeginFromCurrentState|UIViewAnimationOptionCurveEaseInOut animations:^{
             cell.imageView.layer.transformScale = 1.0;
-            _pager.alpha = 1;
+           // _pager.alpha = 1;
         }completion:^(BOOL finished) {
             cell.imageContainerView.clipsToBounds = YES;
             _isPresented = YES;
             [self scrollViewDidScroll:_scrollView];
             _scrollView.userInteractionEnabled = YES;
-            [self hidePager];
-             self.backgroundColor = [UIColor blackColor];
+            //[self hidePager];
         }];
     }];
 }
 
-- (void)presentFromImageView:(UIView *)fromView
-                 toContainer:(UIView *)toContainer
-                    animated:(BOOL)animated
-                  completion:(void (^)(void))completion {
-    if (!toContainer) return;
-    
-    _fromView = fromView;
-    _toContainerView = [UIApplication sharedApplication].keyWindow;
-    NSInteger page = -1;
-    for (NSUInteger i = 0; i < self.groupItems.count; i++) {
-        if (fromView == ((YYPhotoGroupItem *)self.groupItems[i]).thumbView) {
-            page = (int)i;
-            break;
-        }
-    }
-    if (page == -1) page = 0;
-    _fromItemIndex = page;
-
-    self.size = _toContainerView.size;
-
-    self.pager.alpha = 0;
-    self.pager.numberOfPages = self.groupItems.count;
-    self.pager.currentPage = page;
-    [_toContainerView addSubview:self];
-    self.translatesAutoresizingMaskIntoConstraints = NO;
-    [_toContainerView addConstraint:[NSLayoutConstraint constraintWithItem:self attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:_toContainerView attribute:NSLayoutAttributeWidth multiplier:1 constant:0]];
-    [_toContainerView addConstraint:[NSLayoutConstraint constraintWithItem:self attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:_toContainerView attribute:NSLayoutAttributeHeight multiplier:1 constant:0]];
-    
-    _scrollView.contentSize = CGSizeMake(_scrollView.width * self.groupItems.count, _scrollView.height);
-    [_scrollView scrollRectToVisible:CGRectMake(_scrollView.width * _pager.currentPage, 0, _scrollView.width, _scrollView.height) animated:NO];
-    [UIView setAnimationsEnabled:YES];
-
-    YYPhotoGroupCell *cell = [self cellForPage:self.currentPage];
-    YYPhotoGroupItem *item = _groupItems[self.currentPage];
-    
-    if (!item.thumbClippedToTop) {
-        NSString *imageKey = [[YYWebImageManager sharedManager] cacheKeyForURL:item.largeImageURL];
-        if ([[YYWebImageManager sharedManager].cache getImageForKey:imageKey withType:YYImageCacheTypeMemory]) {
-            cell.item = item;
-        }
-    }
-    if (!cell.item) {
-        cell.imageView.image = item.thumbImage;
-        [cell resizeSubviewSize];
-    }
-    CGRect fromFrame = [_fromView convertRect:_fromView.bounds toView:cell.imageContainerView];
-    
-    cell.imageContainerView.clipsToBounds = NO;
-    cell.imageView.frame = fromFrame;
-    cell.imageView.contentMode = UIViewContentModeScaleAspectFill;
-    
-    float oneTime = animated ? 0.18 : 0;
-    
-    _scrollView.userInteractionEnabled = NO;
-    [UIView animateWithDuration:oneTime delay:0 options:UIViewAnimationOptionBeginFromCurrentState|UIViewAnimationOptionCurveEaseInOut animations:^{
-        cell.imageView.frame = cell.imageContainerView.bounds;
-        cell.imageView.layer.transformScale = 1.01;
-    }completion:^(BOOL finished) {
-        [UIView animateWithDuration:oneTime delay:0 options:UIViewAnimationOptionBeginFromCurrentState|UIViewAnimationOptionCurveEaseInOut animations:^{
-            cell.imageView.layer.transformScale = 1.0;
-            _pager.alpha = 1;
-        }completion:^(BOOL finished) {
-            cell.imageContainerView.clipsToBounds = YES;
-            _isPresented = YES;
-            [self scrollViewDidScroll:_scrollView];
-            _scrollView.userInteractionEnabled = YES;
-            [self hidePager];
-        }];
-    }];
-}
 
 - (void)dismissAnimated:(BOOL)animated completion:(void (^)(void))completion {
     [UIView setAnimationsEnabled:YES];
@@ -511,7 +458,7 @@
             self.alpha = 0.0;
             self.scrollView.layer.transformScale = 0.95;
             self.scrollView.alpha = 0;
-            self.pager.alpha = 0;
+//            self.pager.alpha = 0;
         }completion:^(BOOL finished) {
             self.scrollView.layer.transformScale = 1;
             [self removeFromSuperview];
@@ -526,7 +473,7 @@
     }
     
     [UIView animateWithDuration:animated ? 0.2 : 0 delay:0 options:UIViewAnimationOptionBeginFromCurrentState|UIViewAnimationOptionCurveEaseOut animations:^{
-        _pager.alpha = 0.0;
+//        _pager.alpha = 0.0;
         if (isFromImageClipped) {
             
             CGRect fromFrame = [fromView convertRect:fromView.bounds toView:cell];
@@ -572,6 +519,12 @@
     }];
 }
 
+- (void)setCurrentIndex:(NSUInteger)currentIndex{
+    _currentIndex = currentIndex;
+    _indexLabel.text = [NSString stringWithFormat:@"%ld /%ld", _currentIndex+1,_groupItems.count];
+    
+}
+
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
     if(_rotation) return;
     [self updateCellsForReuse];
@@ -601,30 +554,32 @@
     
     NSInteger intPage = floatPage + 0.5;
     intPage = intPage < 0 ? 0 : intPage >= _groupItems.count ? (int)_groupItems.count - 1 : intPage;
-    _pager.currentPage = intPage;
-    [UIView animateWithDuration:0.3 delay:0 options:UIViewAnimationOptionBeginFromCurrentState | UIViewAnimationOptionCurveEaseInOut animations:^{
-        _pager.alpha = 1;
-    }completion:^(BOOL finish) {
-    }];
+//    _pager.currentPage = intPage;
+    self.currentIndex = intPage;
+ //   _indexLabel.text = [NSString stringWithFormat:@"%ld /%ld", _currentIndex,_groupItems.count];
+//    [UIView animateWithDuration:0.3 delay:0 options:UIViewAnimationOptionBeginFromCurrentState | UIViewAnimationOptionCurveEaseInOut animations:^{
+//        _pager.alpha = 1;
+//    }completion:^(BOOL finish) {
+//    }];
 }
 
 - (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate{
-    if (!decelerate) {
-        [self hidePager];
-    }
+//    if (!decelerate) {
+//        //[self hidePager];
+//    }
 }
 
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView{
-    [self hidePager];
+//    [self hidePager];
 }
 
 
-- (void)hidePager {
-    [UIView animateWithDuration:0.3 delay:0.8 options:UIViewAnimationOptionBeginFromCurrentState | UIViewAnimationOptionCurveEaseOut animations:^{
-        _pager.alpha = 0;
-    }completion:^(BOOL finish) {
-    }];
-}
+//- (void)hidePager {
+//    [UIView animateWithDuration:0.3 delay:0.8 options:UIViewAnimationOptionBeginFromCurrentState | UIViewAnimationOptionCurveEaseOut animations:^{
+//        _pager.alpha = 0;
+//    }completion:^(BOOL finish) {
+//    }];
+//}
 
 /// enqueue invisible cells for reuse
 - (void)updateCellsForReuse {
@@ -771,12 +726,12 @@
             CGFloat deltaY = p.y - _panGestureBeginPoint.y;
             _scrollView.top = deltaY;
             
-            CGFloat alphaDelta = 160;
-            CGFloat alpha = (alphaDelta - fabs(deltaY) + 50) / alphaDelta;
-            alpha = YY_CLAMP(alpha, 0, 1);
-            [UIView animateWithDuration:0.1 delay:0 options:UIViewAnimationOptionBeginFromCurrentState | UIViewAnimationOptionAllowUserInteraction | UIViewAnimationOptionCurveLinear animations:^{
-                _pager.alpha = alpha;
-            } completion:nil];
+//            CGFloat alphaDelta = 160;
+//            CGFloat alpha = (alphaDelta - fabs(deltaY) + 50) / alphaDelta;
+//            alpha = YY_CLAMP(alpha, 0, 1);
+//            [UIView animateWithDuration:0.1 delay:0 options:UIViewAnimationOptionBeginFromCurrentState | UIViewAnimationOptionAllowUserInteraction | UIViewAnimationOptionCurveLinear animations:^{
+//                _pager.alpha = alpha;
+//            } completion:nil];
             
         } break;
         case UIGestureRecognizerStateEnded: {
@@ -797,7 +752,7 @@
                 duration = YY_CLAMP(duration, 0.05, 0.3);
                 
                 [UIView animateWithDuration:duration delay:0 options:UIViewAnimationOptionCurveLinear | UIViewAnimationOptionBeginFromCurrentState animations:^{
-                    _pager.alpha = 0;
+//                    _pager.alpha = 0;
                     if (moveToTop) {
                         _scrollView.bottom = 0;
                     } else {
@@ -810,7 +765,7 @@
             } else {
                 [UIView animateWithDuration:0.4 delay:0 usingSpringWithDamping:0.9 initialSpringVelocity:v.y / 1000 options:UIViewAnimationOptionCurveEaseInOut | UIViewAnimationOptionAllowUserInteraction | UIViewAnimationOptionBeginFromCurrentState animations:^{
                     _scrollView.top = 0;
-                    _pager.alpha = 1;
+//                    _pager.alpha = 1;
                 } completion:^(BOOL finished) {
                     
                 }];

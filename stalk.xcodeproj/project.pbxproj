@@ -33,7 +33,6 @@
 		171BCCFE1DD6C110009FF89E /* UserWeiBoTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 171BCCFD1DD6C110009FF89E /* UserWeiBoTableViewController.m */; };
 		171BCD0C1DD7025A009FF89E /* NSString+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = 171BCD011DD7025A009FF89E /* NSString+Additions.m */; };
 		171BCD0D1DD7025A009FF89E /* UIScreen+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = 171BCD031DD7025A009FF89E /* UIScreen+Additions.m */; };
-		171BCD0E1DD7025A009FF89E /* UIView+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = 171BCD051DD7025A009FF89E /* UIView+Additions.m */; };
 		171BCD1A1DD7347D009FF89E /* WBStatusCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 171BCD191DD7347D009FF89E /* WBStatusCell.m */; };
 		171BCD1D1DD7F666009FF89E /* WBStatusLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 171BCD1C1DD7F666009FF89E /* WBStatusLayout.m */; };
 		171BCD291DDAD6A5009FF89E /* STalkTextAttachment.m in Sources */ = {isa = PBXBuildFile; fileRef = 171BCD281DDAD6A5009FF89E /* STalkTextAttachment.m */; };
@@ -101,8 +100,6 @@
 		171BCD011DD7025A009FF89E /* NSString+Additions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+Additions.m"; sourceTree = "<group>"; };
 		171BCD021DD7025A009FF89E /* UIScreen+Additions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIScreen+Additions.h"; sourceTree = "<group>"; };
 		171BCD031DD7025A009FF89E /* UIScreen+Additions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIScreen+Additions.m"; sourceTree = "<group>"; };
-		171BCD041DD7025A009FF89E /* UIView+Additions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+Additions.h"; sourceTree = "<group>"; };
-		171BCD051DD7025A009FF89E /* UIView+Additions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+Additions.m"; sourceTree = "<group>"; };
 		171BCD181DD7347D009FF89E /* WBStatusCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WBStatusCell.h; sourceTree = "<group>"; };
 		171BCD191DD7347D009FF89E /* WBStatusCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WBStatusCell.m; sourceTree = "<group>"; };
 		171BCD1B1DD7F666009FF89E /* WBStatusLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WBStatusLayout.h; sourceTree = "<group>"; };
@@ -312,8 +309,6 @@
 				171BCD011DD7025A009FF89E /* NSString+Additions.m */,
 				171BCD021DD7025A009FF89E /* UIScreen+Additions.h */,
 				171BCD031DD7025A009FF89E /* UIScreen+Additions.m */,
-				171BCD041DD7025A009FF89E /* UIView+Additions.h */,
-				171BCD051DD7025A009FF89E /* UIView+Additions.m */,
 				1741E66F1DE1D44300C887D0 /* NSObject+runtime.h */,
 				1741E6701DE1D44300C887D0 /* NSObject+runtime.m */,
 				17FA22FE1DE3CE0C00617651 /* WBHttpRequest+STalk.h */,
@@ -489,7 +484,6 @@
 				1741E6621DDF165D00C887D0 /* UserViewController.m in Sources */,
 				171BCD291DDAD6A5009FF89E /* STalkTextAttachment.m in Sources */,
 				17FA23091DE3DD8D00617651 /* StatusDataSource.m in Sources */,
-				171BCD0E1DD7025A009FF89E /* UIView+Additions.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
