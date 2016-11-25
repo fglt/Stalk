@@ -198,10 +198,8 @@
 //    blackview = [[UIView alloc]initWithFrame:[UIScreen mainScreen].bounds];
 //    blackview.backgroundColor = [UIColor redColor];
  //   [self.tabBarController.view  addSubview:blackview];
-    YYPhotoGroupView *picBrower = [[YYPhotoGroupView alloc] initWithGroupItems:items];
-    [picBrower presentFromImageView:fromView toContainer:self.tabBarController.view animated:YES completion:^{
-        //[blackview removeFromSuperview];
-    }];
+    YYPhotoGroupView *photoGroupView = [[YYPhotoGroupView alloc] initWithGroupItems:items];
+    [photoGroupView presentFromImageView:fromView animated:YES completion:nil];
    
 }
 

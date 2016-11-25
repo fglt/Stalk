@@ -1,4 +1,4 @@
-//
+ //
 //  YYPhotoGroupView.m
 //
 //  Created by ibireme on 14/3/9.
@@ -245,7 +245,6 @@
 
 @implementation YYPhotoGroupView
 
-
 - (instancetype)initWithGroupItems:(NSArray *)groupItems {
     self = [super init];
     if (groupItems.count == 0) return nil;
@@ -274,7 +273,6 @@
         [self addGestureRecognizer:pan];
         _panGesture = pan;
     }
-    
     
     _cells = @[].mutableCopy;
 
@@ -309,17 +307,10 @@
 
 - (void)layoutSubviews{
     [super layoutSubviews];
-    //if(CGRectEqualToRect(self.bounds, _contentView.frame)) return;
     CGPoint c = CGPointMake(self.bounds.size.width/2, self.bounds.size.height/2);
     _pager.center = CGPointMake(self.width / 2, self.height - 18);
-    
-    //[_contentView setNeedsLayout];
+
     _rotation = YES;
-//    _scrollView.frame = CGRectMake(-kPadding / 2, 0, self.width + kPadding, self.height);
-//    _scrollView.contentSize = CGSizeMake(_scrollView.width * self.groupItems.count, _scrollView.height);
-    
-    //_scrollView.contentOffset = CGPointMake(_pager.currentPage *(self.width + kPadding), _scrollView.contentOffset.y) ;
-    //_scrollView.center = c;
     _contentView.frame = self.bounds;
     _contentView.center = c;
     _scrollView.contentOffset = CGPointMake(_pager.currentPage *_scrollView.width, _scrollView.contentOffset.y);
@@ -336,7 +327,6 @@
         //cell.origin = CGPointMake(_scrollView.width * i + kPadding / 2, 0);
     }
     _rotation = NO;
-//    [_scrollView scrollRectToVisible:CGRectMake(_scrollView.width * _pager.currentPage, 0, _scrollView.width, _scrollView.height) animated:NO];
     [self scrollViewDidScroll:_scrollView];
     
 }
@@ -368,6 +358,12 @@
     
     _scrollView.contentSize = CGSizeMake(_scrollView.width * self.groupItems.count, _scrollView.height);
     [_scrollView scrollRectToVisible:CGRectMake(_scrollView.width * _pager.currentPage, 0, _scrollView.width, _scrollView.height) animated:NO];
+    
+    /**bug:下面这一句必须有，否则下面的cell为空，点击第一张图片就不会有下面对应的动画效果;
+           因为上面的[_scrollView scrollRectToVisible:CGRectMake(_scrollView.width * _pager.currentPage, 0, _scrollView.width, _scrollView.height) animated:NO];这一句在点击第一张图片时，不会触发——scrollView的contentoffset改变就不会自动触发scrollViewDidScroll 这个函数
+     2016-11-25 20:39:48
+     **/
+    [self scrollViewDidScroll:_scrollView]; 
     [UIView setAnimationsEnabled:YES];
     
     YYPhotoGroupCell *cell = [self cellForPage:self.currentPage];
@@ -383,60 +379,31 @@
         cell.imageView.image = item.thumbImage;
         [cell resizeSubviewSize];
     }
+    CGRect fromFrame = [_fromView convertRect:_fromView.bounds toView:cell.imageContainerView];
     
-    if (item.thumbClippedToTop) {
-        CGRect fromFrame = [_fromView convertRect:_fromView.bounds toView:cell];
-        CGRect originFrame = cell.imageContainerView.frame;
-        CGFloat scale = fromFrame.size.width / cell.imageContainerView.width;
-        
-        cell.imageContainerView.centerX = CGRectGetMidX(fromFrame);
-        cell.imageContainerView.height = fromFrame.size.height / scale;
-        cell.imageContainerView.layer.transformScale = scale;
-        cell.imageContainerView.centerY = CGRectGetMidY(fromFrame);
-        
-        float oneTime = animated ? 0.25 : 0;
+    cell.imageContainerView.clipsToBounds = NO;
+    cell.imageView.frame = fromFrame;
+    cell.imageView.contentMode = UIViewContentModeScaleAspectFill;
+    
+    float oneTime = animated ? 0.2 : 0;
+    
+    _scrollView.userInteractionEnabled = NO;
+    [UIView animateWithDuration:oneTime delay:0 options:UIViewAnimationOptionBeginFromCurrentState|UIViewAnimationOptionCurveEaseInOut animations:^{
+        cell.imageView.frame = cell.imageContainerView.bounds;
+        cell.imageView.layer.transformScale = 1.01;
+    }completion:^(BOOL finished) {
         [UIView animateWithDuration:oneTime delay:0 options:UIViewAnimationOptionBeginFromCurrentState|UIViewAnimationOptionCurveEaseInOut animations:^{
-        }completion:NULL];
-        
-        _scrollView.userInteractionEnabled = NO;
-        [UIView animateWithDuration:oneTime delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
-            cell.imageContainerView.layer.transformScale = 1;
-            cell.imageContainerView.frame = originFrame;
+            cell.imageView.layer.transformScale = 1.0;
             _pager.alpha = 1;
         }completion:^(BOOL finished) {
+            cell.imageContainerView.clipsToBounds = YES;
             _isPresented = YES;
             [self scrollViewDidScroll:_scrollView];
             _scrollView.userInteractionEnabled = YES;
             [self hidePager];
+             self.backgroundColor = [UIColor blackColor];
         }];
-        
-    } else {
-        CGRect fromFrame = [_fromView convertRect:_fromView.bounds toView:cell.imageContainerView];
-        
-        cell.imageContainerView.clipsToBounds = NO;
-        cell.imageView.frame = fromFrame;
-        cell.imageView.contentMode = UIViewContentModeScaleAspectFill;
-        
-        float oneTime = animated ? 0.18 : 0;
-
-        _scrollView.userInteractionEnabled = NO;
-        [UIView animateWithDuration:oneTime delay:0 options:UIViewAnimationOptionBeginFromCurrentState|UIViewAnimationOptionCurveEaseInOut animations:^{
-            cell.imageView.frame = cell.imageContainerView.bounds;
-            cell.imageView.layer.transformScale = 1.01;
-        }completion:^(BOOL finished) {
-            [UIView animateWithDuration:oneTime delay:0 options:UIViewAnimationOptionBeginFromCurrentState|UIViewAnimationOptionCurveEaseInOut animations:^{
-                cell.imageView.layer.transformScale = 1.0;
-                _pager.alpha = 1;
-            }completion:^(BOOL finished) {
-                cell.imageContainerView.clipsToBounds = YES;
-                _isPresented = YES;
-                [self scrollViewDidScroll:_scrollView];
-                _scrollView.userInteractionEnabled = YES;
-                [self hidePager];
-            }];
-        }];
-    }
-
+    }];
 }
 
 - (void)presentFromImageView:(UIView *)fromView
@@ -484,57 +451,30 @@
         cell.imageView.image = item.thumbImage;
         [cell resizeSubviewSize];
     }
+    CGRect fromFrame = [_fromView convertRect:_fromView.bounds toView:cell.imageContainerView];
     
-    if (item.thumbClippedToTop) {
-        CGRect fromFrame = [_fromView convertRect:_fromView.bounds toView:cell];
-        CGRect originFrame = cell.imageContainerView.frame;
-        CGFloat scale = fromFrame.size.width / cell.imageContainerView.width;
-        
-        cell.imageContainerView.centerX = CGRectGetMidX(fromFrame);
-        cell.imageContainerView.height = fromFrame.size.height / scale;
-        cell.imageContainerView.layer.transformScale = scale;
-        cell.imageContainerView.centerY = CGRectGetMidY(fromFrame);
-        
-        float oneTime = animated ? 0.25 : 0;
-        
-        _scrollView.userInteractionEnabled = NO;
-        [UIView animateWithDuration:oneTime delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
-            cell.imageContainerView.layer.transformScale = 1;
-            cell.imageContainerView.frame = originFrame;
+    cell.imageContainerView.clipsToBounds = NO;
+    cell.imageView.frame = fromFrame;
+    cell.imageView.contentMode = UIViewContentModeScaleAspectFill;
+    
+    float oneTime = animated ? 0.18 : 0;
+    
+    _scrollView.userInteractionEnabled = NO;
+    [UIView animateWithDuration:oneTime delay:0 options:UIViewAnimationOptionBeginFromCurrentState|UIViewAnimationOptionCurveEaseInOut animations:^{
+        cell.imageView.frame = cell.imageContainerView.bounds;
+        cell.imageView.layer.transformScale = 1.01;
+    }completion:^(BOOL finished) {
+        [UIView animateWithDuration:oneTime delay:0 options:UIViewAnimationOptionBeginFromCurrentState|UIViewAnimationOptionCurveEaseInOut animations:^{
+            cell.imageView.layer.transformScale = 1.0;
             _pager.alpha = 1;
         }completion:^(BOOL finished) {
+            cell.imageContainerView.clipsToBounds = YES;
             _isPresented = YES;
             [self scrollViewDidScroll:_scrollView];
             _scrollView.userInteractionEnabled = YES;
             [self hidePager];
         }];
-        
-    } else {
-        CGRect fromFrame = [_fromView convertRect:_fromView.bounds toView:cell.imageContainerView];
-        
-        cell.imageContainerView.clipsToBounds = NO;
-        cell.imageView.frame = fromFrame;
-        cell.imageView.contentMode = UIViewContentModeScaleAspectFill;
-        
-        float oneTime = animated ? 0.18 : 0;
-
-        _scrollView.userInteractionEnabled = NO;
-        [UIView animateWithDuration:oneTime delay:0 options:UIViewAnimationOptionBeginFromCurrentState|UIViewAnimationOptionCurveEaseInOut animations:^{
-            cell.imageView.frame = cell.imageContainerView.bounds;
-            cell.imageView.layer.transformScale = 1.01;
-        }completion:^(BOOL finished) {
-            [UIView animateWithDuration:oneTime delay:0 options:UIViewAnimationOptionBeginFromCurrentState|UIViewAnimationOptionCurveEaseInOut animations:^{
-                cell.imageView.layer.transformScale = 1.0;
-                _pager.alpha = 1;
-            }completion:^(BOOL finished) {
-                cell.imageContainerView.clipsToBounds = YES;
-                _isPresented = YES;
-                [self scrollViewDidScroll:_scrollView];
-                _scrollView.userInteractionEnabled = YES;
-                [self hidePager];
-            }];
-        }];
-    }
+    }];
 }
 
 - (void)dismissAnimated:(BOOL)animated completion:(void (^)(void))completion {
@@ -564,8 +504,6 @@
     }
     cell.progressLayer.hidden = YES;
     [CATransaction commit];
-    
-    
     
     
     if (fromView == nil) {
@@ -623,6 +561,10 @@
     [self dismissAnimated:YES completion:nil];
 }
 
+- (void)setGroupItems:(NSArray *)groupItems{
+    _groupItems = groupItems.copy;
+    [_cells removeAllObjects];
+}
 
 - (void)cancelAllImageLoad {
     [_cells enumerateObjectsUsingBlock:^(YYPhotoGroupCell *cell, NSUInteger idx, BOOL *stop) {

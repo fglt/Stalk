@@ -38,4 +38,5 @@
                   completion:(void (^)(void))completion;
 - (void)dismissAnimated:(BOOL)animated completion:(void (^)(void))completion;
 - (void)dismiss;
+- (void)setGroupItems:(NSArray *)groupItems;
 @end
