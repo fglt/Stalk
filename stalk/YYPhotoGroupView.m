@@ -60,6 +60,7 @@
 
 @property (nonatomic, strong) YYPhotoGroupItem *item;
 @property (nonatomic, readonly) BOOL itemDidLoad;
+
 - (void)resizeSubviewSize;
 @end
 
@@ -104,7 +105,9 @@
 
 - (void)layoutSubviews {
     [super layoutSubviews];
+    [self resizeSubviewSize];
     _progressLayer.center = CGPointMake(self.width / 2, self.height / 2);
+    
 }
 
 - (void)setItem:(YYPhotoGroupItem *)item {
@@ -235,14 +238,13 @@
 @property (nonatomic, strong) UIScrollView *scrollView;
 @property (nonatomic, strong) NSMutableArray *cells;
 @property (nonatomic, strong) UIPageControl *pager;
-@property (nonatomic, assign) CGFloat pagerCurrentPage;
-@property (nonatomic, assign) BOOL fromNavigationBarHidden;
 
 @property (nonatomic, assign) NSInteger fromItemIndex;
 @property (nonatomic, assign) BOOL isPresented;
 
 @property (nonatomic, strong) UIPanGestureRecognizer *panGesture;
 @property (nonatomic, assign) CGPoint panGestureBeginPoint;
+
 @end
 
 @implementation YYPhotoGroupView
@@ -319,16 +321,12 @@
     
     _background = UIImageView.new;
     _background.frame = self.bounds;
-    _background.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-    
+
     _blurBackground = UIImageView.new;
     _blurBackground.frame = self.bounds;
-    _blurBackground.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-    
     _contentView = UIView.new;
     _contentView.frame = self.bounds;
-    _contentView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-    
+  
     _scrollView = UIScrollView.new;
     _scrollView.frame = CGRectMake(-kPadding / 2, 0, self.width + kPadding, self.height);
     _scrollView.delegate = self;
@@ -347,7 +345,7 @@
     _pager.width = self.width - 36;
     _pager.height = 10;
     _pager.center = CGPointMake(self.width / 2, self.height - 18);
-    _pager.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleTopMargin;
+
     
     [self addSubview:_background];
     [self addSubview:_blurBackground];
@@ -358,6 +356,37 @@
     return self;
 }
 
+- (void)layoutSubviews{
+    [super layoutSubviews];
+    _background.frame = self.bounds;
+    CGPoint c = CGPointMake(self.bounds.size.width/2, self.bounds.size.height/2);
+    _background.center =  c;
+    _blurBackground.frame = self.bounds;
+    _blurBackground.center = c;
+    _contentView.frame = self.bounds;
+    _contentView.frame = self.bounds;
+    _contentView.center = c;
+    _pager.center = CGPointMake(self.width / 2, self.height - 18);
+    
+    [_contentView setNeedsLayout];
+    _scrollView.frame = CGRectMake(-kPadding / 2, 0, self.width + kPadding, self.height);
+    _scrollView.contentSize = CGSizeMake(_scrollView.width * self.groupItems.count, _scrollView.height);
+    _scrollView.center = c;
+    
+    
+    for (int i=0; i<_cells.count; i++){
+        UIView *cell = _cells[i];
+        cell.frame = self.bounds;
+    }
+    
+    for (int i=0; i<_scrollView.subviews.count; i++){
+        UIView *cell = _scrollView.subviews[i];
+        cell.origin = CGPointMake((self.width + kPadding) * i + kPadding / 2, 0);
+        [cell layoutSubviews];
+    }
+    
+    [_scrollView scrollRectToVisible:CGRectMake(_scrollView.width * _pager.currentPage, 0, _scrollView.width, _scrollView.height) animated:NO];
+}
 
 - (void)presentFromImageView:(UIView *)fromView
                  toContainer:(UIView *)toContainer
@@ -403,10 +432,7 @@
     [self scrollViewDidScroll:_scrollView];
     
     [UIView setAnimationsEnabled:YES];
-    _fromNavigationBarHidden = [UIApplication sharedApplication].statusBarHidden;
-//    [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:animated ? UIStatusBarAnimationFade : UIStatusBarAnimationNone];
-//    
-    
+
     YYPhotoGroupCell *cell = [self cellForPage:self.currentPage];
     YYPhotoGroupItem *item = _groupItems[self.currentPage];
     

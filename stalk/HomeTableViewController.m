@@ -54,10 +54,11 @@
 //        blackview.transform = CGAffineTransformConcat(blackview.transform, invertedRotation);
 //        blackview.center = blackview.superview.center;
 //        if(picBrower){
-            picBrower.transform = CGAffineTransformConcat(picBrower.transform, invertedRotation);
-            picBrower.center = picBrower.superview.center;
-        picBrower.contentView.transform =CGAffineTransformConcat(picBrower.contentView.transform, transform);
-        [picBrower.contentView layoutSubviews];
+           // picBrower.transform = CGAffineTransformConcat(picBrower.transform, invertedRotation);
+        picBrower.frame = picBrower.superview.bounds;
+        picBrower.center = picBrower.superview.center;
+       // picBrower.contentView.transform =CGAffineTransformConcat(picBrower.contentView.transform, transform);
+        //[picBrower.contentView layoutSubviews];
           //  [picBrower dismiss];
 
            // CGFloat width = MAX([UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height);
@@ -68,7 +69,7 @@
 //        }
         //        NSLog(@"%@",NSStringFromCGPoint(CGPointApplyAffineTransform(center, transform) ));
     } completion:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
-      
+        [picBrower setNeedsLayout];
     }];
 }
 
