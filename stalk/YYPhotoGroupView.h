@@ -33,7 +33,9 @@
                  toContainer:(UIView *)container
                     animated:(BOOL)animated
                   completion:(void (^)(void))completion;
-
+- (void)presentFromImageView:(UIView *)fromView
+                    animated:(BOOL)animated
+                  completion:(void (^)(void))completion;
 - (void)dismissAnimated:(BOOL)animated completion:(void (^)(void))completion;
 - (void)dismiss;
 @end

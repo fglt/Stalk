@@ -106,6 +106,7 @@
 - (void)layoutSubviews {
     [super layoutSubviews];
     [self resizeSubviewSize];
+    
     _progressLayer.center = CGPointMake(self.width / 2, self.height / 2);
     
 }
@@ -230,12 +231,6 @@
 @property (nonatomic, weak) UIView *fromView;
 @property (nonatomic, weak) UIView *toContainerView;
 
-@property (nonatomic, strong) UIImage *snapshotImage;
-@property (nonatomic, strong) UIImage *snapshorImageHideFromView;
-
-@property (nonatomic, strong) UIImageView *background;
-@property (nonatomic, strong) UIImageView *blurBackground;
-
 @property (nonatomic, strong) UIScrollView *scrollView;
 @property (nonatomic, strong) NSMutableArray *cells;
 @property (nonatomic, strong) UIPageControl *pager;
@@ -250,48 +245,13 @@
 
 @implementation YYPhotoGroupView
 
+
 - (instancetype)initWithGroupItems:(NSArray *)groupItems {
     self = [super init];
     if (groupItems.count == 0) return nil;
     _groupItems = groupItems.copy;
-    _blurEffectBackground = YES;
-    NSString *model = [UIDevice currentDevice].machineModel;
-    static NSMutableSet *oldDevices;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        oldDevices = [NSMutableSet new];
-        [oldDevices addObject:@"iPod1,1"];
-        [oldDevices addObject:@"iPod2,1"];
-        [oldDevices addObject:@"iPod3,1"];
-        [oldDevices addObject:@"iPod4,1"];
-        [oldDevices addObject:@"iPod5,1"];
-        
-        [oldDevices addObject:@"iPhone1,1"];
-        [oldDevices addObject:@"iPhone1,1"];
-        [oldDevices addObject:@"iPhone1,2"];
-        [oldDevices addObject:@"iPhone2,1"];
-        [oldDevices addObject:@"iPhone3,1"];
-        [oldDevices addObject:@"iPhone3,2"];
-        [oldDevices addObject:@"iPhone3,3"];
-        [oldDevices addObject:@"iPhone4,1"];
-        
-        [oldDevices addObject:@"iPad1,1"];
-        [oldDevices addObject:@"iPad2,1"];
-        [oldDevices addObject:@"iPad2,2"];
-        [oldDevices addObject:@"iPad2,3"];
-        [oldDevices addObject:@"iPad2,4"];
-        [oldDevices addObject:@"iPad2,5"];
-        [oldDevices addObject:@"iPad2,6"];
-        [oldDevices addObject:@"iPad2,7"];
-        [oldDevices addObject:@"iPad3,1"];
-        [oldDevices addObject:@"iPad3,2"];
-        [oldDevices addObject:@"iPad3,3"];
-    });
-    if ([oldDevices containsObject:model]) {
-        _blurEffectBackground = NO;
-    }
     
-    self.backgroundColor = [UIColor clearColor];
+    self.backgroundColor = [UIColor blackColor];
     self.frame = [UIScreen mainScreen].bounds;
     self.clipsToBounds = YES;
     
@@ -317,12 +277,7 @@
     
     
     _cells = @[].mutableCopy;
-    
-    _background = UIImageView.new;
-    _background.frame = self.bounds;
 
-    _blurBackground = UIImageView.new;
-    _blurBackground.frame = self.bounds;
     _contentView = UIView.new;
     _contentView.frame = self.bounds;
   
@@ -345,9 +300,6 @@
     _pager.height = 10;
     _pager.center = CGPointMake(self.width / 2, self.height - 18);
 
-    
-    [self addSubview:_background];
-    [self addSubview:_blurBackground];
     [self addSubview:_contentView];
     [_contentView addSubview:_scrollView];
     [_contentView addSubview:_pager];
@@ -358,12 +310,7 @@
 - (void)layoutSubviews{
     [super layoutSubviews];
     //if(CGRectEqualToRect(self.bounds, _contentView.frame)) return;
-    _background.frame = self.bounds;
     CGPoint c = CGPointMake(self.bounds.size.width/2, self.bounds.size.height/2);
-    _background.center =  c;
-    _blurBackground.frame = self.bounds;
-    _blurBackground.center = c;
-
     _pager.center = CGPointMake(self.width / 2, self.height - 18);
     
     //[_contentView setNeedsLayout];
@@ -395,13 +342,10 @@
 }
 
 - (void)presentFromImageView:(UIView *)fromView
-                 toContainer:(UIView *)toContainer
                     animated:(BOOL)animated
-                  completion:(void (^)(void))completion {
-    if (!toContainer) return;
-    
+                  completion:(void (^)(void))completion{
     _fromView = fromView;
-    _toContainerView = toContainer;
+    _toContainerView = [UIApplication sharedApplication].keyWindow;
     
     NSInteger page = -1;
     for (NSUInteger i = 0; i < self.groupItems.count; i++) {
@@ -412,22 +356,8 @@
     }
     if (page == -1) page = 0;
     _fromItemIndex = page;
-    
-    _snapshotImage = [_toContainerView snapshotImageAfterScreenUpdates:NO];
-    BOOL fromViewHidden = fromView.hidden;
-    fromView.hidden = YES;
-    _snapshorImageHideFromView = [_toContainerView snapshotImage];
-    fromView.hidden = fromViewHidden;
-    
-    _background.image = _snapshorImageHideFromView;
-    if (_blurEffectBackground) {
-        _blurBackground.image = [_snapshorImageHideFromView imageByBlurDark]; //Same to UIBlurEffectStyleDark
-    } else {
-        _blurBackground.image = [UIImage imageWithColor:[UIColor blackColor]];
-    }
-    
+
     self.size = _toContainerView.size;
-    self.blurBackground.alpha = 0;
     self.pager.alpha = 0;
     self.pager.numberOfPages = self.groupItems.count;
     self.pager.currentPage = page;
@@ -438,8 +368,107 @@
     
     _scrollView.contentSize = CGSizeMake(_scrollView.width * self.groupItems.count, _scrollView.height);
     [_scrollView scrollRectToVisible:CGRectMake(_scrollView.width * _pager.currentPage, 0, _scrollView.width, _scrollView.height) animated:NO];
-//    [self scrollViewDidScroll:_scrollView];
-    //_isPresented =YES;
+    [UIView setAnimationsEnabled:YES];
+    
+    YYPhotoGroupCell *cell = [self cellForPage:self.currentPage];
+    YYPhotoGroupItem *item = _groupItems[self.currentPage];
+    
+    if (!item.thumbClippedToTop) {
+        NSString *imageKey = [[YYWebImageManager sharedManager] cacheKeyForURL:item.largeImageURL];
+        if ([[YYWebImageManager sharedManager].cache getImageForKey:imageKey withType:YYImageCacheTypeMemory]) {
+            cell.item = item;
+        }
+    }
+    if (!cell.item) {
+        cell.imageView.image = item.thumbImage;
+        [cell resizeSubviewSize];
+    }
+    
+    if (item.thumbClippedToTop) {
+        CGRect fromFrame = [_fromView convertRect:_fromView.bounds toView:cell];
+        CGRect originFrame = cell.imageContainerView.frame;
+        CGFloat scale = fromFrame.size.width / cell.imageContainerView.width;
+        
+        cell.imageContainerView.centerX = CGRectGetMidX(fromFrame);
+        cell.imageContainerView.height = fromFrame.size.height / scale;
+        cell.imageContainerView.layer.transformScale = scale;
+        cell.imageContainerView.centerY = CGRectGetMidY(fromFrame);
+        
+        float oneTime = animated ? 0.25 : 0;
+        [UIView animateWithDuration:oneTime delay:0 options:UIViewAnimationOptionBeginFromCurrentState|UIViewAnimationOptionCurveEaseInOut animations:^{
+        }completion:NULL];
+        
+        _scrollView.userInteractionEnabled = NO;
+        [UIView animateWithDuration:oneTime delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+            cell.imageContainerView.layer.transformScale = 1;
+            cell.imageContainerView.frame = originFrame;
+            _pager.alpha = 1;
+        }completion:^(BOOL finished) {
+            _isPresented = YES;
+            [self scrollViewDidScroll:_scrollView];
+            _scrollView.userInteractionEnabled = YES;
+            [self hidePager];
+        }];
+        
+    } else {
+        CGRect fromFrame = [_fromView convertRect:_fromView.bounds toView:cell.imageContainerView];
+        
+        cell.imageContainerView.clipsToBounds = NO;
+        cell.imageView.frame = fromFrame;
+        cell.imageView.contentMode = UIViewContentModeScaleAspectFill;
+        
+        float oneTime = animated ? 0.18 : 0;
+
+        _scrollView.userInteractionEnabled = NO;
+        [UIView animateWithDuration:oneTime delay:0 options:UIViewAnimationOptionBeginFromCurrentState|UIViewAnimationOptionCurveEaseInOut animations:^{
+            cell.imageView.frame = cell.imageContainerView.bounds;
+            cell.imageView.layer.transformScale = 1.01;
+        }completion:^(BOOL finished) {
+            [UIView animateWithDuration:oneTime delay:0 options:UIViewAnimationOptionBeginFromCurrentState|UIViewAnimationOptionCurveEaseInOut animations:^{
+                cell.imageView.layer.transformScale = 1.0;
+                _pager.alpha = 1;
+            }completion:^(BOOL finished) {
+                cell.imageContainerView.clipsToBounds = YES;
+                _isPresented = YES;
+                [self scrollViewDidScroll:_scrollView];
+                _scrollView.userInteractionEnabled = YES;
+                [self hidePager];
+            }];
+        }];
+    }
+
+}
+
+- (void)presentFromImageView:(UIView *)fromView
+                 toContainer:(UIView *)toContainer
+                    animated:(BOOL)animated
+                  completion:(void (^)(void))completion {
+    if (!toContainer) return;
+    
+    _fromView = fromView;
+    _toContainerView = [UIApplication sharedApplication].keyWindow;
+    NSInteger page = -1;
+    for (NSUInteger i = 0; i < self.groupItems.count; i++) {
+        if (fromView == ((YYPhotoGroupItem *)self.groupItems[i]).thumbView) {
+            page = (int)i;
+            break;
+        }
+    }
+    if (page == -1) page = 0;
+    _fromItemIndex = page;
+
+    self.size = _toContainerView.size;
+
+    self.pager.alpha = 0;
+    self.pager.numberOfPages = self.groupItems.count;
+    self.pager.currentPage = page;
+    [_toContainerView addSubview:self];
+    self.translatesAutoresizingMaskIntoConstraints = NO;
+    [_toContainerView addConstraint:[NSLayoutConstraint constraintWithItem:self attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:_toContainerView attribute:NSLayoutAttributeWidth multiplier:1 constant:0]];
+    [_toContainerView addConstraint:[NSLayoutConstraint constraintWithItem:self attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:_toContainerView attribute:NSLayoutAttributeHeight multiplier:1 constant:0]];
+    
+    _scrollView.contentSize = CGSizeMake(_scrollView.width * self.groupItems.count, _scrollView.height);
+    [_scrollView scrollRectToVisible:CGRectMake(_scrollView.width * _pager.currentPage, 0, _scrollView.width, _scrollView.height) animated:NO];
     [UIView setAnimationsEnabled:YES];
 
     YYPhotoGroupCell *cell = [self cellForPage:self.currentPage];
@@ -467,9 +496,6 @@
         cell.imageContainerView.centerY = CGRectGetMidY(fromFrame);
         
         float oneTime = animated ? 0.25 : 0;
-        [UIView animateWithDuration:oneTime delay:0 options:UIViewAnimationOptionBeginFromCurrentState|UIViewAnimationOptionCurveEaseInOut animations:^{
-            _blurBackground.alpha = 1;
-        }completion:NULL];
         
         _scrollView.userInteractionEnabled = NO;
         [UIView animateWithDuration:oneTime delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
@@ -491,10 +517,7 @@
         cell.imageView.contentMode = UIViewContentModeScaleAspectFill;
         
         float oneTime = animated ? 0.18 : 0;
-        [UIView animateWithDuration:oneTime*2 delay:0 options:UIViewAnimationOptionBeginFromCurrentState|UIViewAnimationOptionCurveEaseInOut animations:^{
-            _blurBackground.alpha = 1;
-        }completion:NULL];
-        
+
         _scrollView.userInteractionEnabled = NO;
         [UIView animateWithDuration:oneTime delay:0 options:UIViewAnimationOptionBeginFromCurrentState|UIViewAnimationOptionCurveEaseInOut animations:^{
             cell.imageView.frame = cell.imageContainerView.bounds;
@@ -517,7 +540,6 @@
 - (void)dismissAnimated:(BOOL)animated completion:(void (^)(void))completion {
     [UIView setAnimationsEnabled:YES];
     
-//    [[UIApplication sharedApplication] setStatusBarHidden:_fromNavigationBarHidden withAnimation:animated ? UIStatusBarAnimationFade : UIStatusBarAnimationNone];
     NSInteger currentPage = self.currentPage;
     YYPhotoGroupCell *cell = [self cellForPage:currentPage];
     YYPhotoGroupItem *item = _groupItems[currentPage];
@@ -547,13 +569,11 @@
     
     
     if (fromView == nil) {
-        self.background.image = _snapshotImage;
         [UIView animateWithDuration:animated ? 0.25 : 0 delay:0 options:UIViewAnimationOptionBeginFromCurrentState|UIViewAnimationOptionCurveEaseOut animations:^{
             self.alpha = 0.0;
             self.scrollView.layer.transformScale = 0.95;
             self.scrollView.alpha = 0;
             self.pager.alpha = 0;
-            self.blurBackground.alpha = 0;
         }completion:^(BOOL finished) {
             self.scrollView.layer.transformScale = 1;
             [self removeFromSuperview];
@@ -563,21 +583,12 @@
         return;
     }
     
-    if (_fromItemIndex != currentPage) {
-        _background.image = _snapshotImage;
-        [_background.layer addFadeAnimationWithDuration:0.25 curve:UIViewAnimationCurveEaseOut];
-    } else {
-        _background.image = _snapshorImageHideFromView;
-    }
-    
-    
     if (isFromImageClipped) {
         [cell scrollToTopAnimated:NO];
     }
     
     [UIView animateWithDuration:animated ? 0.2 : 0 delay:0 options:UIViewAnimationOptionBeginFromCurrentState|UIViewAnimationOptionCurveEaseOut animations:^{
         _pager.alpha = 0.0;
-        _blurBackground.alpha = 0.0;
         if (isFromImageClipped) {
             
             CGRect fromFrame = [fromView convertRect:fromView.bounds toView:cell];
@@ -822,7 +833,6 @@
             CGFloat alpha = (alphaDelta - fabs(deltaY) + 50) / alphaDelta;
             alpha = YY_CLAMP(alpha, 0, 1);
             [UIView animateWithDuration:0.1 delay:0 options:UIViewAnimationOptionBeginFromCurrentState | UIViewAnimationOptionAllowUserInteraction | UIViewAnimationOptionCurveLinear animations:^{
-                _blurBackground.alpha = alpha;
                 _pager.alpha = alpha;
             } completion:nil];
             
@@ -845,7 +855,6 @@
                 duration = YY_CLAMP(duration, 0.05, 0.3);
                 
                 [UIView animateWithDuration:duration delay:0 options:UIViewAnimationOptionCurveLinear | UIViewAnimationOptionBeginFromCurrentState animations:^{
-                    _blurBackground.alpha = 0;
                     _pager.alpha = 0;
                     if (moveToTop) {
                         _scrollView.bottom = 0;
@@ -856,13 +865,9 @@
                     [self removeFromSuperview];
                 }];
                 
-                _background.image = _snapshotImage;
-                [_background.layer addFadeAnimationWithDuration:0.3 curve:UIViewAnimationCurveEaseInOut];
-                
             } else {
                 [UIView animateWithDuration:0.4 delay:0 usingSpringWithDamping:0.9 initialSpringVelocity:v.y / 1000 options:UIViewAnimationOptionCurveEaseInOut | UIViewAnimationOptionAllowUserInteraction | UIViewAnimationOptionBeginFromCurrentState animations:^{
                     _scrollView.top = 0;
-                    _blurBackground.alpha = 1;
                     _pager.alpha = 1;
                 } completion:^(BOOL finished) {
                     
@@ -872,7 +877,6 @@
         } break;
         case UIGestureRecognizerStateCancelled : {
             _scrollView.top = 0;
-            _blurBackground.alpha = 1;
         }
         default:break;
     }
