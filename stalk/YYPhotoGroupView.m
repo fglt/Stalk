@@ -244,7 +244,7 @@
 
 @property (nonatomic, strong) UIPanGestureRecognizer *panGesture;
 @property (nonatomic, assign) CGPoint panGestureBeginPoint;
-
+@property (nonatomic) BOOL rotation;
 @end
 
 @implementation YYPhotoGroupView
@@ -358,22 +358,26 @@
 
 - (void)layoutSubviews{
     [super layoutSubviews];
+    //if(CGRectEqualToRect(self.bounds, _contentView.frame)) return;
     _background.frame = self.bounds;
     CGPoint c = CGPointMake(self.bounds.size.width/2, self.bounds.size.height/2);
     _background.center =  c;
     _blurBackground.frame = self.bounds;
     _blurBackground.center = c;
-    _contentView.frame = self.bounds;
-    _contentView.frame = self.bounds;
-    _contentView.center = c;
+
     _pager.center = CGPointMake(self.width / 2, self.height - 18);
     
-    [_contentView setNeedsLayout];
-    _scrollView.frame = CGRectMake(-kPadding / 2, 0, self.width + kPadding, self.height);
+    //[_contentView setNeedsLayout];
+    _rotation = YES;
+//    _scrollView.frame = CGRectMake(-kPadding / 2, 0, self.width + kPadding, self.height);
+//    _scrollView.contentSize = CGSizeMake(_scrollView.width * self.groupItems.count, _scrollView.height);
+    
+    //_scrollView.contentOffset = CGPointMake(_pager.currentPage *(self.width + kPadding), _scrollView.contentOffset.y) ;
+    //_scrollView.center = c;
+    _contentView.frame = self.bounds;
+    _contentView.center = c;
+    _scrollView.contentOffset = CGPointMake(_pager.currentPage *_scrollView.width, _scrollView.contentOffset.y);
     _scrollView.contentSize = CGSizeMake(_scrollView.width * self.groupItems.count, _scrollView.height);
-    _scrollView.center = c;
-    
-    
     for (int i=0; i<_cells.count; i++){
         UIView *cell = _cells[i];
         cell.frame = self.bounds;
@@ -382,10 +386,12 @@
     for (int i=0; i<_scrollView.subviews.count; i++){
         UIView *cell = _scrollView.subviews[i];
         cell.origin = CGPointMake((self.width + kPadding) * i + kPadding / 2, 0);
-        [cell layoutSubviews];
+
     }
+    _rotation = NO;
+//    [_scrollView scrollRectToVisible:CGRectMake(_scrollView.width * _pager.currentPage, 0, _scrollView.width, _scrollView.height) animated:NO];
+    [self scrollViewDidScroll:_scrollView];
     
-    [_scrollView scrollRectToVisible:CGRectMake(_scrollView.width * _pager.currentPage, 0, _scrollView.width, _scrollView.height) animated:NO];
 }
 
 - (void)presentFromImageView:(UIView *)fromView
@@ -426,6 +432,9 @@
     self.pager.numberOfPages = self.groupItems.count;
     self.pager.currentPage = page;
     [_toContainerView addSubview:self];
+    self.translatesAutoresizingMaskIntoConstraints = NO;
+    [_toContainerView addConstraint:[NSLayoutConstraint constraintWithItem:self attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:_toContainerView attribute:NSLayoutAttributeWidth multiplier:1 constant:0]];
+    [_toContainerView addConstraint:[NSLayoutConstraint constraintWithItem:self attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:_toContainerView attribute:NSLayoutAttributeHeight multiplier:1 constant:0]];
     
     _scrollView.contentSize = CGSizeMake(_scrollView.width * self.groupItems.count, _scrollView.height);
     [_scrollView scrollRectToVisible:CGRectMake(_scrollView.width * _pager.currentPage, 0, _scrollView.width, _scrollView.height) animated:NO];
@@ -611,6 +620,7 @@
 }
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
+    if(_rotation) return;
     [self updateCellsForReuse];
     
     CGFloat floatPage = _scrollView.contentOffset.x / _scrollView.width;
