@@ -255,8 +255,6 @@
     if (groupItems.count == 0) return nil;
     _groupItems = groupItems.copy;
     _blurEffectBackground = YES;
-    //self.autoresizingMask = UIViewAutoresizingFlexibleHeight |UIViewAutoresizingFlexibleWidth;
-    self.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin|UIViewAutoresizingFlexibleTopMargin|UIViewAutoresizingFlexibleBottomMargin;
     NSString *model = [UIDevice currentDevice].machineModel;
     static NSMutableSet *oldDevices;
     static dispatch_once_t onceToken;
