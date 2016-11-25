@@ -33,8 +33,6 @@
     NSMutableArray *needLoadArr;
     BOOL scrollToToping;
     YYFPSLabel *_fpsLabel;
-    UIView *blackview;
-    YYPhotoGroupView *picBrower;
 }
 - (void)viewDidAppear:(BOOL)animated{
     [super viewDidAppear:animated];
@@ -200,7 +198,7 @@
 //    blackview = [[UIView alloc]initWithFrame:[UIScreen mainScreen].bounds];
 //    blackview.backgroundColor = [UIColor redColor];
  //   [self.tabBarController.view  addSubview:blackview];
-    picBrower = [[YYPhotoGroupView alloc] initWithGroupItems:items];
+    YYPhotoGroupView *picBrower = [[YYPhotoGroupView alloc] initWithGroupItems:items];
     [picBrower presentFromImageView:fromView toContainer:self.tabBarController.view animated:YES completion:^{
         //[blackview removeFromSuperview];
     }];

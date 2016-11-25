@@ -167,9 +167,10 @@
     
     UIImage *image = _imageView.image;
     if (image.size.height / image.size.width > self.height / self.width) {
-        _imageContainerView.height = self.height;
-        _imageContainerView.width = self.height *image.size.width/image.size.height;
-        _imageContainerView.centerX = self.width / 2;
+        _imageContainerView.height = floor(image.size.height / (image.size.width / self.width));
+//        _imageContainerView.height = self.height;
+//        _imageContainerView.width = self.height *image.size.width/image.size.height;
+//        _imageContainerView.centerX = self.width / 2;
     } else {
         CGFloat height = image.size.height / image.size.width * self.width;
         if (height < 1 || isnan(height)) height = self.height;
@@ -384,9 +385,10 @@
     }
     
     for (int i=0; i<_scrollView.subviews.count; i++){
-        UIView *cell = _scrollView.subviews[i];
-        cell.origin = CGPointMake((self.width + kPadding) * i + kPadding / 2, 0);
-
+        YYPhotoGroupCell *cell = (YYPhotoGroupCell *) _scrollView.subviews[i];
+        cell.origin = CGPointMake(_scrollView.width * cell.page + kPadding / 2, 0);
+        //修复bug：应为cell复用，cell在——scrollView加入的顺序不能作为计算器坐标的参数。而要用cell的page属性；
+        cell.origin = CGPointMake(_scrollView.width * i + kPadding / 2, 0);
     }
     _rotation = NO;
 //    [_scrollView scrollRectToVisible:CGRectMake(_scrollView.width * _pager.currentPage, 0, _scrollView.width, _scrollView.height) animated:NO];
@@ -438,8 +440,8 @@
     
     _scrollView.contentSize = CGSizeMake(_scrollView.width * self.groupItems.count, _scrollView.height);
     [_scrollView scrollRectToVisible:CGRectMake(_scrollView.width * _pager.currentPage, 0, _scrollView.width, _scrollView.height) animated:NO];
-    [self scrollViewDidScroll:_scrollView];
-    
+//    [self scrollViewDidScroll:_scrollView];
+    //_isPresented =YES;
     [UIView setAnimationsEnabled:YES];
 
     YYPhotoGroupCell *cell = [self cellForPage:self.currentPage];
@@ -632,7 +634,7 @@
             if (!cell) {
                 YYPhotoGroupCell *cell = [self dequeueReusableCell];
                 cell.page = i;
-                cell.left = (self.width + kPadding) * i + kPadding / 2;
+                cell.left = _scrollView.width * i + kPadding / 2;
                 
                 if (_isPresented) {
                     cell.item = self.groupItems[i];

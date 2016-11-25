@@ -16,10 +16,13 @@
 #define SIZE_FONT_CONTENT 19
 #define SIZE_FONT_SUBCONTENT (SIZE_FONT_CONTENT-1)
 #define  CELL_WIDTH (MIN([UIScreen mainScreen].bounds.size.width,[UIScreen mainScreen].bounds.size.height) -30)
+#define kWBCellToolbarHeight 35
 
 #define kWBCellBackgroundColor UIColorHex(f2f2f2)    // Cell背景灰色
 #define kWBCellHighlightColor UIColorHex(f0f0f0)      // Cell高亮时灰色
 #define kWBCellInnerViewColor UIColorHex(f7f7f7)      //retweetContentView 背景色
+
+#define kWBCellLineColor [UIColor colorWithWhite:0.000 alpha:0.09] //线条颜色
 
 #define kRegexHighlightViewTypeURL @"url"
 #define kRegexHighlightViewTypeAccount @"account"
