@@ -388,7 +388,7 @@
         YYPhotoGroupCell *cell = (YYPhotoGroupCell *) _scrollView.subviews[i];
         cell.origin = CGPointMake(_scrollView.width * cell.page + kPadding / 2, 0);
         //修复bug：应为cell复用，cell在——scrollView加入的顺序不能作为计算器坐标的参数。而要用cell的page属性；
-        cell.origin = CGPointMake(_scrollView.width * i + kPadding / 2, 0);
+        //cell.origin = CGPointMake(_scrollView.width * i + kPadding / 2, 0);
     }
     _rotation = NO;
 //    [_scrollView scrollRectToVisible:CGRectMake(_scrollView.width * _pager.currentPage, 0, _scrollView.width, _scrollView.height) animated:NO];
