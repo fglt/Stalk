@@ -51,7 +51,6 @@
 		177B21021DE56F61005A1438 /* clear.png in Resources */ = {isa = PBXBuildFile; fileRef = 177B21011DE56F61005A1438 /* clear.png */; };
 		177B21041DE5797A005A1438 /* clear247.png in Resources */ = {isa = PBXBuildFile; fileRef = 177B21031DE5797A005A1438 /* clear247.png */; };
 		177B21451DE816E2005A1438 /* ResourceWeibo.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 177B21441DE816E2005A1438 /* ResourceWeibo.bundle */; };
-		177B21481DE818C1005A1438 /* WBStatusHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 177B21471DE818C1005A1438 /* WBStatusHelper.m */; };
 		17AFD3F71DDED732007C7DB9 /* StatusDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 17AFD3F61DDED732007C7DB9 /* StatusDetailViewController.m */; };
 		17FA23001DE3CE0C00617651 /* WBHttpRequest+STalk.m in Sources */ = {isa = PBXBuildFile; fileRef = 17FA22FF1DE3CE0C00617651 /* WBHttpRequest+STalk.m */; };
 		17FA23091DE3DD8D00617651 /* StatusDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 17FA23081DE3DD8D00617651 /* StatusDataSource.m */; };
@@ -132,8 +131,6 @@
 		177B21011DE56F61005A1438 /* clear.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = clear.png; sourceTree = "<group>"; };
 		177B21031DE5797A005A1438 /* clear247.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = clear247.png; sourceTree = "<group>"; };
 		177B21441DE816E2005A1438 /* ResourceWeibo.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = ResourceWeibo.bundle; sourceTree = "<group>"; };
-		177B21461DE818C1005A1438 /* WBStatusHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WBStatusHelper.h; sourceTree = "<group>"; };
-		177B21471DE818C1005A1438 /* WBStatusHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WBStatusHelper.m; sourceTree = "<group>"; };
 		17AFD3F51DDED731007C7DB9 /* StatusDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StatusDetailViewController.h; sourceTree = "<group>"; };
 		17AFD3F61DDED732007C7DB9 /* StatusDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StatusDetailViewController.m; sourceTree = "<group>"; };
 		17FA22FE1DE3CE0C00617651 /* WBHttpRequest+STalk.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "WBHttpRequest+STalk.h"; sourceTree = "<group>"; };
@@ -190,8 +187,6 @@
 		171BCCA21DD4B6FF009FF89E /* stalk */ = {
 			isa = PBXGroup;
 			children = (
-				177B21461DE818C1005A1438 /* WBStatusHelper.h */,
-				177B21471DE818C1005A1438 /* WBStatusHelper.m */,
 				177B21441DE816E2005A1438 /* ResourceWeibo.bundle */,
 				177B21031DE5797A005A1438 /* clear247.png */,
 				177B21011DE56F61005A1438 /* clear.png */,
@@ -457,7 +452,6 @@
 				171BCCAB1DD4B6FF009FF89E /* LoginViewController.m in Sources */,
 				177B20F41DE43CB0005A1438 /* SendStatusViewController.m in Sources */,
 				171BCD0C1DD7025A009FF89E /* NSString+Additions.m in Sources */,
-				177B21481DE818C1005A1438 /* WBStatusHelper.m in Sources */,
 				177B20F71DE43F11005A1438 /* APPHelper.m in Sources */,
 				177B20F11DE43650005A1438 /* TopicController.m in Sources */,
 				177B20FD1DE52CB0005A1438 /* WBPicture.m in Sources */,

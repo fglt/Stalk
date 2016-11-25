@@ -268,7 +268,7 @@
     [tap requireGestureRecognizerToFail: tap2];
     [self addGestureRecognizer:tap2];
     
-    UILongPressGestureRecognizer *press = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(longPress)];
+    UILongPressGestureRecognizer *press = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(longPress:)];
     press.delegate = self;
     [self addGestureRecognizer:press];
     
@@ -348,6 +348,86 @@
     
 }
 
+- (void)presentFromImageView:(UIView *)fromView
+                 coContainer:(UIView *)container
+                    animated:(BOOL)animated
+                  completion:(void (^)(void))completion{
+    _fromView = fromView;
+    if(!container){
+        _toContainerView = [UIApplication sharedApplication].keyWindow;
+    }else{
+        _toContainerView = container;
+    }
+    
+    NSInteger page = -1;
+    for (NSUInteger i = 0; i < self.groupItems.count; i++) {
+        if (fromView == ((YYPhotoGroupItem *)self.groupItems[i]).thumbView) {
+            page = (int)i;
+            break;
+        }
+    }
+    if (page == -1) page = 0;
+    _fromItemIndex = page;
+    self.currentIndex = page;
+    // _indexLabel.text = [NSString stringWithFormat:@"%ld /%ld", _currentIndex,_groupItems.count];
+    self.size = _toContainerView.size;
+    //    self.pager.alpha = 0;
+    //    self.pager.numberOfPages = self.groupItems.count;
+    //    self.pager.currentPage = page;
+    [_toContainerView addSubview:self];
+    self.translatesAutoresizingMaskIntoConstraints = NO;
+    [_toContainerView addConstraint:[NSLayoutConstraint constraintWithItem:self attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:_toContainerView attribute:NSLayoutAttributeWidth multiplier:1 constant:0]];
+    [_toContainerView addConstraint:[NSLayoutConstraint constraintWithItem:self attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:_toContainerView attribute:NSLayoutAttributeHeight multiplier:1 constant:0]];
+    
+    _scrollView.contentSize = CGSizeMake(_scrollView.width * self.groupItems.count, _scrollView.height);
+    [_scrollView scrollRectToVisible:CGRectMake(_scrollView.width * _currentIndex, 0, _scrollView.width, _scrollView.height) animated:NO];
+    
+    /**bug:下面这一句必须有，否则下面的cell为空，点击第一张图片就不会有下面对应的动画效果;
+     因为上面的[_scrollView scrollRectToVisible:CGRectMake(_scrollView.width * _pager.currentPage, 0, _scrollView.width, _scrollView.height) animated:NO];这一句在点击第一张图片时，不会触发——scrollView的contentoffset改变就不会自动触发scrollViewDidScroll 这个函数
+     2016-11-25 20:39:48
+     **/
+    [self scrollViewDidScroll:_scrollView];
+    [UIView setAnimationsEnabled:YES];
+    
+    YYPhotoGroupCell *cell = [self cellForPage:self.currentPage];
+    YYPhotoGroupItem *item = _groupItems[self.currentPage];
+    
+    if (!item.thumbClippedToTop) {
+        NSString *imageKey = [[YYWebImageManager sharedManager] cacheKeyForURL:item.largeImageURL];
+        if ([[YYWebImageManager sharedManager].cache getImageForKey:imageKey withType:YYImageCacheTypeMemory]) {
+            cell.item = item;
+        }
+    }
+    if (!cell.item) {
+        cell.imageView.image = item.thumbImage;
+        [cell resizeSubviewSize];
+    }
+    CGRect fromFrame = [_fromView convertRect:_fromView.bounds toView:cell.imageContainerView];
+    
+    cell.imageContainerView.clipsToBounds = NO;
+    cell.imageView.frame = fromFrame;
+    cell.imageView.contentMode = UIViewContentModeScaleAspectFill;
+    
+    float oneTime = animated ? 0.2 : 0;
+    
+    _scrollView.userInteractionEnabled = NO;
+    [UIView animateWithDuration:oneTime delay:0 options:UIViewAnimationOptionBeginFromCurrentState|UIViewAnimationOptionCurveEaseInOut animations:^{
+        cell.imageView.frame = cell.imageContainerView.bounds;
+        cell.imageView.layer.transformScale = 1.01;
+    }completion:^(BOOL finished) {
+        [UIView animateWithDuration:oneTime delay:0 options:UIViewAnimationOptionBeginFromCurrentState|UIViewAnimationOptionCurveEaseInOut animations:^{
+            cell.imageView.layer.transformScale = 1.0;
+            // _pager.alpha = 1;
+        }completion:^(BOOL finished) {
+            cell.imageContainerView.clipsToBounds = YES;
+            _isPresented = YES;
+            [self scrollViewDidScroll:_scrollView];
+            _scrollView.userInteractionEnabled = YES;
+            //[self hidePager];
+        }];
+    }];
+
+}
 - (void)presentFromImageView:(UIView *)fromView
                     animated:(BOOL)animated
                   completion:(void (^)(void))completion{
@@ -685,8 +765,9 @@
     }
 }
 
-- (void)longPress {
+- (void)longPress:(UIGestureRecognizer *)recognizer {
     if (!_isPresented) return;
+    if(recognizer.state != UIGestureRecognizerStateBegan) return;
     
     YYPhotoGroupCell *tile = [self cellForPage:self.currentPage];
     if (!tile.imageView.image) return;
@@ -699,15 +780,21 @@
         type != YYImageTypeGIF) {
         imageItem = tile.imageView.image;
     }
-    
+    UIViewController *toVC;
+    toVC = self.viewController ? :[self topViewController];
     UIActivityViewController *activityViewController =
     [[UIActivityViewController alloc] initWithActivityItems:@[imageItem] applicationActivities:nil];
+    activityViewController.completionWithItemsHandler = ^(UIActivityType activityType, BOOL completed, NSArray *  returnedItems, NSError * activityError){
+        NSLog(@"ok");
+    };
+    
+    activityViewController.modalPresentationStyle = UIModalPresentationPopover;
     if ([activityViewController respondsToSelector:@selector(popoverPresentationController)]) {
         activityViewController.popoverPresentationController.sourceView = self;
+        activityViewController.popoverPresentationController.sourceRect = CGRectInset(self.bounds, self.bounds.size.width/4, self.bounds.size.height/4);
+        activityViewController.popoverPresentationController.permittedArrowDirections = UIMenuControllerArrowDefault;
     }
     
-    UIViewController *toVC = self.toContainerView.viewController;
-    if (!toVC) toVC = self.viewController;
     [toVC presentViewController:activityViewController animated:YES completion:nil];
 }
 
@@ -777,6 +864,26 @@
         }
         default:break;
     }
+}
+
+- (UIViewController *)topViewController {
+    UIViewController *resultVC;
+    resultVC = [self _topViewController:[[UIApplication sharedApplication].keyWindow rootViewController]];
+    while (resultVC.presentedViewController) {
+        resultVC = [self _topViewController:resultVC.presentedViewController];
+    }
+    return resultVC;
+}
+
+- (UIViewController *)_topViewController:(UIViewController *)vc {
+    if ([vc isKindOfClass:[UINavigationController class]]) {
+        return [self _topViewController:[(UINavigationController *)vc topViewController]];
+    } else if ([vc isKindOfClass:[UITabBarController class]]) {
+        return [self _topViewController:[(UITabBarController *)vc selectedViewController]];
+    } else {
+        return vc;
+    }
+    return nil;
 }
 
 @end

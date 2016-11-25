@@ -199,7 +199,7 @@
 //    blackview.backgroundColor = [UIColor redColor];
  //   [self.tabBarController.view  addSubview:blackview];
     YYPhotoGroupView *photoGroupView = [[YYPhotoGroupView alloc] initWithGroupItems:items];
-    [photoGroupView presentFromImageView:fromView animated:YES completion:nil];
+    [photoGroupView presentFromImageView:fromView coContainer:self.tabBarController.view animated:YES completion:nil];
    
 }
 

@@ -32,6 +32,10 @@
 - (void)presentFromImageView:(UIView *)fromView
                     animated:(BOOL)animated
                   completion:(void (^)(void))completion;
+- (void)presentFromImageView:(UIView *)fromView
+                 coContainer:(UIView *)container
+                    animated:(BOOL)animated
+                  completion:(void (^)(void))completion;
 - (void)dismissAnimated:(BOOL)animated completion:(void (^)(void))completion;
 - (void)dismiss;
 - (void)setGroupItems:(NSArray *)groupItems;
