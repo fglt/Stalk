@@ -52,7 +52,6 @@
 		177B21041DE5797A005A1438 /* clear247.png in Resources */ = {isa = PBXBuildFile; fileRef = 177B21031DE5797A005A1438 /* clear247.png */; };
 		177B21451DE816E2005A1438 /* ResourceWeibo.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 177B21441DE816E2005A1438 /* ResourceWeibo.bundle */; };
 		177B21481DE818C1005A1438 /* WBStatusHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 177B21471DE818C1005A1438 /* WBStatusHelper.m */; };
-		17AFD3F41DDDFABF007C7DB9 /* emotionResource.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 17AFD3F31DDDFABF007C7DB9 /* emotionResource.bundle */; };
 		17AFD3F71DDED732007C7DB9 /* StatusDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 17AFD3F61DDED732007C7DB9 /* StatusDetailViewController.m */; };
 		17FA23001DE3CE0C00617651 /* WBHttpRequest+STalk.m in Sources */ = {isa = PBXBuildFile; fileRef = 17FA22FF1DE3CE0C00617651 /* WBHttpRequest+STalk.m */; };
 		17FA23091DE3DD8D00617651 /* StatusDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 17FA23081DE3DD8D00617651 /* StatusDataSource.m */; };
@@ -135,7 +134,6 @@
 		177B21441DE816E2005A1438 /* ResourceWeibo.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = ResourceWeibo.bundle; sourceTree = "<group>"; };
 		177B21461DE818C1005A1438 /* WBStatusHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WBStatusHelper.h; sourceTree = "<group>"; };
 		177B21471DE818C1005A1438 /* WBStatusHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WBStatusHelper.m; sourceTree = "<group>"; };
-		17AFD3F31DDDFABF007C7DB9 /* emotionResource.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = emotionResource.bundle; sourceTree = "<group>"; };
 		17AFD3F51DDED731007C7DB9 /* StatusDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StatusDetailViewController.h; sourceTree = "<group>"; };
 		17AFD3F61DDED732007C7DB9 /* StatusDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StatusDetailViewController.m; sourceTree = "<group>"; };
 		17FA22FE1DE3CE0C00617651 /* WBHttpRequest+STalk.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "WBHttpRequest+STalk.h"; sourceTree = "<group>"; };
@@ -197,7 +195,6 @@
 				177B21441DE816E2005A1438 /* ResourceWeibo.bundle */,
 				177B21031DE5797A005A1438 /* clear247.png */,
 				177B21011DE56F61005A1438 /* clear.png */,
-				17AFD3F31DDDFABF007C7DB9 /* emotionResource.bundle */,
 				171BCD141DD70299009FF89E /* category */,
 				171BCD131DD70277009FF89E /* modal */,
 				171BCD121DD7026D009FF89E /* view */,
@@ -389,7 +386,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				171BCCB31DD4B6FF009FF89E /* LaunchScreen.storyboard in Resources */,
-				17AFD3F41DDDFABF007C7DB9 /* emotionResource.bundle in Resources */,
 				177B21021DE56F61005A1438 /* clear.png in Resources */,
 				177B21041DE5797A005A1438 /* clear247.png in Resources */,
 				171BCCB01DD4B6FF009FF89E /* Assets.xcassets in Resources */,
