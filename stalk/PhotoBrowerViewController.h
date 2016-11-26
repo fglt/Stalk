@@ -7,9 +7,33 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "YYPhotoGroupView.h"
+
+@interface YYPhotoGroupItem : NSObject
+@property (nonatomic, strong) UIView *thumbView;
+@property (nonatomic, assign) CGSize largeImageSize;
+@property (nonatomic, strong) NSURL *largeImageURL;
+@property (nonatomic, readonly) UIImage *thumbImage;
+@property (nonatomic, readonly) BOOL thumbClippedToTop;
+- (BOOL)shouldClipToTop:(CGSize)imageSize forView:(UIView *)view;
+@end
+
+@interface YYPhotoGroupCell : UIScrollView<UIScrollViewDelegate>
+@property (nonatomic, strong) UIView *imageContainerView;
+@property (nonatomic, strong) YYAnimatedImageView *imageView;
+@property (nonatomic, assign) NSInteger page;
+
+@property (nonatomic, assign) BOOL showProgress;
+@property (nonatomic, assign) CGFloat progress;
+@property (nonatomic, strong) CAShapeLayer *progressLayer;
+
+@property (nonatomic, strong) YYPhotoGroupItem *item;
+@property (nonatomic, readonly) BOOL itemDidLoad;
+
+- (void)resizeSubviewSize;
+@end
 
 @interface PhotoBrowerViewController : UIViewController
-@property (nonatomic, strong) YYPhotoGroupView *groupView;
-@property (nonatomic, strong) UIView *fromView;
+@property (nonatomic, weak) UIView *fromView;
+@property (nonatomic, copy) NSArray<YYPhotoGroupItem *> *groupItems;
+@property (nonatomic, strong) UIView *contentView;
 @end
