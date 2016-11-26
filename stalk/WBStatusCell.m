@@ -142,29 +142,17 @@
         _pictureHolder.frame = layout.statusPictureFrame;
     }
     
-    CGFloat imgWidth = ceil((self.statusText.width - SIZE_GAP_IMG*2)/3.0);
     if(urls.count>0){
         NSURL *baseURL = [NSURL URLWithString:[self imageFilePath:status.bmiddlePic]];
-        if(urls.count ==1){
-            YYAnimatedImageView *thumbView = [self _newImageViewWithTag:0];
+        for (NSInteger i=0; i<urls.count&& i<9; i++) {
+            YYAnimatedImageView *thumbView = [self _newImageViewWithTag:i];;
             [picview addSubview:thumbView];
-            thumbView.frame = CGRectMake(0,0, self.statusText.width*2/3, SIZE_IMAGE<<1);
+            thumbView.frame = CGRectMake(i%3*(SIZE_GAP_IMG+layout.imgWidth), i/3*(SIZE_GAP_IMG+layout.imgHeight), layout.imgWidth, layout.imgHeight);
             //thumbView.autoPlayAnimatedImage =NO;
-            NSURL *url= [NSURL URLWithString:[self imageName:urls[0]] relativeToURL:baseURL];
+            NSURL *url= [NSURL URLWithString:[self imageName:urls[i]] relativeToURL:baseURL];
             thumbView.imageURL = url;
             UITapGestureRecognizer *recognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapImageGesture:)];
             [thumbView addGestureRecognizer:recognizer];
-        }else{
-            for (NSInteger i=0; i<urls.count&& i<9; i++) {
-                YYAnimatedImageView *thumbView = [self _newImageViewWithTag:i];;
-                [picview addSubview:thumbView];
-                thumbView.frame = CGRectMake(i%3*(SIZE_GAP_IMG+imgWidth), i/3*(SIZE_GAP_IMG+SIZE_IMAGE), imgWidth, SIZE_IMAGE);
-                //thumbView.autoPlayAnimatedImage =NO;
-                NSURL *url= [NSURL URLWithString:[self imageName:urls[i]] relativeToURL:baseURL];
-                thumbView.imageURL = url;
-                UITapGestureRecognizer *recognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapImageGesture:)];
-                [thumbView addGestureRecognizer:recognizer];
-            }
         }
     }
 

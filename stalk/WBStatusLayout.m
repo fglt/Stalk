@@ -46,6 +46,8 @@
 - (void)layout
 {
     CGFloat viewWidth = CELL_WIDTH - (PADDING<<1);
+    _imgWidth = ceil(viewWidth - 2*SIZE_GAP_IMG)/3;
+    _imgHeight = _imgWidth *3/4;
     CGFloat picHeight=0;
     UIFont *font = [UIFont systemFontOfSize:SIZE_FONT_CONTENT];
     NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
@@ -83,8 +85,8 @@
         //文字内容
         CGSize retweetSize = [self sizeWithText:attributedStr maxSize:CGSizeMake(viewWidth, MAXFLOAT)];
         self.retweetTextFrame =CGRectMake(PADDING, 0, viewWidth, retweetSize.height);
-       
-        picHeight = [self heightForPic:_status.retweetedStatus.thumbnailPic.count];
+        _pictures = _status.retweetedStatus.pictures;
+        picHeight = [self heightForPic:_pictures.count];
         self.retweetPicFrame = CGRectMake(PADDING, CGRectGetMaxY(self.retweetTextFrame)+PADDING, viewWidth, picHeight);
         if(picHeight>0){
             self.retweetContentFrame = CGRectMake(0, CGRectGetMaxY(self.statusTextFrame) + PADDING, CELL_WIDTH, retweetSize.height + PADDING + picHeight);
@@ -93,13 +95,10 @@
         }
         _height += self.retweetContentFrame.size.height +PADDING;
     } else{
-        picHeight = [self heightForPic:_status.thumbnailPic.count];
+        _pictures = _status.pictures;
+        picHeight = [self heightForPic:_pictures.count];
         if(picHeight>0){
-            if(_status.retweetedStatus){
-                self.statusPictureFrame = CGRectMake(PADDING, CGRectGetMaxY( self.retweetContentFrame) + PADDING, viewWidth,  picHeight);
-            }else{
-                self.statusPictureFrame = CGRectMake(PADDING, CGRectGetMaxY( self.statusTextFrame) + PADDING, viewWidth,  picHeight);
-            }
+            self.statusPictureFrame = CGRectMake(PADDING, CGRectGetMaxY( self.statusTextFrame) + PADDING, viewWidth,  picHeight);
             _height += self.statusPictureFrame.size.height + PADDING;
         }
     }
@@ -109,9 +108,12 @@
 
 - (CGFloat) heightForPic:(NSUInteger) count{
     if(count ==0) return 0;
-    if(count == 1) return SIZE_IMAGE*2;
+    if(count ==1) {
+        _imgWidth *=2;
+        _imgHeight *=2;
+    }
     count--;
-    return count/3 * SIZE_IMAGE +SIZE_IMAGE + count/3 *SIZE_GAP_IMG;
+    return (count/3 * _imgHeight +_imgHeight + count/3 *SIZE_GAP_IMG);
 }
 
 - (NSMutableAttributedString *)replaceEmotion:(NSMutableAttributedString *)coloredString{

@@ -12,10 +12,11 @@
 #define PADDING 10
 #define SIZE_GAP_IMG 8
 #define ICONWIDTH 50
-#define SIZE_IMAGE 120
+
 #define SIZE_FONT_CONTENT 19
 #define SIZE_FONT_SUBCONTENT (SIZE_FONT_CONTENT-1)
 #define  CELL_WIDTH (MIN([UIScreen mainScreen].bounds.size.width,[UIScreen mainScreen].bounds.size.height) -30)
+
 #define kWBCellToolbarHeight 35
 
 #define kWBCellBackgroundColor UIColorHex(f2f2f2)    // Cell背景灰色
@@ -44,7 +45,10 @@
 @property (nonatomic) CGRect retweetContentFrame;
 @property (nonatomic) CGRect retweetTextFrame;
 @property (nonatomic) CGRect retweetPicFrame;
+@property (nonatomic) CGFloat imgWidth;
+@property (nonatomic) CGFloat imgHeight;
 @property (nonatomic) CGFloat height;
+@property (nonatomic, copy) NSArray *pictures;
 
 - (instancetype)initWithStatus:(WBStatus *)status;
 + (NSMutableArray *)statusLayoutsWithStatuses:(NSArray *)WBStatus;
