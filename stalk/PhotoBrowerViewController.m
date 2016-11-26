@@ -249,8 +249,9 @@
 //        _contentView.center = c;
 //        _indexLabel.center =  CGPointMake(self.view.width / 2, self.view.height - 30);
         
-        _scrollView.contentSize = CGSizeMake(_scrollView.width * self.groupItems.count, 0);
-        _scrollView.contentOffset = CGPointMake(_currentIndex *_scrollView.width, 0);
+        _scrollView.contentSize = CGSizeMake(_scrollView.width * self.groupItems.count, 1);
+        _scrollView.contentOffset = CGPointMake(_currentIndex *_scrollView.width, _scrollView.contentOffset.y);
+        _scrollView.alwaysBounceVertical = NO;
         for (int i=0; i<_cells.count; i++){
             YYPhotoGroupCell *cell = (YYPhotoGroupCell *)_cells[i];
             cell.frame = cell.superview.bounds;
@@ -370,8 +371,10 @@
     _fromItemIndex = page;
     self.currentIndex = page;
     
-    _scrollView.contentSize = CGSizeMake(_scrollView.width * self.groupItems.count, 0);
-    [_scrollView scrollRectToVisible:CGRectMake(_scrollView.width * _currentIndex, 0, _scrollView.width, _scrollView.height) animated:NO];
+    _scrollView.contentSize = CGSizeMake(_scrollView.width * self.groupItems.count, 1);
+    _scrollView.alwaysBounceVertical = NO;
+    CGRect visable = CGRectMake(_scrollView.width * _currentIndex, 0, _scrollView.width, 1);
+    [_scrollView scrollRectToVisible:visable animated:NO];
     
     /**bug:下面这一句必须有，否则下面的cell为空，点击第一张图片就不会有下面对应的动画效果;
      因为上面的[_scrollView scrollRectToVisible:CGRectMake(_scrollView.width * _currentIndex, 0, _scrollView.width, _scrollView.height) animated:NO];这一句在点击第一张图片时，不会触发——scrollView的contentoffset改变就不会自动触发scrollViewDidScroll 这个函数
