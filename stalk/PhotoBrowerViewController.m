@@ -220,9 +220,8 @@
 @end
 
 @interface PhotoBrowerViewController ()<UIScrollViewDelegate, UIGestureRecognizerDelegate>
-@property (nonatomic) BOOL navgationIsHide;
-@property (nonatomic) BOOL tabIsHide;
 @property (nonatomic, strong) UIScrollView *scrollView;
+@property (nonatomic, strong) UIView *contentView;
 @property (nonatomic, strong) NSMutableArray *cells;
 @property (nonatomic, strong) UILabel *indexLabel;
 @property (nonatomic) NSUInteger currentIndex;
@@ -232,7 +231,10 @@
 @property (nonatomic) BOOL rotation;
 @end
 
-@implementation PhotoBrowerViewController
+@implementation PhotoBrowerViewController{
+    BOOL navgationIsHide;
+    BOOL tabIsHide;
+}
 
 - (BOOL) prefersStatusBarHidden{
     return YES;
@@ -246,9 +248,9 @@
 //        _contentView.frame = self.view.bounds;
 //        _contentView.center = c;
 //        _indexLabel.center =  CGPointMake(self.view.width / 2, self.view.height - 30);
-
-        _scrollView.contentSize = CGSizeMake(_scrollView.width * self.groupItems.count, _scrollView.height);
-        _scrollView.contentOffset = CGPointMake(_currentIndex *_scrollView.width, _scrollView.contentOffset.y);
+        
+        _scrollView.contentSize = CGSizeMake(_scrollView.width * self.groupItems.count, 0);
+        _scrollView.contentOffset = CGPointMake(_currentIndex *_scrollView.width, 0);
         for (int i=0; i<_cells.count; i++){
             YYPhotoGroupCell *cell = (YYPhotoGroupCell *)_cells[i];
             cell.frame = cell.superview.bounds;
@@ -272,22 +274,21 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.view.backgroundColor = [UIColor clearColor];
-    [self animatationWillBegin];
     [self start];
+    [self animatationWillBegin];
     [self startBrowing:YES completion:nil];
 }
 
 - (void)animatationWillBegin{
-    _navgationIsHide = self.navigationController.navigationBar.hidden;
-    _tabIsHide = self.tabBarController.tabBar.hidden;
+    navgationIsHide = self.navigationController.navigationBar.hidden;
+    tabIsHide = self.tabBarController.tabBar.hidden;
     self.navigationController.navigationBar.hidden = YES;
     self.tabBarController.tabBar.hidden = YES;
 }
 
 - (void) animatationDidEnd{
-    self.navigationController.navigationBar.hidden = _navgationIsHide;
-    self.tabBarController.tabBar.hidden = _tabIsHide;
+    self.navigationController.navigationBar.hidden = navgationIsHide;
+    self.tabBarController.tabBar.hidden = tabIsHide;
     [self.navigationController popViewControllerAnimated:NO];
 }
 
@@ -311,6 +312,7 @@
     if (kSystemVersion >= 7) {
         UIPanGestureRecognizer *pan = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(pan:)];
         [self.view addGestureRecognizer:pan];
+        pan.delegate = self;
     }
     
     _cells = @[].mutableCopy;
@@ -324,6 +326,7 @@
     _scrollView.scrollsToTop = NO;
     _scrollView.pagingEnabled = YES;
     _scrollView.alwaysBounceHorizontal = _groupItems.count > 1;
+    _scrollView.alwaysBounceVertical = NO;
     _scrollView.showsHorizontalScrollIndicator = NO;
     _scrollView.showsVerticalScrollIndicator = NO;
     _scrollView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
@@ -367,7 +370,7 @@
     _fromItemIndex = page;
     self.currentIndex = page;
     
-    _scrollView.contentSize = CGSizeMake(_scrollView.width * self.groupItems.count, _scrollView.height);
+    _scrollView.contentSize = CGSizeMake(_scrollView.width * self.groupItems.count, 0);
     [_scrollView scrollRectToVisible:CGRectMake(_scrollView.width * _currentIndex, 0, _scrollView.width, _scrollView.height) animated:NO];
     
     /**bug:下面这一句必须有，否则下面的cell为空，点击第一张图片就不会有下面对应的动画效果;
@@ -524,7 +527,7 @@
             if (!cell) {
                 YYPhotoGroupCell *cell = [self dequeueReusableCell];
                 cell.page = i;
-                cell.left = _scrollView.width * i + kPadding / 2;
+                cell.left = (self.view.width + kPadding) * i + kPadding / 2;
                 
                 if (_isPresented) {
                     cell.item = self.groupItems[i];
@@ -538,24 +541,6 @@
         }
     }
 }
-
-- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate{
-    //    if (!decelerate) {
-    //        //[self hidePager];
-    //    }
-}
-
-- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView{
-    //    [self hidePager];
-}
-
-
-//- (void)hidePager {
-//    [UIView animateWithDuration:0.3 delay:0.8 options:UIViewAnimationOptionBeginFromCurrentState | UIViewAnimationOptionCurveEaseOut animations:^{
-//        _pager.alpha = 0;
-//    }completion:^(BOOL finish) {
-//    }];
-//}
 
 /// enqueue invisible cells for reuse
 - (void)updateCellsForReuse {
@@ -643,11 +628,17 @@
     if (!_isPresented) return;
     YYPhotoGroupCell *tile = [self cellForPage:_currentIndex];
     if (tile) {
-        if (tile.zoomScale > 1) {
+        if (tile.zoomScale > 1 || tile.zoomScale <1) {
             [tile setZoomScale:1 animated:YES];
-        } else {
+        } else if(tile.maximumZoomScale>1){
             CGPoint touchPoint = [g locationInView:tile.imageView];
             CGFloat newZoomScale = tile.maximumZoomScale;
+            CGFloat xsize = self.view.width / newZoomScale;
+            CGFloat ysize = self.view.height / newZoomScale;
+            [tile zoomToRect:CGRectMake(touchPoint.x - xsize/2, touchPoint.y - ysize/2, xsize, ysize) animated:YES];
+        }else{
+            CGPoint touchPoint = [g locationInView:tile.imageView];
+            CGFloat newZoomScale = tile.minimumZoomScale;
             CGFloat xsize = self.view.width / newZoomScale;
             CGFloat ysize = self.view.height / newZoomScale;
             [tile zoomToRect:CGRectMake(touchPoint.x - xsize/2, touchPoint.y - ysize/2, xsize, ysize) animated:YES];
@@ -727,7 +718,8 @@
                         _scrollView.top = self.view.height;
                     }
                 } completion:^(BOOL finished) {
-                    
+                    [self cancelAllImageLoad];
+                    [self animatationDidEnd];
                 }];
                 
             } else {

@@ -35,5 +35,5 @@
 @interface PhotoBrowerViewController : UIViewController
 @property (nonatomic, weak) UIView *fromView;
 @property (nonatomic, copy) NSArray<YYPhotoGroupItem *> *groupItems;
-@property (nonatomic, strong) UIView *contentView;
+
 @end
