@@ -166,21 +166,34 @@
 }
 
 - (void)resizeSubviewSize {
-    _imageContainerView.origin = CGPointZero;
+//    _imageContainerView.center = CGPointMake(self.width/2, self.height/2);
     _imageContainerView.width = self.width;
     
     UIImage *image = _imageView.image;
+//    if(image.size.width <self.width){
+//       
+//        _imageContainerView.width = image.size.width;
+//    }else{
+//        _imageContainerView.width = self.width;
+//    }
+//    if(image.size.width <= self.width){
+//        _imageContainerView.width = image.size.width;
+//        _imageContainerView.centerX = image.size.width;
+//    }else{
+//        _imageContainerView.width = self.width;
+//    }
+    
     if (image.size.height / image.size.width > self.height / self.width) {
-        _imageContainerView.height = floor(image.size.height / (image.size.width / self.width));
+        _imageContainerView.height = floor(image.size.height / (image.size.width /_imageContainerView.width));
 //        _imageContainerView.height = self.height;
 //        _imageContainerView.width = self.height *image.size.width/image.size.height;
 //        _imageContainerView.centerX = self.width / 2;
     } else {
-        CGFloat height = image.size.height / image.size.width * self.width;
+        CGFloat height = image.size.height / image.size.width * _imageContainerView.width;
         if (height < 1 || isnan(height)) height = self.height;
         height = floor(height);
         _imageContainerView.height = height;
-        _imageContainerView.centerY = self.height / 2;
+       // _imageContainerView.centerY = self.height / 2;
     }
     if (_imageContainerView.height > self.height && _imageContainerView.height - self.height <= 1) {
         _imageContainerView.height = self.height;
@@ -193,9 +206,12 @@
     } else {
         self.alwaysBounceVertical = YES;
     }
+    self.minimumZoomScale = MIN(1, image.size.width/self.width);
+    self.maximumZoomScale = MAX(1,2*image.size.width/_imageContainerView.width);
     
     [CATransaction begin];
     [CATransaction setDisableActions:YES];
+    _imageContainerView.center = CGPointMake(self.width/2, self.height/2);
     _imageView.frame = _imageContainerView.bounds;
     [CATransaction commit];
 }
@@ -226,7 +242,7 @@
 
 
 
-
+typedef void (^CompletionHandler)();
 
 
 
@@ -245,6 +261,7 @@
 @property (nonatomic, strong) UIPanGestureRecognizer *panGesture;
 @property (nonatomic, assign) CGPoint panGestureBeginPoint;
 @property (nonatomic) BOOL rotation;
+@property (nonatomic,copy) CompletionHandler handler;
 @end
 
 @implementation YYPhotoGroupView
@@ -298,6 +315,7 @@
     _indexLabel = [UILabel new];
     _indexLabel.width = 80;
     _indexLabel.height = 40;
+    _indexLabel.textAlignment = NSTextAlignmentCenter;
     _indexLabel.textColor = [UIColor whiteColor];
     _indexLabel.font = [UIFont boldSystemFontOfSize:16];
     _indexLabel.center = CGPointMake(self.width / 2, self.height - 30);
@@ -353,6 +371,7 @@
                     animated:(BOOL)animated
                   completion:(void (^)(void))completion{
     _fromView = fromView;
+    _handler = completion;
     if(!container){
         _toContainerView = [UIApplication sharedApplication].keyWindow;
     }else{
@@ -433,7 +452,7 @@
                   completion:(void (^)(void))completion{
     _fromView = fromView;
     _toContainerView = [UIApplication sharedApplication].keyWindow;
-    
+    _handler = completion;
     NSInteger page = -1;
     for (NSUInteger i = 0; i < self.groupItems.count; i++) {
         if (fromView == ((YYPhotoGroupItem *)self.groupItems[i]).thumbView) {
@@ -585,7 +604,7 @@
 }
 
 - (void)dismiss {
-    [self dismissAnimated:YES completion:nil];
+    [self dismissAnimated:YES completion:_handler];
 }
 
 - (void)setGroupItems:(NSArray *)groupItems{
@@ -793,6 +812,7 @@
         activityViewController.popoverPresentationController.sourceView = self;
         activityViewController.popoverPresentationController.sourceRect = CGRectInset(self.bounds, self.bounds.size.width/4, self.bounds.size.height/4);
         activityViewController.popoverPresentationController.permittedArrowDirections = UIMenuControllerArrowDefault;
+        activityViewController.excludedActivityTypes = @[UIActivityTypeAirDrop,UIActivityTypePostToTwitter];
     }
     
     [toVC presentViewController:activityViewController animated:YES completion:nil];
@@ -877,7 +897,7 @@
 
 - (UIViewController *)_topViewController:(UIViewController *)vc {
     if ([vc isKindOfClass:[UINavigationController class]]) {
-        return [self _topViewController:[(UINavigationController *)vc topViewController]];
+        return [self _topViewController:[(UINavigationController *)vc visibleViewController]];
     } else if ([vc isKindOfClass:[UITabBarController class]]) {
         return [self _topViewController:[(UITabBarController *)vc selectedViewController]];
     } else {

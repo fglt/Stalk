@@ -24,6 +24,7 @@
 #import "StatusDataSource.h"
 #import "TopicController.h"
 #import "YYPhotoGroupView.h"
+#import "PhotoBrowerViewController.h"
 
 @interface HomeTableViewController ()<WBStatusCellDelegate,SFSafariViewControllerDelegate>
 @property (nonatomic, strong) StatusDataSource *dataSource;
@@ -199,8 +200,11 @@
 //    blackview.backgroundColor = [UIColor redColor];
  //   [self.tabBarController.view  addSubview:blackview];
     YYPhotoGroupView *photoGroupView = [[YYPhotoGroupView alloc] initWithGroupItems:items];
-    [photoGroupView presentFromImageView:fromView coContainer:self.tabBarController.view animated:YES completion:nil];
-   
+//    [photoGroupView presentFromImageView:fromView coContainer:self.tabBarController.view animated:YES completion:nil];
+    PhotoBrowerViewController *brower = [[PhotoBrowerViewController alloc]init];
+    brower.groupView = photoGroupView;
+    brower.fromView = fromView;
+    [self.navigationController pushViewController:brower animated:NO];
 }
 
 - (void)cell:(WBStatusCell *)cell didClickLink:(MLLink *)link
