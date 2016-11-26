@@ -206,7 +206,11 @@
     } else {
         self.alwaysBounceVertical = YES;
     }
-    self.minimumZoomScale = MIN(MIN(1, image.size.width/self.width),self.height/_imageContainerView.height);
+    //限制缩放太小
+    CGFloat minzoom = MAX(self.height/_imageContainerView.height, 0.3);
+    
+    minzoom = MIN(image.size.width/self.width, MIN(minzoom,1));
+    self.minimumZoomScale = minzoom;
     self.maximumZoomScale = MAX(1, 2*image.size.width/_imageContainerView.width);
     
     [CATransaction begin];
