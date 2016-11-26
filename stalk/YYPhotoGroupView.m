@@ -166,7 +166,7 @@
 }
 
 - (void)resizeSubviewSize {
-//    _imageContainerView.center = CGPointMake(self.width/2, self.height/2);
+    _imageContainerView.origin = CGPointZero;
     _imageContainerView.width = self.width;
     
     UIImage *image = _imageView.image;
@@ -193,7 +193,7 @@
         if (height < 1 || isnan(height)) height = self.height;
         height = floor(height);
         _imageContainerView.height = height;
-       // _imageContainerView.centerY = self.height / 2;
+        _imageContainerView.centerY = self.height / 2;
     }
     if (_imageContainerView.height > self.height && _imageContainerView.height - self.height <= 1) {
         _imageContainerView.height = self.height;
@@ -206,12 +206,11 @@
     } else {
         self.alwaysBounceVertical = YES;
     }
-    self.minimumZoomScale = MIN(1, image.size.width/self.width);
-    self.maximumZoomScale = MAX(1,2*image.size.width/_imageContainerView.width);
+    self.minimumZoomScale = MIN(MIN(1, image.size.width/self.width),self.height/_imageContainerView.height);
+    self.maximumZoomScale = MAX(1, 2*image.size.width/_imageContainerView.width);
     
     [CATransaction begin];
     [CATransaction setDisableActions:YES];
-    _imageContainerView.center = CGPointMake(self.width/2, self.height/2);
     _imageView.frame = _imageContainerView.bounds;
     [CATransaction commit];
 }
