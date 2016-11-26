@@ -83,6 +83,14 @@
     return self;
 }
 
+- (void)resetAlwaysBounceVertical{
+    if (_imageContainerView.height <= self.height) {
+        self.alwaysBounceVertical = NO;
+    } else {
+        self.alwaysBounceVertical = YES;
+    }
+}
+
 - (void)layoutSubviews {
     [super layoutSubviews];
     /***
@@ -182,11 +190,7 @@
     self.contentSize = CGSizeMake(_imageContainerView.width, MAX(_imageContainerView.height, self.height));
     [self scrollRectToVisible:self.bounds animated:NO];
     
-    if (_imageContainerView.height <= self.height) {
-        self.alwaysBounceVertical = NO;
-    } else {
-        self.alwaysBounceVertical = YES;
-    }
+    [self resetAlwaysBounceVertical];
     //限制缩放太小
     CGFloat minzoom = MAX(self.height/_imageContainerView.height, 0.3);
     
@@ -215,6 +219,7 @@
     
     subView.center = CGPointMake(scrollView.contentSize.width * 0.5 + offsetX,
                                  scrollView.contentSize.height * 0.5 + offsetY);
+    [self resetAlwaysBounceVertical];
 }
 
 @end
@@ -251,7 +256,6 @@
         
         _scrollView.contentSize = CGSizeMake(_scrollView.width * self.groupItems.count, 1);
         _scrollView.contentOffset = CGPointMake(_currentIndex *_scrollView.width, _scrollView.contentOffset.y);
-        _scrollView.alwaysBounceVertical = NO;
         for (int i=0; i<_cells.count; i++){
             YYPhotoGroupCell *cell = (YYPhotoGroupCell *)_cells[i];
             cell.frame = cell.superview.bounds;
@@ -372,7 +376,6 @@
     self.currentIndex = page;
     
     _scrollView.contentSize = CGSizeMake(_scrollView.width * self.groupItems.count, 1);
-    _scrollView.alwaysBounceVertical = NO;
     CGRect visable = CGRectMake(_scrollView.width * _currentIndex, 0, _scrollView.width, 1);
     [_scrollView scrollRectToVisible:visable animated:NO];
     
@@ -639,6 +642,7 @@
             CGFloat xsize = self.view.width / newZoomScale;
             CGFloat ysize = self.view.height / newZoomScale;
             [tile zoomToRect:CGRectMake(touchPoint.x - xsize/2, touchPoint.y - ysize/2, xsize, ysize) animated:YES];
+            
         }else{
             CGPoint touchPoint = [g locationInView:tile.imageView];
             CGFloat newZoomScale = tile.minimumZoomScale;
@@ -646,6 +650,7 @@
             CGFloat ysize = self.view.height / newZoomScale;
             [tile zoomToRect:CGRectMake(touchPoint.x - xsize/2, touchPoint.y - ysize/2, xsize, ysize) animated:YES];
         }
+        [tile resetAlwaysBounceVertical];
     }
 }
 

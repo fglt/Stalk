@@ -29,6 +29,7 @@
 @property (nonatomic, strong) YYPhotoGroupItem *item;
 @property (nonatomic, readonly) BOOL itemDidLoad;
 
+- (void)resetAlwaysBounceVertical;
 - (void)resizeSubviewSize;
 @end
 
