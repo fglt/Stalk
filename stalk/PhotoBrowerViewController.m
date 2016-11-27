@@ -290,9 +290,6 @@
 }
 
 - (void)show{
-//    UIWindow *window = [UIApplication sharedApplication].keyWindow;
-//    [window addSubview:self.view];
-//    [window.rootViewController addChildViewController:self];
     /***
      使用addChildViewController的方式好处是消失时会显示将要显示的viewcontroller，
      但不能正常显示uiactivitycontroller，也不能隐藏状态栏。
@@ -300,13 +297,20 @@
      但是能正常显示uiactivitycontroller，也能隐藏状态栏
      ***/
     UIWindow *window = [UIApplication sharedApplication].keyWindow;
-    [window.rootViewController presentViewController:self animated:NO completion:nil];
+    [window addSubview:self.view];
+    [window.rootViewController addChildViewController:self];
+    [self didMoveToParentViewController:window.rootViewController];
+    
+//    [window.rootViewController presentViewController:self animated:NO completion:nil];
     
     [self startBrowing:YES completion:nil];
 }
 
 - (void) animatationDidEnd{
-    [self.presentingViewController dismissViewControllerAnimated:NO completion:nil];
+    [self.view removeFromSuperview];
+    [self willMoveToParentViewController:nil];
+    [self removeFromParentViewController];
+    //[self.presentingViewController dismissViewControllerAnimated:NO completion:nil];
 }
 
 - (void) start{
