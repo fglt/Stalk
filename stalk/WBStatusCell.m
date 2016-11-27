@@ -121,6 +121,7 @@
     NSArray<WBPicture *> *pictures;
     WBStatus *status;
     UIView *picview;
+    BOOL isRetweet = NO;
     
     for(UIView *view in _pictureHolder.subviews){
         [view removeFromSuperview];
@@ -135,6 +136,7 @@
         status = layout.status.retweetedStatus;
         pictures = layout.status.retweetedStatus.pictures;
         picview = _retweetPictureHolder;
+        isRetweet = YES;
         _retweetPictureHolder.frame = layout.retweetPicFrame;
     }else if(layout.statusPictureFrame.size.height >0){
         status = layout.status;
@@ -148,10 +150,43 @@
             YYAnimatedImageView *thumbView = [self _newImageViewWithTag:i];;
             [picview addSubview:thumbView];
             thumbView.frame = CGRectMake(i%3*(SIZE_GAP_IMG+layout.imgWidth), i/3*(SIZE_GAP_IMG+layout.imgHeight), layout.imgWidth, layout.imgHeight);
+            thumbView.backgroundColor = isRetweet? kWBCellInnerViewColor : kWBCellBackgroundColor;
             thumbView.autoPlayAnimatedImage =NO;
             NSURL *url = pictures[i].bmiddle.url ? : pictures[i].thumbnail.url ? : pictures[i].original.url;
-            thumbView.imageURL = [WBStatusHelper defaultURLForImageURL:url] ;
-            UITapGestureRecognizer *recognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapImageGesture:)];
+
+            __weak __typeof__(thumbView) weakThumb = thumbView;
+            [thumbView.layer setImageWithURL:[WBStatusHelper defaultURLForImageURL:url] placeholder:nil options:YYWebImageOptionAvoidSetImage completion:^(UIImage * _Nullable image, NSURL * _Nonnull url, YYWebImageFromType from, YYWebImageStage stage, NSError * _Nullable error) {
+                NSLog(@"fromtype: %ld", from);
+                if(!image) return;
+                if(stage != YYWebImageStageFinished) return;
+                int width = image.size.width;
+                int height = image.size.height;
+                if(pictures.count==1 && (width<height)){
+                    
+                    weakThumb.width = 9.0/16*weakThumb.height;
+                }
+                CGFloat scale = (height / width) / (weakThumb.height / weakThumb.width);
+                if (scale < 0.99 || isnan(scale)) {
+                    weakThumb.contentMode = UIViewContentModeScaleAspectFill;
+                    weakThumb.layer.contentsRect = CGRectMake(0, 0, 1, 1);
+                } else {
+                    
+                    weakThumb.contentMode = UIViewContentModeScaleToFill;
+                    weakThumb.layer.contentsRect = CGRectMake(0, 0, 1, (float)width / height);
+                }
+                weakThumb.image = image;
+                if (from != YYWebImageFromMemoryCacheFast) {
+                    CATransition *transition = [CATransition animation];
+                    transition.duration = 0.15;
+                    transition.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseOut];
+                    transition.type = kCATransitionFade;
+                    [weakThumb.layer addAnimation:transition forKey:@"contents"];
+                }
+            }];
+            UITapGestureRecognizer *recognizer = [[UITapGestureRecognizer alloc] initWithActionBlock:^(id sender) {
+                NSLog(@"图片 %ld 被点击",thumbView.tag );
+                [self.statusCell.delegate cell:self.statusCell didClickImageAt:thumbView.tag];
+            }];
             [thumbView addGestureRecognizer:recognizer];
             UIView *badge = [UIImageView new];
             badge.userInteractionEnabled = NO;
@@ -161,6 +196,7 @@
             badge.right = thumbView.width;
             badge.bottom = thumbView.height;
             badge.hidden = YES;
+
             [thumbView addSubview:badge];
             switch (pictures[i].original.badgeType) {
                 case WBPictureBadgeTypeNone: {
@@ -176,6 +212,11 @@
                 case WBPictureBadgeTypeGIF: {
                     badge.layer.contents = (__bridge id)([WBStatusHelper imageNamed:@"timeline_image_gif"].CGImage);
                     badge.hidden = NO;
+//                    __weak __typeof__(thumbView) weakThumb = thumbView;
+//                    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithActionBlock:^(id  _Nonnull sender) {
+//                        weakThumb.autoPlayAnimatedImage = !weakThumb.autoPlayAnimatedImage;
+//                    }];
+//                    [badge addGestureRecognizer:tap];
                 } break;
             }
 
