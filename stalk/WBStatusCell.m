@@ -146,10 +146,18 @@
     }
     
     if(pictures.count>0){
+        CGPoint origin = CGPointZero;
+        CGSize picSize = CGSizeMake(layout.imgWidth, layout.imgHeight);
         for (NSInteger i=0; i<pictures.count&& i<9; i++) {
+            if(pictures.count == 4){
+                origin = CGPointMake(i%2*(SIZE_GAP_IMG+layout.imgWidth), i/2*(SIZE_GAP_IMG+layout.imgHeight));
+            }else{
+                origin = CGPointMake(i%3*(SIZE_GAP_IMG+layout.imgWidth), i/3*(SIZE_GAP_IMG+layout.imgHeight));
+            }
             YYAnimatedImageView *thumbView = [self _newImageViewWithTag:i];;
             [picview addSubview:thumbView];
-            thumbView.frame = CGRectMake(i%3*(SIZE_GAP_IMG+layout.imgWidth), i/3*(SIZE_GAP_IMG+layout.imgHeight), layout.imgWidth, layout.imgHeight);
+    
+            thumbView.frame = (CGRect){origin, picSize};
             thumbView.backgroundColor = isRetweet? kWBCellInnerViewColor : kWBCellBackgroundColor;
             thumbView.autoPlayAnimatedImage =NO;
             NSURL *url = pictures[i].bmiddle.url ? : pictures[i].thumbnail.url ? : pictures[i].original.url;
@@ -161,11 +169,14 @@
                 if(stage != YYWebImageStageFinished) return;
                 int width = image.size.width;
                 int height = image.size.height;
-                if(pictures.count==1 && (width<height)){
-                    
-                    weakThumb.width = 9.0/16*weakThumb.height;
+                
+                CGFloat factor= (CGFloat)height/width;
+                if(pictures.count==1){
+                    factor =  factor > 16/9.0 ? 16/9.0:factor;
+                    factor = factor > 9/16.0 ? factor:9/16.0;
+                    weakThumb.width = weakThumb.height/factor;
                 }
-                CGFloat scale = (height / width) / (weakThumb.height / weakThumb.width);
+                CGFloat scale = (height/width) / (weakThumb.height / weakThumb.width);
                 if (scale < 0.99 || isnan(scale)) {
                     weakThumb.contentMode = UIViewContentModeScaleAspectFill;
                     weakThumb.layer.contentsRect = CGRectMake(0, 0, 1, 1);

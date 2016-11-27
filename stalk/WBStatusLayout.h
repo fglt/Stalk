@@ -45,8 +45,8 @@
 @property (nonatomic) CGRect retweetContentFrame;
 @property (nonatomic) CGRect retweetTextFrame;
 @property (nonatomic) CGRect retweetPicFrame;
-@property (nonatomic) CGFloat imgWidth;
-@property (nonatomic) CGFloat imgHeight;
+@property (nonatomic) int imgWidth;
+@property (nonatomic) int imgHeight;
 @property (nonatomic) CGFloat height;
 @property (nonatomic, copy) NSArray *pictures;
 

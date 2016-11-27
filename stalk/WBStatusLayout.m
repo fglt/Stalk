@@ -46,8 +46,8 @@
 - (void)layout
 {
     CGFloat viewWidth = CELL_WIDTH - (PADDING<<1);
-    _imgWidth = ceil(viewWidth - 2*SIZE_GAP_IMG)/3;
-    _imgHeight = _imgWidth *3/4;
+    _imgWidth = (viewWidth - 2*SIZE_GAP_IMG)/3;
+    _imgHeight = _imgWidth *0.75;
     CGFloat picHeight=0;
     UIFont *font = [UIFont systemFontOfSize:SIZE_FONT_CONTENT];
     NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
@@ -109,8 +109,8 @@
 - (CGFloat) heightForPic:(NSUInteger) count{
     if(count ==0) return 0;
     if(count ==1) {
-        _imgWidth *=2;
-        _imgHeight *=2;
+        _imgWidth *= 2;
+        _imgHeight *= 1.5;
     }
     count--;
     return (count/3 * _imgHeight +_imgHeight + count/3 *SIZE_GAP_IMG);
