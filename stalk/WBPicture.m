@@ -10,6 +10,16 @@
 
 @implementation WBPictureMetadata
 
+- (void)setType:(NSString *)type{
+    _type = [type copy];
+    if ([_type isEqualToString:@"gif"]) {
+        _badgeType = WBPictureBadgeTypeGIF;
+    } else {
+        if (_width > 0 && (float)_height / _width > 3) {
+            _badgeType = WBPictureBadgeTypeLong;
+        }
+    }
+}
 @end
 
 @implementation WBPicture

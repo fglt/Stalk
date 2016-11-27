@@ -22,11 +22,10 @@ typedef NS_ENUM(NSUInteger, WBPictureBadgeType) {
 @property (nonatomic, strong) NSURL *url; ///< Full image url
 @property (nonatomic, assign) int width; ///< pixel width
 @property (nonatomic, assign) int height; ///< pixel height
-@property (nonatomic, strong) NSString *type; ///< "WEBP" "JPEG" "GIF"
+@property (nonatomic, copy) NSString *type; ///< "WEBP" "JPEG" "GIF"
 @property (nonatomic, assign) int cutType; ///< Default:1
 @property (nonatomic, assign) WBPictureBadgeType badgeType;
 
-+ (instancetype)metadataWithDict:(NSDictionary *)dict;
 @end
 
 

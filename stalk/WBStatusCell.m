@@ -148,12 +148,37 @@
             YYAnimatedImageView *thumbView = [self _newImageViewWithTag:i];;
             [picview addSubview:thumbView];
             thumbView.frame = CGRectMake(i%3*(SIZE_GAP_IMG+layout.imgWidth), i/3*(SIZE_GAP_IMG+layout.imgHeight), layout.imgWidth, layout.imgHeight);
-            //thumbView.autoPlayAnimatedImage =NO;
+            thumbView.autoPlayAnimatedImage =NO;
             NSURL *url = pictures[i].bmiddle.url ? : pictures[i].thumbnail.url ? : pictures[i].original.url;
             thumbView.imageURL = [WBStatusHelper defaultURLForImageURL:url] ;
-            thumbView.autoPlayAnimatedImage = NO;
             UITapGestureRecognizer *recognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapImageGesture:)];
             [thumbView addGestureRecognizer:recognizer];
+            UIView *badge = [UIImageView new];
+            badge.userInteractionEnabled = NO;
+            badge.contentMode = UIViewContentModeScaleAspectFit;
+            badge.size = CGSizeMake(56 / 2, 36 / 2);
+            badge.autoresizingMask = UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleLeftMargin;
+            badge.right = thumbView.width;
+            badge.bottom = thumbView.height;
+            badge.hidden = YES;
+            [thumbView addSubview:badge];
+            switch (pictures[i].original.badgeType) {
+                case WBPictureBadgeTypeNone: {
+                    if (badge.layer.contents) {
+                        badge.layer.contents = nil;
+                        badge.hidden = YES;
+                    }
+                } break;
+                case WBPictureBadgeTypeLong: {
+                    badge.layer.contents = (__bridge id)([WBStatusHelper imageNamed:@"timeline_image_longimage"].CGImage);
+                    badge.hidden = NO;
+                } break;
+                case WBPictureBadgeTypeGIF: {
+                    badge.layer.contents = (__bridge id)([WBStatusHelper imageNamed:@"timeline_image_gif"].CGImage);
+                    badge.hidden = NO;
+                } break;
+            }
+
         }
     }
 

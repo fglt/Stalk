@@ -79,6 +79,7 @@
             WBPictureMetadata *originmeta = [WBPictureMetadata new];
             originmeta.url = [NSURL URLWithString:fileName relativeToURL:orginBaseURL];
             originmeta.type = [aStatus.originalPic pathExtension];
+            
             picture.original = originmeta;
         }
         [pictures addObject:picture];
