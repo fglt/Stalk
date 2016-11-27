@@ -5,6 +5,10 @@
 //  Created by Coding on 26/11/2016.
 //  Copyright © 2016 Coding. All rights reserved.
 //
+/**2016-11-27 20:41:05让keyWindow加载此ViewController;
+ **解决了退出时背景问题；
+ **但是UIActivityController不能正常显示；
+ **/
 
 #import "PhotoBrowerViewController.h"
 
@@ -237,11 +241,7 @@
 @property (nonatomic, strong) UIView *backgroundView;
 @end
 
-@implementation PhotoBrowerViewController{
-    BOOL navgationIsHide;
-    BOOL tabIsHide;
-}
-
+@implementation PhotoBrowerViewController
 //- (BOOL) prefersStatusBarHidden{
 //    return YES;
 //}
@@ -292,17 +292,7 @@
     [self startBrowing:YES completion:nil];
 }
 
-- (void)animatationWillBegin{
-    navgationIsHide = self.navigationController.navigationBar.hidden;
-    tabIsHide = self.tabBarController.tabBar.hidden;
-    self.navigationController.navigationBar.hidden = YES;
-    self.tabBarController.tabBar.hidden = YES;
-}
-
 - (void) animatationDidEnd{
-//    self.navigationController.navigationBar.hidden = navgationIsHide;
-//    self.tabBarController.tabBar.hidden = tabIsHide;
-//    [self.navigationController popViewControllerAnimated:NO];
     [self.view removeFromSuperview];
     [self removeFromParentViewController];
 }
@@ -691,8 +681,6 @@
         activityViewController.popoverPresentationController.permittedArrowDirections = UIMenuControllerArrowDefault;
         activityViewController.excludedActivityTypes = @[UIActivityTypeAirDrop,UIActivityTypePostToTwitter];
     }
-    
-    [self presentViewController:activityViewController animated:YES completion:nil];
 }
 
 - (void)pan:(UIPanGestureRecognizer *)g {
