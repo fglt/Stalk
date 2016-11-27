@@ -51,6 +51,8 @@
 		177B21041DE5797A005A1438 /* clear247.png in Resources */ = {isa = PBXBuildFile; fileRef = 177B21031DE5797A005A1438 /* clear247.png */; };
 		177B21451DE816E2005A1438 /* ResourceWeibo.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 177B21441DE816E2005A1438 /* ResourceWeibo.bundle */; };
 		177B21551DE9D119005A1438 /* PhotoBrowerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 177B21541DE9D119005A1438 /* PhotoBrowerViewController.m */; };
+		177B21581DEA72F5005A1438 /* WBStatusHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 177B21571DEA72F5005A1438 /* WBStatusHelper.m */; };
+		177B215B1DEA7341005A1438 /* WBModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 177B215A1DEA7341005A1438 /* WBModel.m */; };
 		17AFD3F71DDED732007C7DB9 /* StatusDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 17AFD3F61DDED732007C7DB9 /* StatusDetailViewController.m */; };
 		17FA23001DE3CE0C00617651 /* WBHttpRequest+STalk.m in Sources */ = {isa = PBXBuildFile; fileRef = 17FA22FF1DE3CE0C00617651 /* WBHttpRequest+STalk.m */; };
 		17FA23091DE3DD8D00617651 /* StatusDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 17FA23081DE3DD8D00617651 /* StatusDataSource.m */; };
@@ -131,6 +133,10 @@
 		177B21441DE816E2005A1438 /* ResourceWeibo.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = ResourceWeibo.bundle; sourceTree = "<group>"; };
 		177B21531DE9D119005A1438 /* PhotoBrowerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PhotoBrowerViewController.h; sourceTree = "<group>"; };
 		177B21541DE9D119005A1438 /* PhotoBrowerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PhotoBrowerViewController.m; sourceTree = "<group>"; };
+		177B21561DEA72F5005A1438 /* WBStatusHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WBStatusHelper.h; sourceTree = "<group>"; };
+		177B21571DEA72F5005A1438 /* WBStatusHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WBStatusHelper.m; sourceTree = "<group>"; };
+		177B21591DEA7341005A1438 /* WBModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WBModel.h; sourceTree = "<group>"; };
+		177B215A1DEA7341005A1438 /* WBModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WBModel.m; sourceTree = "<group>"; };
 		17AFD3F51DDED731007C7DB9 /* StatusDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StatusDetailViewController.h; sourceTree = "<group>"; };
 		17AFD3F61DDED732007C7DB9 /* StatusDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StatusDetailViewController.m; sourceTree = "<group>"; };
 		17FA22FE1DE3CE0C00617651 /* WBHttpRequest+STalk.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "WBHttpRequest+STalk.h"; sourceTree = "<group>"; };
@@ -274,6 +280,8 @@
 		171BCD131DD70277009FF89E /* modal */ = {
 			isa = PBXGroup;
 			children = (
+				177B21561DEA72F5005A1438 /* WBStatusHelper.h */,
+				177B21571DEA72F5005A1438 /* WBStatusHelper.m */,
 				171BCCE21DD60210009FF89E /* WBUser.h */,
 				171BCCE31DD60210009FF89E /* WBUser.m */,
 				171BCCE51DD60245009FF89E /* WBStatus.h */,
@@ -288,6 +296,8 @@
 				171BCD591DDBFC1F009FF89E /* EmotionHelper.m */,
 				177B20FB1DE52CB0005A1438 /* WBPicture.h */,
 				177B20FC1DE52CB0005A1438 /* WBPicture.m */,
+				177B21591DEA7341005A1438 /* WBModel.h */,
+				177B215A1DEA7341005A1438 /* WBModel.m */,
 			);
 			name = modal;
 			sourceTree = "<group>";
@@ -458,6 +468,7 @@
 				177B20FD1DE52CB0005A1438 /* WBPicture.m in Sources */,
 				171BCCE41DD60210009FF89E /* WBUser.m in Sources */,
 				171BCD521DDB4D5E009FF89E /* STalkTextView.m in Sources */,
+				177B215B1DEA7341005A1438 /* WBModel.m in Sources */,
 				17FA23001DE3CE0C00617651 /* WBHttpRequest+STalk.m in Sources */,
 				171BCCA81DD4B6FF009FF89E /* AppDelegate.m in Sources */,
 				171BCCF01DD61C57009FF89E /* WBAuthorizeResponse+copy.m in Sources */,
@@ -473,6 +484,7 @@
 				171BCD5A1DDBFC1F009FF89E /* EmotionHelper.m in Sources */,
 				1741E6621DDF165D00C887D0 /* UserViewController.m in Sources */,
 				171BCD291DDAD6A5009FF89E /* STalkTextAttachment.m in Sources */,
+				177B21581DEA72F5005A1438 /* WBStatusHelper.m in Sources */,
 				17FA23091DE3DD8D00617651 /* StatusDataSource.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

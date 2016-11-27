@@ -24,6 +24,7 @@
 #import "StatusDataSource.h"
 #import "TopicController.h"
 #import "PhotoBrowerViewController.h"
+#import "WBStatusHelper.h"
 
 @interface HomeTableViewController ()<WBStatusCellDelegate,SFSafariViewControllerDelegate>
 @property (nonatomic, strong) StatusDataSource *dataSource;
@@ -154,15 +155,11 @@
 
         YYPhotoGroupItem *item = [YYPhotoGroupItem new];
         item.thumbView = imgView;
-        item.largeImageURL = status.pictures[i].original.url;
-        [[YYWebImageManager sharedManager] requestImageWithURL:item.largeImageURL options:YYWebImageOptionAvoidSetImage progress:nil transform:nil completion:^(UIImage * _Nullable image, NSURL * _Nonnull url, YYWebImageFromType from, YYWebImageStage stage, NSError * _Nullable error) {
-            item.largeImageSize = image.size;
-        }];
+        item.largeImageURL = [WBStatusHelper defaultURLForImageURL:status.pictures[i].original.url];
         [items addObject:item];
         if (i == index) {
             fromView = imgView;
         }
-        
     }
     
 //    blackview = [[UIView alloc]initWithFrame:[UIScreen mainScreen].bounds];

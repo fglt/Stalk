@@ -18,6 +18,7 @@
 #import "EmotionHelper.h"
 #import "MLLinkLabel.h"
 #import "AppDelegate.h"
+#import "WBStatusHelper.h"
 
 
 @interface WBStatusView()
@@ -117,7 +118,7 @@
 }
 
 - (void)addPicViewWithLayout:(WBStatusLayout *)layout{
-    NSArray *urls;
+    NSArray<WBPicture *> *pictures;
     WBStatus *status;
     UIView *picview;
     
@@ -132,25 +133,25 @@
     
     if(layout.retweetPicFrame.size.height>0){
         status = layout.status.retweetedStatus;
-        urls = layout.status.retweetedStatus.thumbnailPic;
+        pictures = layout.status.retweetedStatus.pictures;
         picview = _retweetPictureHolder;
         _retweetPictureHolder.frame = layout.retweetPicFrame;
     }else if(layout.statusPictureFrame.size.height >0){
         status = layout.status;
-        urls = layout.status.thumbnailPic;
+        pictures = layout.status.pictures;
         picview = _pictureHolder;
         _pictureHolder.frame = layout.statusPictureFrame;
     }
     
-    if(urls.count>0){
-        NSURL *baseURL = [NSURL URLWithString:[self imageFilePath:status.bmiddlePic]];
-        for (NSInteger i=0; i<urls.count&& i<9; i++) {
+    if(pictures.count>0){
+        for (NSInteger i=0; i<pictures.count&& i<9; i++) {
             YYAnimatedImageView *thumbView = [self _newImageViewWithTag:i];;
             [picview addSubview:thumbView];
             thumbView.frame = CGRectMake(i%3*(SIZE_GAP_IMG+layout.imgWidth), i/3*(SIZE_GAP_IMG+layout.imgHeight), layout.imgWidth, layout.imgHeight);
             //thumbView.autoPlayAnimatedImage =NO;
-            NSURL *url= [NSURL URLWithString:[self imageName:urls[i]] relativeToURL:baseURL];
-            thumbView.imageURL = url;
+            NSURL *url = pictures[i].bmiddle.url ? : pictures[i].thumbnail.url ? : pictures[i].original.url;
+            thumbView.imageURL = [WBStatusHelper defaultURLForImageURL:url] ;
+            thumbView.autoPlayAnimatedImage = NO;
             UITapGestureRecognizer *recognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapImageGesture:)];
             [thumbView addGestureRecognizer:recognizer];
         }
