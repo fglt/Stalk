@@ -242,9 +242,9 @@
 @end
 
 @implementation PhotoBrowerViewController
-//- (BOOL) prefersStatusBarHidden{
-//    return YES;
-//}
+- (BOOL) prefersStatusBarHidden{
+    return YES;
+}
 
 - (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
 {
@@ -259,8 +259,13 @@
         _scrollView.contentOffset = CGPointMake(_currentIndex *_scrollView.width, _scrollView.contentOffset.y);
         for (int i=0; i<_cells.count; i++){
             YYPhotoGroupCell *cell = (YYPhotoGroupCell *)_cells[i];
-            cell.frame = cell.superview.bounds;
-            cell.origin = CGPointMake(_scrollView.width * cell.page + kPadding / 2, 0);
+            /**
+              cell.frame = cell.superview.bounds;
+              cell的父View可能为空；此时cell的frame为cgpointzero。导致不显示内容；
+              修复bug
+             **/
+            CGFloat left = _scrollView.width * cell.page + kPadding / 2;
+            cell.frame = CGRectMake(left, 0, self.view.width, self.view.height);
             cell.zoomScale = 1;
             [cell resizeSubviewSize];
         }
@@ -285,16 +290,23 @@
 }
 
 - (void)show{
+//    UIWindow *window = [UIApplication sharedApplication].keyWindow;
+//    [window addSubview:self.view];
+//    [window.rootViewController addChildViewController:self];
+    /***
+     使用addChildViewController的方式好处是消失时会显示将要显示的viewcontroller，
+     但不能正常显示uiactivitycontroller，也不能隐藏状态栏。
+     使用presentViewController的方式则在消失前背景是黑的；
+     但是能正常显示uiactivitycontroller，也能隐藏状态栏
+     ***/
     UIWindow *window = [UIApplication sharedApplication].keyWindow;
-    [window addSubview:self.view];
-    [window.rootViewController addChildViewController:self];
-
+    [window.rootViewController presentViewController:self animated:NO completion:nil];
+    
     [self startBrowing:YES completion:nil];
 }
 
 - (void) animatationDidEnd{
-    [self.view removeFromSuperview];
-    [self removeFromParentViewController];
+    [self.presentingViewController dismissViewControllerAnimated:NO completion:nil];
 }
 
 - (void) start{
@@ -681,6 +693,7 @@
         activityViewController.popoverPresentationController.permittedArrowDirections = UIMenuControllerArrowDefault;
         activityViewController.excludedActivityTypes = @[UIActivityTypeAirDrop,UIActivityTypePostToTwitter];
     }
+    [self presentViewController:activityViewController animated:YES completion:nil];
 }
 
 - (void)pan:(UIPanGestureRecognizer *)g {
