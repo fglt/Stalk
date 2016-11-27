@@ -12,6 +12,7 @@
 #import "WBStatus.h"
 #import "WBUser.h"
 #import "STalkTextAttachment.h"
+#import "WBStatusHelper.h"
 
 @implementation WBStatusLayout
 
@@ -120,14 +121,14 @@
     
     NSUInteger lengthDetail = 0;
     NSRange newRange;
-    NSString *bundleName = @"emotionResource.bundle";
     
     NSArray* matches = [[NSRegularExpression regularExpressionWithPattern:EmojiRegular options:NSRegularExpressionDotMatchesLineSeparators error:nil] matchesInString:coloredString.string options:0 range:NSMakeRange(0,coloredString.string.length)];
     for(NSTextCheckingResult* match in matches) {
         newRange = NSMakeRange(match.range.location - lengthDetail, match.range.length);
         NSString *emotionstr = [coloredString.string substringWithRange:newRange];
         STalkTextAttachment *attachment = [[STalkTextAttachment alloc] init];
-        attachment.image = [UIImage imageNamed:[bundleName stringByAppendingPathComponent:emotionstr]];
+        NSDictionary *emotions = [WBStatusHelper emoticonDic];
+        attachment.image = [UIImage imageNamed:emotions[emotionstr]];
         NSAttributedString * attachStr = [NSAttributedString attributedStringWithAttachment:attachment];
         NSUInteger prelength = coloredString.length;
         [coloredString replaceCharactersInRange:newRange withAttributedString:attachStr];

@@ -12,6 +12,9 @@
 #import "WBHttpRequest+STalk.h"
 #import "WBRequestQueue.h"
 
+static NSString *const StatusesCacheName = @"statusesCache";
+static NSString *const LastCachedStatues = @"LastCachedStatues";
+
 @interface StatusDataSource()
 @property (nonatomic, copy) NSString *identifer;
 @property (nonatomic, strong) NSMutableArray *statusLayoutList;
@@ -28,15 +31,22 @@
 }
 
 - (void)loadDataWithCompletionHandler:(LoadDataCompletionHandler)handler;{
-    
+
+    YYCache *statusCache = [[YYCache alloc] initWithName:StatusesCacheName];
     AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
-    
-    NSDictionary *parms = @{@"count":[NSString stringWithFormat:@"%d",100]};
-    [WBHttpRequest requestForStatusesOfPath:@"friends_timeline" withAccessToken:appDelegate.wbAuthorizeResponse.accessToken andOtherProperties:parms queue:[WBRequestQueue queueForWBRequest] withCompletionHandler:^(WBHttpRequest *httpRequest, id result, NSError *error) {
-        NSDictionary *dict = [result objectForKey:@"statuses"];
+    NSDictionary *dict = (NSDictionary *)[statusCache objectForKey:LastCachedStatues];
+    if(dict){
         _statusLayoutList = [WBStatusLayout statusLayoutsWithStatuses:[WBStatus statuesWithDict:dict]];
-        handler(error);
-    }];
+        handler(nil);
+    }else{
+        NSDictionary *parms = @{@"count":[NSString stringWithFormat:@"%d",100]};
+        [WBHttpRequest requestForStatusesOfPath:@"friends_timeline" withAccessToken:appDelegate.wbAuthorizeResponse.accessToken andOtherProperties:parms queue:[WBRequestQueue queueForWBRequest] withCompletionHandler:^(WBHttpRequest *httpRequest, id result, NSError *error) {
+            NSDictionary *statusDict = [result objectForKey:@"statuses"];
+            [statusCache setObject:statusDict forKey:LastCachedStatues];
+            _statusLayoutList = [WBStatusLayout statusLayoutsWithStatuses:[WBStatus statuesWithDict:statusDict]];
+            handler(error);
+        }];
+    }
 }
 
 - (void)loadDataAboutTopic:(NSString *)topic completionHandler:(LoadDataCompletionHandler)handler{

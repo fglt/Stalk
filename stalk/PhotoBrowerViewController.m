@@ -234,6 +234,7 @@
 @property (nonatomic, assign) BOOL isPresented;
 @property (nonatomic, assign) CGPoint panGestureBeginPoint;
 @property (nonatomic) BOOL rotation;
+@property (nonatomic, strong) UIView *backgroundView;
 @end
 
 @implementation PhotoBrowerViewController{
@@ -241,9 +242,9 @@
     BOOL tabIsHide;
 }
 
-- (BOOL) prefersStatusBarHidden{
-    return YES;
-}
+//- (BOOL) prefersStatusBarHidden{
+//    return YES;
+//}
 
 - (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
 {
@@ -279,8 +280,15 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.view.backgroundColor = [UIColor clearColor];
     [self start];
-    [self animatationWillBegin];
+}
+
+- (void)show{
+    UIWindow *window = [UIApplication sharedApplication].keyWindow;
+    [window addSubview:self.view];
+    [window.rootViewController addChildViewController:self];
+
     [self startBrowing:YES completion:nil];
 }
 
@@ -292,14 +300,14 @@
 }
 
 - (void) animatationDidEnd{
-    self.navigationController.navigationBar.hidden = navgationIsHide;
-    self.tabBarController.tabBar.hidden = tabIsHide;
-    [self.navigationController popViewControllerAnimated:NO];
+//    self.navigationController.navigationBar.hidden = navgationIsHide;
+//    self.tabBarController.tabBar.hidden = tabIsHide;
+//    [self.navigationController popViewControllerAnimated:NO];
+    [self.view removeFromSuperview];
+    [self removeFromParentViewController];
 }
 
 - (void) start{
-    self.view.backgroundColor = [UIColor blackColor];
-    
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismiss)];
     tap.delegate = self;
     [self.view addGestureRecognizer:tap];
@@ -321,6 +329,11 @@
     }
     
     _cells = @[].mutableCopy;
+    
+    _backgroundView = UIView.new;
+    _backgroundView.frame = self.view.bounds;
+    _backgroundView.backgroundColor = [UIColor blackColor];
+    _backgroundView.autoresizingMask = UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight;
     
     _contentView = UIView.new;
     _contentView.frame = self.view.bounds;
@@ -346,6 +359,7 @@
     _indexLabel.font = [UIFont boldSystemFontOfSize:16];
     _indexLabel.center = CGPointMake(self.view.width / 2, self.view.height - 30);
     _indexLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleTopMargin;
+    [self.view addSubview:_backgroundView];
     [self.view addSubview:_contentView];
     [_contentView addSubview:_scrollView];
     [_contentView addSubview:_indexLabel];
@@ -426,7 +440,8 @@
 
 - (void)dismissAnimated:(BOOL)animated completion:(void (^)(void))completion {
     [UIView setAnimationsEnabled:YES];
-    
+    self.view.backgroundColor = [UIColor clearColor];
+    _backgroundView.backgroundColor = [UIColor clearColor];
     YYPhotoGroupCell *cell = [self cellForPage:_currentIndex];
     YYPhotoGroupItem *item = _groupItems[_currentIndex];
     
@@ -436,7 +451,6 @@
     } else {
         fromView = item.thumbView;
     }
-    
     [self cancelAllImageLoad];
     _isPresented = NO;
     BOOL isFromImageClipped = fromView.layer.contentsRect.size.height < 1;
@@ -454,7 +468,6 @@
     
     if (fromView == nil) {
         [UIView animateWithDuration:animated ? 0.25 : 0 delay:0 options:UIViewAnimationOptionBeginFromCurrentState|UIViewAnimationOptionCurveEaseOut animations:^{
-            self.view.alpha = 0.0;
             self.scrollView.layer.transformScale = 0.95;
             self.scrollView.alpha = 0;
         }completion:^(BOOL finished) {
@@ -488,12 +501,7 @@
             cell.imageView.frame = fromFrame;
         }
     }completion:^(BOOL finished) {
-        [UIView animateWithDuration:animated ? 0.15 : 0 delay:0 options:UIViewAnimationOptionCurveLinear animations:^{
-            self.view.alpha = 0;
-        } completion:^(BOOL finished) {
-            cell.imageContainerView.layer.anchorPoint = CGPointMake(0.5, 0.5);
-            [self animatationDidEnd];
-        }];
+        [self animatationDidEnd];
     }];
 }
 
@@ -701,6 +709,14 @@
             CGPoint p = [g locationInView:self.view];
             CGFloat deltaY = p.y - _panGestureBeginPoint.y;
             _scrollView.top = deltaY;
+            CGFloat alphaDelta = 160;
+            CGFloat alpha = (alphaDelta - fabs(deltaY) + 50) / alphaDelta;
+            alpha = YY_CLAMP(alpha, 0, 1);
+            [UIView animateWithDuration:0.1 delay:0 options:UIViewAnimationOptionBeginFromCurrentState | UIViewAnimationOptionAllowUserInteraction | UIViewAnimationOptionCurveLinear animations:^{
+                _backgroundView.alpha = alpha;
+            } completion:nil];
+            
+
         } break;
         case UIGestureRecognizerStateEnded: {
             if (_panGestureBeginPoint.x == 0 && _panGestureBeginPoint.y == 0) return;
@@ -711,7 +727,6 @@
             if (fabs(v.y) > 1000 || fabs(deltaY) > 120) {
                 [self cancelAllImageLoad];
                 _isPresented = NO;
-                
                 BOOL moveToTop = (v.y < - 50 || (v.y < 50 && deltaY < 0));
                 CGFloat vy = fabs(v.y);
                 if (vy < 1) vy = 1;
@@ -720,6 +735,7 @@
                 duration = YY_CLAMP(duration, 0.05, 0.3);
                 
                 [UIView animateWithDuration:duration delay:0 options:UIViewAnimationOptionCurveLinear | UIViewAnimationOptionBeginFromCurrentState animations:^{
+                    _backgroundView.alpha = 0;
                     if (moveToTop) {
                         _scrollView.bottom = 0;
                     } else {

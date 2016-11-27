@@ -10,6 +10,12 @@
 #import "WBUser.h"
 
 @implementation WBStatus
+
+//- (instancetype)initWithCoder:(NSCoder *)aDecoder{
+//    self = [super init];
+//    if(!self) return nil;
+//}
+
 + (instancetype)statusWithDict:(NSDictionary *) dict {
     WBStatus *aStatus = [[WBStatus alloc] init];
     aStatus.createdAt = [dict objectForKey:@"created_at"];

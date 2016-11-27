@@ -25,6 +25,7 @@
 #import "TopicController.h"
 #import "PhotoBrowerViewController.h"
 #import "WBStatusHelper.h"
+//#import "PhotoBrowerView.h"
 
 @interface HomeTableViewController ()<WBStatusCellDelegate,SFSafariViewControllerDelegate>
 @property (nonatomic, strong) StatusDataSource *dataSource;
@@ -170,7 +171,19 @@
     PhotoBrowerViewController *brower = [[PhotoBrowerViewController alloc]init];
     brower.fromView = fromView;
     brower.groupItems = items;
-    [self.navigationController pushViewController:brower animated:NO];
+    [brower show];
+//    [self.navigationController pushViewController:brower animated:NO];
+//    PhotoBrowerView *brower = [[PhotoBrowerView alloc] initWithItems:items];
+//    brower.fromView = fromView;
+//    [brower startBrowing:YES toContainer:self.tabBarController.view completion:nil];
+}
+
+- (UIImage *)snapImage{
+    UIGraphicsBeginImageContextWithOptions(self.view.bounds.size, 1, 0);
+    [self.tabBarController.view.layer renderInContext:UIGraphicsGetCurrentContext()];
+    UIImage *snap = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    return snap;
 }
 
 - (void)cell:(WBStatusCell *)cell didClickLink:(MLLink *)link

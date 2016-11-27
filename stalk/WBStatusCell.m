@@ -75,7 +75,14 @@
 - (void)setWithLayout:(WBStatusLayout *)layout{
     self.height = layout.height;
     _contentView.height = layout.height;
-    _icon.imageURL =[NSURL URLWithString:layout.status.user.avatarLarge];
+    //_icon.imageURL =[NSURL URLWithString:layout.status.user.avatarLarge];
+    [_icon setImageWithURL:[NSURL URLWithString:layout.status.user.avatarLarge] //profileImageURL
+               placeholder:nil
+                   options:kNilOptions
+                   manager:[WBStatusHelper avatarImageManager] //< 圆角头像manager，内置圆角处理
+                  progress:nil
+                 transform:nil
+                completion:nil];
     _name.text =layout.status.user.screenName;
     _from.text = [NSString stringWithFormat:@"%@ 来自%@", [layout.status.createdAt substringToIndex:11], [ self sourceWithString:layout.status.source]];
     [self layoutStatusTextWithLayout:layout];
