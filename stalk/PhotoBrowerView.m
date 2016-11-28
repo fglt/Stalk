@@ -15,25 +15,19 @@
 @implementation YYPhotoGroupItem
 
 - (UIImage *)thumbImage {
-    if ([_thumbView respondsToSelector:@selector(image)]) {
-        return ((UIImageView *)_thumbView).image;
+    if ([_fromView respondsToSelector:@selector(image)]) {
+        return ((UIImageView *)_fromView).image;
     }
     return nil;
 }
 
 - (BOOL)thumbClippedToTop {
-    if (_thumbView) {
-        if (_thumbView.layer.contentsRect.size.height < 1) {
+    if (_fromView) {
+        if (_fromView.layer.contentsRect.size.height < 1) {
             return YES;
         }
     }
     return NO;
-}
-
-- (BOOL)shouldClipToTop:(CGSize)imageSize forView:(UIView *)view {
-    if (imageSize.width < 1 || imageSize.height < 1) return NO;
-    if (view.width < 1 || view.height < 1) return NO;
-    return imageSize.height / imageSize.width > view.width / view.height;
 }
 
 - (id)copyWithZone:(NSZone *)zone {
@@ -325,7 +319,7 @@
     [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationFade];
     NSInteger page = -1;
     for (NSUInteger i = 0; i < self.groupItems.count; i++) {
-        if (_fromView == ((YYPhotoGroupItem *)self.groupItems[i]).thumbView) {
+        if (_fromView == ((YYPhotoGroupItem *)self.groupItems[i]).fromView) {
             page = (int)i;
             break;
         }
@@ -402,7 +396,7 @@
     if (_fromItemIndex == _currentIndex) {
         fromView = _fromView;
     } else {
-        fromView = item.thumbView;
+        fromView = item.fromView;
     }
     [self cancelAllImageLoad];
     _isPresented = NO;

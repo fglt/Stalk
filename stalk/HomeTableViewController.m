@@ -159,7 +159,7 @@
         UIView *imgView = picviews[i];
 
         YYPhotoGroupItem *item = [YYPhotoGroupItem new];
-        item.thumbView = imgView;
+        item.fromView = imgView;
         item.largeImageURL = [WBStatusHelper defaultURLForImageURL:status.pictures[i].original.url];
         [items addObject:item];
         if (i == index) {
@@ -167,12 +167,11 @@
         }
     }
     
-
 //    PhotoBrowerViewController *brower = [[PhotoBrowerViewController alloc]init];
 //    brower.fromView = fromView;
 //    brower.groupItems = items;
-//    [self presentViewController:brower animated:NO completion:nil];
-//
+//    [brower show];
+
     PhotoBrowerView *brower = [[PhotoBrowerView alloc] initWithItems:items];
     brower.fromView = fromView;
     [brower showWithAnimate:YES];

@@ -88,13 +88,13 @@
      但是能正常显示uiactivitycontroller，也能隐藏状态栏
      ***/
     UIWindow *window = [UIApplication sharedApplication].keyWindow;
-    [window addSubview:self.view];
-    [window.rootViewController addChildViewController:self];
-    [self didMoveToParentViewController:window.rootViewController];
+//    [window addSubview:self.view];
+//    [window.rootViewController addChildViewController:self];
+//    [self didMoveToParentViewController:window.rootViewController];
     
-//    [window.rootViewController presentViewController:self animated:NO completion:nil];
+    [window.rootViewController presentViewController:self animated:NO completion:nil];
     
-    [self startBrowing:YES completion:nil];
+//    [self startBrowing:YES completion:nil];
 }
 
 - (void) dismissSelf{
@@ -105,7 +105,7 @@
 }
 
 - (void) start{
-    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismiss)];
+    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissWithTap)];
     tap.delegate = self;
     [self.view addGestureRecognizer:tap];
     
@@ -177,7 +177,7 @@
 - (void) startBrowing:(BOOL)animated completion:(void (^)(void))completion{
     NSInteger page = -1;
     for (NSUInteger i = 0; i < self.groupItems.count; i++) {
-        if (_fromView == ((YYPhotoGroupItem *)self.groupItems[i]).thumbView) {
+        if (_fromView == ((YYPhotoGroupItem *)self.groupItems[i]).fromView) {
             page = (int)i;
             break;
         }
@@ -235,31 +235,6 @@
     
 }
 
-- (void)willDisMissOnTap{
-    _indexLabel.hidden= YES;
-    YYPhotoGroupCell *cell = [self cellForPage:_currentIndex];
-    YYPhotoGroupItem *item = _groupItems[_currentIndex];
-    
-    UIView *fromView = item.thumbView;
-    fromView.hidden = YES;
-    [self cancelAllImageLoad];
-    _isPresented = NO;
-    
-    BOOL isFromImageClipped = fromView.layer.contentsRect.size.height < 1;
-    [CATransaction begin];
-    [CATransaction setDisableActions:YES];
-    if (isFromImageClipped) {
-        CGRect frame = cell.imageContainerView.frame;
-        cell.imageContainerView.layer.anchorPoint = CGPointMake(0.5, 0);
-        cell.imageContainerView.frame =frame;
-    }
-    cell.progressLayer.hidden = YES;
-    [CATransaction commit];
-    if (isFromImageClipped) {
-        [cell scrollToTopAnimated:NO];
-    }
-}
-
 - (void)dismissAnimated:(BOOL)animated completion:(void (^)(void))completion {
     [UIView setAnimationsEnabled:YES];
     self.view.backgroundColor = [UIColor clearColor];
@@ -268,11 +243,9 @@
     YYPhotoGroupItem *item = _groupItems[_currentIndex];
     
     UIView *fromView = nil;
-    if (_fromItemIndex == _currentIndex) {
-        fromView = _fromView;
-    } else {
-        fromView = item.thumbView;
-    }
+
+    fromView = item.fromView;
+    
     [self cancelAllImageLoad];
     _isPresented = NO;
     fromView.hidden= YES;
@@ -340,7 +313,7 @@
     YYPhotoGroupCell *cell = [self cellForPage:_currentIndex];
     YYPhotoGroupItem *item = _groupItems[_currentIndex];
     
-    UIView *fromView = item.thumbView;
+    UIView *fromView = item.fromView;
     
     BOOL isFromImageClipped = [item thumbClippedToTop];
     
@@ -393,10 +366,31 @@
     }
 }
 
-- (void)dismiss {
-    //[self dismissAnimated:YES completion:nil];
+- (void)dismissWithTap {
     _disappearMode = ControllerDisappearModeTap;
-    [self willDisMissOnTap];
+    _indexLabel.hidden= YES;
+    YYPhotoGroupCell *cell = [self cellForPage:_currentIndex];
+    YYPhotoGroupItem *item = _groupItems[_currentIndex];
+    
+    UIView *fromView = item.fromView;
+    fromView.hidden = YES;
+    [self cancelAllImageLoad];
+    _isPresented = NO;
+    
+    BOOL isFromImageClipped = fromView.layer.contentsRect.size.height < 1;
+    [CATransaction begin];
+    [CATransaction setDisableActions:YES];
+    if (isFromImageClipped) {
+        CGRect frame = cell.imageContainerView.frame;
+        cell.imageContainerView.layer.anchorPoint = CGPointMake(0.5, 0);
+        cell.imageContainerView.frame =frame;
+    }
+    cell.progressLayer.hidden = YES;
+    [CATransaction commit];
+    if (isFromImageClipped) {
+        [cell scrollToTopAnimated:NO];
+    }
+
     [self dismissSelf];
 }
 
@@ -408,7 +402,7 @@
 }
 
 - (UIView *)currentFromView{
-    return  _groupItems[_currentIndex].thumbView;
+    return  _groupItems[_currentIndex].fromView;
 }
 
 - (void)setGroupItems:(NSArray *)groupItems{

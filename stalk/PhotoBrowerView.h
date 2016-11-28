@@ -11,11 +11,10 @@
 #define ScrollViewCellPadding 20
 
 @interface YYPhotoGroupItem : NSObject
-@property (nonatomic, strong) UIView *thumbView;
+@property (nonatomic, strong) UIView *fromView;
 @property (nonatomic, strong) NSURL *largeImageURL;
 @property (nonatomic, readonly) UIImage *thumbImage;
 @property (nonatomic, readonly) BOOL thumbClippedToTop;
-- (BOOL)shouldClipToTop:(CGSize)imageSize forView:(UIView *)view;
 @end
 
 @interface YYPhotoGroupCell : UIScrollView<UIScrollViewDelegate>
