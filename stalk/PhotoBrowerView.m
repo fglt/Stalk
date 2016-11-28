@@ -8,9 +8,7 @@
 
 #import "PhotoBrowerView.h"
 
-#define kPadding 20
 #define kHiColor [UIColor colorWithRGBHex:0x2dd6b8]
-
 
 @interface YYPhotoGroupItem()<NSCopying>
 @end
@@ -273,7 +271,7 @@
     _contentView.frame = self.bounds;
     //_contentView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     _scrollView = UIScrollView.new;
-    _scrollView.frame = CGRectMake(-kPadding / 2, 0, self.width + kPadding, self.height);
+    _scrollView.frame = CGRectMake(-ScrollViewCellPadding / 2, 0, self.width + ScrollViewCellPadding, self.height);
     _scrollView.delegate = self;
     _scrollView.scrollsToTop = NO;
     _scrollView.pagingEnabled = YES;
@@ -312,8 +310,8 @@
 
     for (int i=0; i<_cells.count; i++){
         YYPhotoGroupCell *cell = (YYPhotoGroupCell *)_cells[i];
-        cell.frame = cell.superview.bounds;
-        cell.left = _scrollView.width * cell.page + kPadding / 2;
+        CGFloat left = _scrollView.width * cell.page + ScrollViewCellPadding / 2;
+        cell.frame = CGRectMake(left, 0, self.width, self.height);
         cell.zoomScale = 1;
         [cell resizeSubviewSize];
     }
@@ -490,7 +488,7 @@
             if (!cell) {
                 YYPhotoGroupCell *cell = [self dequeueReusableCell];
                 cell.page = i;
-                cell.left = (self.width + kPadding) * i + kPadding / 2;
+                cell.left = (self.width + ScrollViewCellPadding) * i + ScrollViewCellPadding / 2;
                 
                 if (_isPresented) {
                     cell.item = self.groupItems[i];

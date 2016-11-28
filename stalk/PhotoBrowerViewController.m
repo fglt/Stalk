@@ -12,222 +12,7 @@
 
 #import "PhotoBrowerViewController.h"
 #import "PhotoBrowerControllerAnimatedDelegate.h"
-
-#define kPadding 20
-#define kHiColor [UIColor colorWithRGBHex:0x2dd6b8]
-
-
-@interface YYPhotoGroupItem()<NSCopying>
-@end
-@implementation YYPhotoGroupItem
-
-- (UIImage *)thumbImage {
-    if ([_thumbView respondsToSelector:@selector(image)]) {
-        return ((UIImageView *)_thumbView).image;
-    }
-    return nil;
-}
-
-- (BOOL)thumbClippedToTop {
-    if (_thumbView) {
-        if (_thumbView.layer.contentsRect.size.height < 1) {
-            return YES;
-        }
-    }
-    return NO;
-}
-
-- (BOOL)shouldClipToTop:(CGSize)imageSize forView:(UIView *)view {
-    if (imageSize.width < 1 || imageSize.height < 1) return NO;
-    if (view.width < 1 || view.height < 1) return NO;
-    return imageSize.height / imageSize.width > view.width / view.height;
-}
-
-- (id)copyWithZone:(NSZone *)zone {
-    YYPhotoGroupItem *item = [self.class new];
-    return item;
-}
-@end
-
-@implementation YYPhotoGroupCell
-
-- (instancetype)init {
-    self = super.init;
-    if (!self) return nil;
-    self.delegate = self;
-    self.bouncesZoom = YES;
-    self.maximumZoomScale = 3;
-    self.multipleTouchEnabled = YES;
-    self.alwaysBounceVertical = NO;
-    self.showsVerticalScrollIndicator = YES;
-    self.showsHorizontalScrollIndicator = NO;
-    self.frame = [UIScreen mainScreen].bounds;
-    
-    _imageContainerView = [UIView new];
-    _imageContainerView.clipsToBounds = YES;
-    [self addSubview:_imageContainerView];
-    _imageView = [YYAnimatedImageView new];
-    _imageView.clipsToBounds = YES;
-    _imageView.backgroundColor = [UIColor colorWithWhite:1.000 alpha:0.500];
-    [_imageContainerView addSubview:_imageView];
-    
-    _progressLayer = [CAShapeLayer layer];
-    _progressLayer.size = CGSizeMake(40, 40);
-    _progressLayer.cornerRadius = 20;
-    _progressLayer.backgroundColor = [UIColor colorWithWhite:0.000 alpha:0.500].CGColor;
-    UIBezierPath *path = [UIBezierPath bezierPathWithRoundedRect:CGRectInset(_progressLayer.bounds, 7, 7) cornerRadius:(40 / 2 - 7)];
-    _progressLayer.path = path.CGPath;
-    _progressLayer.fillColor = [UIColor clearColor].CGColor;
-    _progressLayer.strokeColor = [UIColor whiteColor].CGColor;
-    _progressLayer.lineWidth = 4;
-    _progressLayer.lineCap = kCALineCapRound;
-    _progressLayer.strokeStart = 0;
-    _progressLayer.strokeEnd = 0;
-    _progressLayer.hidden = YES;
-    [self.layer addSublayer:_progressLayer];
-    return self;
-}
-
-- (void)resetAlwaysBounceVertical{
-    if (_imageContainerView.height <= self.height) {
-        self.alwaysBounceVertical = NO;
-    } else {
-        self.alwaysBounceVertical = YES;
-    }
-}
-
-- (void)layoutSubviews {
-    [super layoutSubviews];
-    /***
-     ***[self resizeSubviewSize];
-     ***这个函数不能放到layoutSubviews中;因为缩放会使得layoutSubviews被调用，这样导致子View的大小不能变化，
-     ***也就是不能缩放，当旋转时，应该在其他被触发的函数中调用resizeSubviewSize，比如父View的
-     ***layoutSubviews中调用，同时还要设置缩放为默认值即1.0；
-     ***/
-    //[self resizeSubviewSize];
-    _progressLayer.center = CGPointMake(self.width / 2, self.height / 2);
-}
-
-- (void)setItem:(YYPhotoGroupItem *)item {
-    if (_item == item) return;
-    _item = item;
-    _itemDidLoad = NO;
-    
-    
-    [self setZoomScale:1.0 animated:NO];
-    self.maximumZoomScale = 1;
-    
-    [_imageView cancelCurrentImageRequest];
-    [_imageView.layer removePreviousFadeAnimation];
-    
-    _progressLayer.hidden = NO;
-    [CATransaction begin];
-    [CATransaction setDisableActions:YES];
-    _progressLayer.strokeEnd = 0;
-    _progressLayer.hidden = YES;
-    [CATransaction commit];
-    
-    if (!_item) {
-        _imageView.image = nil;
-        return;
-    }
-    
-    @weakify(self);
-    [_imageView setImageWithURL:item.largeImageURL placeholder:item.thumbImage options:kNilOptions progress:^(NSInteger receivedSize, NSInteger expectedSize) {
-        @strongify(self);
-        if (!self) return;
-        CGFloat progress = receivedSize / (float)expectedSize;
-        progress = progress < 0.01 ? 0.01 : progress > 1 ? 1 : progress;
-        if (isnan(progress)) progress = 0;
-        self.progressLayer.hidden = NO;
-        self.progressLayer.strokeEnd = progress;
-    } transform:nil completion:^(UIImage *image, NSURL *url, YYWebImageFromType from, YYWebImageStage stage, NSError *error) {
-        @strongify(self);
-        if (!self) return;
-        self.progressLayer.hidden = YES;
-        if (stage == YYWebImageStageFinished) {
-            self.maximumZoomScale = 3;
-            if (image) {
-                self->_itemDidLoad = YES;
-                
-                [self resizeSubviewSize];
-                [self.imageView.layer addFadeAnimationWithDuration:0.1 curve:UIViewAnimationCurveLinear];
-            }
-        }
-        
-    }];
-    [self resizeSubviewSize];
-}
-
-- (void)resizeSubviewSize {
-    _imageContainerView.origin = CGPointZero;
-    _imageContainerView.width = self.width;
-    
-    UIImage *image = _imageView.image;
-    //    if(image.size.width <self.width){
-    //
-    //        _imageContainerView.width = image.size.width;
-    //    }else{
-    //        _imageContainerView.width = self.width;
-    //    }
-    //    if(image.size.width <= self.width){
-    //        _imageContainerView.width = image.size.width;
-    //        _imageContainerView.centerX = image.size.width;
-    //    }else{
-    //        _imageContainerView.width = self.width;
-    //    }
-    
-    if (image.size.height / image.size.width > self.height / self.width) {
-        _imageContainerView.height = floor(image.size.height / (image.size.width /_imageContainerView.width));
-        //        _imageContainerView.height = self.height;
-        //        _imageContainerView.width = self.height *image.size.width/image.size.height;
-        //        _imageContainerView.centerX = self.width / 2;
-    } else {
-        CGFloat height = image.size.height / image.size.width * _imageContainerView.width;
-        if (height < 1 || isnan(height)) height = self.height;
-        height = floor(height);
-        _imageContainerView.height = height;
-        _imageContainerView.centerY = self.height / 2;
-    }
-    if (_imageContainerView.height > self.height && _imageContainerView.height - self.height <= 1) {
-        _imageContainerView.height = self.height;
-    }
-    self.contentSize = CGSizeMake(_imageContainerView.width, MAX(_imageContainerView.height, self.height));
-    [self scrollRectToVisible:self.bounds animated:NO];
-    
-    [self resetAlwaysBounceVertical];
-    //限制缩放太小
-    CGFloat minzoom = MAX(self.height/_imageContainerView.height, 0.3);
-    
-    minzoom = MIN(image.size.width/self.width, MIN(minzoom,1));
-    self.minimumZoomScale = minzoom;
-    self.maximumZoomScale = MAX(1, 2*image.size.width/_imageContainerView.width);
-    
-    [CATransaction begin];
-    [CATransaction setDisableActions:YES];
-    _imageView.frame = _imageContainerView.bounds;
-    [CATransaction commit];
-}
-
-- (UIView *)viewForZoomingInScrollView:(UIScrollView *)scrollView{
-    return _imageContainerView;
-}
-
-- (void)scrollViewDidZoom:(UIScrollView *)scrollView {
-    UIView *subView = _imageContainerView;
-    
-    CGFloat offsetX = (scrollView.bounds.size.width > scrollView.contentSize.width)?
-    (scrollView.bounds.size.width - scrollView.contentSize.width) * 0.5 : 0.0;
-    
-    CGFloat offsetY = (scrollView.bounds.size.height > scrollView.contentSize.height)?
-    (scrollView.bounds.size.height - scrollView.contentSize.height) * 0.5 : 0.0;
-    
-    subView.center = CGPointMake(scrollView.contentSize.width * 0.5 + offsetX,
-                                 scrollView.contentSize.height * 0.5 + offsetY);
-    [self resetAlwaysBounceVertical];
-}
-
-@end
+#import "PhotoBrowerView.h"
 
 @interface PhotoBrowerViewController ()<UIScrollViewDelegate, UIGestureRecognizerDelegate>
 @property (nonatomic, strong) UIScrollView *scrollView;
@@ -267,7 +52,7 @@
               cell的父View可能为空；此时cell的frame为cgpointzero。导致不显示内容；
               修复bug
              **/
-            CGFloat left = _scrollView.width * cell.page + kPadding / 2;
+            CGFloat left = _scrollView.width * cell.page + ScrollViewCellPadding / 2;
             cell.frame = CGRectMake(left, 0, self.view.width, self.view.height);
             cell.zoomScale = 1;
             [cell resizeSubviewSize];
@@ -351,7 +136,7 @@
     _contentView.frame = self.view.bounds;
     _contentView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     _scrollView = UIScrollView.new;
-    _scrollView.frame = CGRectMake(-kPadding / 2, 0, self.view.width + kPadding, self.view.height);
+    _scrollView.frame = CGRectMake(-ScrollViewCellPadding / 2, 0, self.view.width + ScrollViewCellPadding, self.view.height);
     _scrollView.delegate = self;
     _scrollView.scrollsToTop = NO;
     _scrollView.pagingEnabled = YES;
@@ -658,7 +443,7 @@
             if (!cell) {
                 YYPhotoGroupCell *cell = [self dequeueReusableCell];
                 cell.page = i;
-                cell.left = (self.view.width + kPadding) * i + kPadding / 2;
+                cell.left = (self.view.width + ScrollViewCellPadding) * i + ScrollViewCellPadding / 2;
                 
                 if (_isPresented) {
                     cell.item = self.groupItems[i];

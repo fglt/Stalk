@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
+#define ScrollViewCellPadding 20
+
 @interface YYPhotoGroupItem : NSObject
 @property (nonatomic, strong) UIView *thumbView;
 @property (nonatomic, assign) CGSize largeImageSize;
@@ -28,6 +30,7 @@
 
 @property (nonatomic, strong) YYPhotoGroupItem *item;
 @property (nonatomic, readonly) BOOL itemDidLoad;
+
 
 - (void)resetAlwaysBounceVertical;
 - (void)resizeSubviewSize;

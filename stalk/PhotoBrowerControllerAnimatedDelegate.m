@@ -11,7 +11,7 @@
 @implementation PhotoBrowerControllerAnimatedDelegate
 
 - (instancetype)init{
-    _popAnimator = [PopAnimator new];
+    _browerAnimator = [PhotoBrowerAnimator new];
     return self;
 }
 
@@ -20,7 +20,7 @@
 //}
 
 -(id< UIViewControllerAnimatedTransitioning >)animationControllerForDismissedController:(UIViewController *)dismissed{
-    return _popAnimator;
+    return _browerAnimator;
 }
 //-(id< UIViewControllerInteractiveTransitioning >)interactionControllerForPresentation:(id < UIViewControllerAnimatedTransitioning >)animator;
 //-(id< UIViewControllerInteractiveTransitioning >)interactionControllerForDismissal:(id < UIViewControllerAnimatedTransitioning >)animator;

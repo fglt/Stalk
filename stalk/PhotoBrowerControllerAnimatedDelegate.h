@@ -7,8 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "PopAnimator.h"
+#import "PhotoBrowerAnimator.h"
 
 @interface PhotoBrowerControllerAnimatedDelegate:NSObject<UIViewControllerTransitioningDelegate>
-@property (nonatomic, strong) PopAnimator *popAnimator;
+@property (nonatomic, strong) PhotoBrowerAnimator *browerAnimator ;
 @end

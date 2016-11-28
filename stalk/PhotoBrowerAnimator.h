@@ -8,6 +8,6 @@
 
 #import <Foundation/Foundation.h>
 
-@interface PopAnimator : NSObject<UIViewControllerAnimatedTransitioning>
+@interface PhotoBrowerAnimator : NSObject<UIViewControllerAnimatedTransitioning>
 
 @end

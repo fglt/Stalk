@@ -26,7 +26,7 @@
 #import "PhotoBrowerViewController.h"
 #import "WBStatusHelper.h"
 #import "PhotoBrowerControllerAnimatedDelegate.h"
-//#import "PhotoBrowerView.h"
+#import "PhotoBrowerView.h"
 
 @interface HomeTableViewController ()<WBStatusCellDelegate,SFSafariViewControllerDelegate>
 @property (nonatomic, strong) StatusDataSource *dataSource;

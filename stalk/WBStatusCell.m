@@ -171,7 +171,6 @@
 
             __weak __typeof__(thumbView) weakThumb = thumbView;
             [thumbView.layer setImageWithURL:[WBStatusHelper defaultURLForImageURL:url] placeholder:nil options:YYWebImageOptionAvoidSetImage completion:^(UIImage * _Nullable image, NSURL * _Nonnull url, YYWebImageFromType from, YYWebImageStage stage, NSError * _Nullable error) {
-                NSLog(@"fromtype: %ld", from);
                 if(!image) return;
                 if(stage != YYWebImageStageFinished) return;
                 int width = image.size.width;

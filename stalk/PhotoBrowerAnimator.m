@@ -6,10 +6,10 @@
 //  Copyright © 2016 Chris Eidhof. All rights reserved.
 //
 
-#import "PopAnimator.h"
+#import "PhotoBrowerAnimator.h"
 #import "PhotoBrowerViewController.h"
 
-@implementation PopAnimator
+@implementation PhotoBrowerAnimator
 - (NSTimeInterval)transitionDuration:(id <UIViewControllerContextTransitioning>)transitionContext
 {
     return 0.3;
