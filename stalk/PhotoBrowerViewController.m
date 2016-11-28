@@ -11,6 +11,7 @@
  **/
 
 #import "PhotoBrowerViewController.h"
+#import "PhotoBrowerControllerAnimatedDelegate.h"
 
 #define kPadding 20
 #define kHiColor [UIColor colorWithRGBHex:0x2dd6b8]
@@ -238,10 +239,12 @@
 @property (nonatomic, assign) BOOL isPresented;
 @property (nonatomic, assign) CGPoint panGestureBeginPoint;
 @property (nonatomic) BOOL rotation;
-@property (nonatomic, strong) UIView *backgroundView;
+@property (nonatomic, strong) PhotoBrowerControllerAnimatedDelegate *animatedDelegate;
+
 @end
 
 @implementation PhotoBrowerViewController
+
 - (BOOL) prefersStatusBarHidden{
     return YES;
 }
@@ -286,7 +289,10 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.view.backgroundColor = [UIColor clearColor];
+    _animatedDelegate = [PhotoBrowerControllerAnimatedDelegate new];
+    self.transitioningDelegate = _animatedDelegate;
     [self start];
+    [self startBrowing:YES completion:nil];
 }
 
 - (void)show{
@@ -306,11 +312,11 @@
     [self startBrowing:YES completion:nil];
 }
 
-- (void) animatationDidEnd{
-    [self.view removeFromSuperview];
-    [self willMoveToParentViewController:nil];
-    [self removeFromParentViewController];
-    //[self.presentingViewController dismissViewControllerAnimated:NO completion:nil];
+- (void) dismissSelf{
+    //[self.view removeFromSuperview];
+    //[self willMoveToParentViewController:nil];
+    //[self removeFromParentViewController];
+    [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (void) start{
@@ -444,6 +450,31 @@
     
 }
 
+- (void)willDisMissOnTap{
+    _indexLabel.hidden= YES;
+    YYPhotoGroupCell *cell = [self cellForPage:_currentIndex];
+    YYPhotoGroupItem *item = _groupItems[_currentIndex];
+    
+    UIView *fromView = item.thumbView;
+    fromView.hidden = YES;
+    [self cancelAllImageLoad];
+    _isPresented = NO;
+    
+    BOOL isFromImageClipped = fromView.layer.contentsRect.size.height < 1;
+    [CATransaction begin];
+    [CATransaction setDisableActions:YES];
+    if (isFromImageClipped) {
+        CGRect frame = cell.imageContainerView.frame;
+        cell.imageContainerView.layer.anchorPoint = CGPointMake(0.5, 0);
+        cell.imageContainerView.frame =frame;
+    }
+    cell.progressLayer.hidden = YES;
+    [CATransaction commit];
+    if (isFromImageClipped) {
+        [cell scrollToTopAnimated:NO];
+    }
+}
+
 - (void)dismissAnimated:(BOOL)animated completion:(void (^)(void))completion {
     [UIView setAnimationsEnabled:YES];
     self.view.backgroundColor = [UIColor clearColor];
@@ -459,6 +490,7 @@
     }
     [self cancelAllImageLoad];
     _isPresented = NO;
+    fromView.hidden= YES;
     BOOL isFromImageClipped = fromView.layer.contentsRect.size.height < 1;
     
     [CATransaction begin];
@@ -471,15 +503,13 @@
     cell.progressLayer.hidden = YES;
     [CATransaction commit];
     
-    
     if (fromView == nil) {
         [UIView animateWithDuration:animated ? 0.25 : 0 delay:0 options:UIViewAnimationOptionBeginFromCurrentState|UIViewAnimationOptionCurveEaseOut animations:^{
             self.scrollView.layer.transformScale = 0.95;
             self.scrollView.alpha = 0;
         }completion:^(BOOL finished) {
             self.scrollView.layer.transformScale = 1;
-            [self cancelAllImageLoad];
-            [self animatationDidEnd];
+            [self dismissSelf];
         }];
         return;
     }
@@ -490,7 +520,6 @@
     
     [UIView animateWithDuration:animated ? 0.2 : 0 delay:0 options:UIViewAnimationOptionBeginFromCurrentState|UIViewAnimationOptionCurveEaseOut animations:^{
         if (isFromImageClipped) {
-            
             CGRect fromFrame = [fromView convertRect:fromView.bounds toView:cell];
             CGFloat scale = fromFrame.size.width / cell.imageContainerView.width * cell.zoomScale;
             CGFloat height = fromFrame.size.height / fromFrame.size.width * cell.imageContainerView.width;
@@ -507,12 +536,94 @@
             cell.imageView.frame = fromFrame;
         }
     }completion:^(BOOL finished) {
-        [self animatationDidEnd];
+        [self dismissSelf];
     }];
 }
 
+- (void)disappearModeTap{
+    //    YYPhotoGroupCell *cell = [self cellForPage:_currentIndex];
+    //    YYPhotoGroupItem *item = _groupItems[_currentIndex];
+    //
+    //    UIImageView *fromView = (UIImageView *)item.thumbView;
+    //    BOOL isFromImageClipped = fromView.layer.contentsRect.size.height < 1;
+    //
+    //        if (isFromImageClipped) {
+    //            CGRect fromFrame = [fromView convertRect:fromView.bounds toView:self.view];
+    //            cell.imageView.height = cell.height/cell.zoomScale;
+    //            cell.imageView.layer.contentsRect = CGRectMake(0, 0, 1, cell.imageView.height*fromFrame.size.width/fromFrame.size.height/cell.imageContainerView.height);
+    //        }
+    YYPhotoGroupCell *cell = [self cellForPage:_currentIndex];
+    YYPhotoGroupItem *item = _groupItems[_currentIndex];
+    
+    UIView *fromView = item.thumbView;
+    
+    BOOL isFromImageClipped = [item thumbClippedToTop];
+    
+    if (fromView == nil) {
+        self.scrollView.alpha = 0;
+        self.scrollView.layer.transformScale = 1;
+        return;
+    }
+    if (isFromImageClipped) {
+        
+        CGRect fromFrame = [fromView convertRect:fromView.bounds toView:cell];
+        CGFloat scale = fromFrame.size.width / cell.imageContainerView.width * cell.zoomScale;
+        CGFloat height = fromFrame.size.height / fromFrame.size.width * cell.imageContainerView.width;
+        if (isnan(height)) height = cell.imageContainerView.height;
+        
+        cell.imageContainerView.height = height;
+        cell.imageContainerView.center = CGPointMake(CGRectGetMidX(fromFrame), CGRectGetMinY(fromFrame));
+        cell.imageContainerView.transform = CGAffineTransformMakeScale(scale, scale);
+    } else {
+        CGRect fromFrame = [fromView convertRect:fromView.bounds toView:cell.imageContainerView];
+        cell.imageContainerView.clipsToBounds = NO;
+        cell.imageView.contentMode = fromView.contentMode;
+        cell.imageView.frame = fromFrame;
+    }
+
+}
+- (void)dismissAppearModeTop{
+    _backgroundView.alpha = 0;
+    _scrollView.bottom = 0;
+}
+
+- (void)dismissAppearModeBottom{
+    _backgroundView.alpha = 0;
+    _scrollView.top = self.view.height;
+}
+- (void)dismissAntimateWithMode:(ControllerDisappearMode)disappearMode{
+
+    switch (disappearMode) {
+        case ControllerDisappearModeTap:
+            [self disappearModeTap];
+            break;
+        case ControllerDisappearModeTop:
+            [self dismissAppearModeTop];
+            break;
+        case ControllerDisappearModeBottom:
+            [self dismissAppearModeBottom];
+            break;
+        default:
+            break;
+    }
+}
+
 - (void)dismiss {
-    [self dismissAnimated:YES completion:nil];
+    //[self dismissAnimated:YES completion:nil];
+    _disappearMode = ControllerDisappearModeTap;
+    [self willDisMissOnTap];
+    [self dismissSelf];
+}
+
+- (void)dismissTopOrBottom{
+    _indexLabel.hidden= YES;
+    [self cancelAllImageLoad];
+    _isPresented = NO;
+    [self dismissSelf];
+}
+
+- (UIView *)currentFromView{
+    return  _groupItems[_currentIndex].thumbView;
 }
 
 - (void)setGroupItems:(NSArray *)groupItems{
@@ -720,7 +831,6 @@
             [UIView animateWithDuration:0.1 delay:0 options:UIViewAnimationOptionBeginFromCurrentState | UIViewAnimationOptionAllowUserInteraction | UIViewAnimationOptionCurveLinear animations:^{
                 _backgroundView.alpha = alpha;
             } completion:nil];
-            
 
         } break;
         case UIGestureRecognizerStateEnded: {
@@ -738,23 +848,28 @@
                 CGFloat duration = (moveToTop ? _scrollView.bottom : self.view.height - _scrollView.top) / vy;
                 duration *= 0.8;
                 duration = YY_CLAMP(duration, 0.05, 0.3);
-                
-                [UIView animateWithDuration:duration delay:0 options:UIViewAnimationOptionCurveLinear | UIViewAnimationOptionBeginFromCurrentState animations:^{
-                    _backgroundView.alpha = 0;
-                    if (moveToTop) {
-                        _scrollView.bottom = 0;
-                    } else {
-                        _scrollView.top = self.view.height;
-                    }
-                } completion:^(BOOL finished) {
-                    [self cancelAllImageLoad];
-                    [self animatationDidEnd];
-                }];
+                if (moveToTop) {
+                    _disappearMode = ControllerDisappearModeTop;
+                } else {
+                    _disappearMode = ControllerDisappearModeBottom;
+                }
+
+                [self dismissTopOrBottom];
+//                [UIView animateWithDuration:duration delay:0 options:UIViewAnimationOptionCurveLinear | UIViewAnimationOptionBeginFromCurrentState animations:^{
+//                    _backgroundView.alpha = 0;
+//                    if (moveToTop) {
+//                        _scrollView.bottom = 0;
+//                    } else {
+//                        _scrollView.top = self.view.height;
+//                    }
+//                } completion:^(BOOL finished) {
+//                    [self cancelAllImageLoad];
+//                    [self animatationDidEnd];
+//                }];
                 
             } else {
                 [UIView animateWithDuration:0.4 delay:0 usingSpringWithDamping:0.9 initialSpringVelocity:v.y / 1000 options:UIViewAnimationOptionCurveEaseInOut | UIViewAnimationOptionAllowUserInteraction | UIViewAnimationOptionBeginFromCurrentState animations:^{
                     _scrollView.top = 0;
-                    //                    _pager.alpha = 1;
                 } completion:^(BOOL finished) {
                     
                 }];

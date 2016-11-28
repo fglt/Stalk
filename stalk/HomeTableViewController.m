@@ -25,6 +25,7 @@
 #import "TopicController.h"
 #import "PhotoBrowerViewController.h"
 #import "WBStatusHelper.h"
+#import "PhotoBrowerControllerAnimatedDelegate.h"
 //#import "PhotoBrowerView.h"
 
 @interface HomeTableViewController ()<WBStatusCellDelegate,SFSafariViewControllerDelegate>
@@ -171,7 +172,8 @@
     PhotoBrowerViewController *brower = [[PhotoBrowerViewController alloc]init];
     brower.fromView = fromView;
     brower.groupItems = items;
-    [brower show];
+    [self presentViewController:brower animated:NO completion:nil];
+   // [brower show];
 //    [self.navigationController pushViewController:brower animated:NO];
 //    PhotoBrowerView *brower = [[PhotoBrowerView alloc] initWithItems:items];
 //    brower.fromView = fromView;

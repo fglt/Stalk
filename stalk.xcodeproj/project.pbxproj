@@ -55,6 +55,8 @@
 		177B21601DEAD3A8005A1438 /* EmoticonWeibo.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 177B215F1DEAD3A8005A1438 /* EmoticonWeibo.bundle */; };
 		177B21661DEB03AB005A1438 /* PhotoBrowerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 177B21651DEB03AB005A1438 /* PhotoBrowerViewController.m */; };
 		17AFD3F71DDED732007C7DB9 /* StatusDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 17AFD3F61DDED732007C7DB9 /* StatusDetailViewController.m */; };
+		17DAF7BE1DEBBAB600D11191 /* PhotoBrowerControllerAnimatedDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 17DAF7BD1DEBBAB600D11191 /* PhotoBrowerControllerAnimatedDelegate.m */; };
+		17DAF7C11DEBBC9900D11191 /* PopAnimator.m in Sources */ = {isa = PBXBuildFile; fileRef = 17DAF7C01DEBBC9900D11191 /* PopAnimator.m */; };
 		17FA23001DE3CE0C00617651 /* WBHttpRequest+STalk.m in Sources */ = {isa = PBXBuildFile; fileRef = 17FA22FF1DE3CE0C00617651 /* WBHttpRequest+STalk.m */; };
 		17FA23091DE3DD8D00617651 /* StatusDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 17FA23081DE3DD8D00617651 /* StatusDataSource.m */; };
 		94EB5C9CEFE6D90560C4BBA6 /* libPods-stalk.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A428582C3D25FA0ACB23CE58 /* libPods-stalk.a */; };
@@ -141,6 +143,10 @@
 		177B21651DEB03AB005A1438 /* PhotoBrowerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PhotoBrowerViewController.m; sourceTree = "<group>"; };
 		17AFD3F51DDED731007C7DB9 /* StatusDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StatusDetailViewController.h; sourceTree = "<group>"; };
 		17AFD3F61DDED732007C7DB9 /* StatusDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StatusDetailViewController.m; sourceTree = "<group>"; };
+		17DAF7BC1DEBBAB600D11191 /* PhotoBrowerControllerAnimatedDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PhotoBrowerControllerAnimatedDelegate.h; sourceTree = "<group>"; };
+		17DAF7BD1DEBBAB600D11191 /* PhotoBrowerControllerAnimatedDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PhotoBrowerControllerAnimatedDelegate.m; sourceTree = "<group>"; };
+		17DAF7BF1DEBBC9900D11191 /* PopAnimator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PopAnimator.h; sourceTree = "<group>"; };
+		17DAF7C01DEBBC9900D11191 /* PopAnimator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PopAnimator.m; sourceTree = "<group>"; };
 		17FA22FE1DE3CE0C00617651 /* WBHttpRequest+STalk.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "WBHttpRequest+STalk.h"; sourceTree = "<group>"; };
 		17FA22FF1DE3CE0C00617651 /* WBHttpRequest+STalk.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "WBHttpRequest+STalk.m"; sourceTree = "<group>"; };
 		17FA23071DE3DD8D00617651 /* StatusDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StatusDataSource.h; sourceTree = "<group>"; };
@@ -195,8 +201,6 @@
 		171BCCA21DD4B6FF009FF89E /* stalk */ = {
 			isa = PBXGroup;
 			children = (
-				177B21641DEB03AB005A1438 /* PhotoBrowerViewController.h */,
-				177B21651DEB03AB005A1438 /* PhotoBrowerViewController.m */,
 				177B215F1DEAD3A8005A1438 /* EmoticonWeibo.bundle */,
 				177B21441DE816E2005A1438 /* ResourceWeibo.bundle */,
 				177B21031DE5797A005A1438 /* clear247.png */,
@@ -210,6 +214,10 @@
 				1741E6611DDF165D00C887D0 /* UserViewController.m */,
 				1741E66C1DE1AB6A00C887D0 /* WBRequestQueue.h */,
 				1741E66D1DE1AB6A00C887D0 /* WBRequestQueue.m */,
+				177B21641DEB03AB005A1438 /* PhotoBrowerViewController.h */,
+				177B21651DEB03AB005A1438 /* PhotoBrowerViewController.m */,
+				17DAF7BC1DEBBAB600D11191 /* PhotoBrowerControllerAnimatedDelegate.h */,
+				17DAF7BD1DEBBAB600D11191 /* PhotoBrowerControllerAnimatedDelegate.m */,
 				171BCCF41DD696F5009FF89E /* constant.h */,
 				171BCCF71DD698F3009FF89E /* constant.m */,
 				171BCCF91DD69BE3009FF89E /* WeiBoTabBarController.h */,
@@ -283,6 +291,8 @@
 		171BCD131DD70277009FF89E /* modal */ = {
 			isa = PBXGroup;
 			children = (
+				17DAF7BF1DEBBC9900D11191 /* PopAnimator.h */,
+				17DAF7C01DEBBC9900D11191 /* PopAnimator.m */,
 				177B21561DEA72F5005A1438 /* WBStatusHelper.h */,
 				177B21571DEA72F5005A1438 /* WBStatusHelper.m */,
 				171BCCE21DD60210009FF89E /* WBUser.h */,
@@ -472,6 +482,7 @@
 				171BCCE41DD60210009FF89E /* WBUser.m in Sources */,
 				171BCD521DDB4D5E009FF89E /* STalkTextView.m in Sources */,
 				177B215B1DEA7341005A1438 /* WBModel.m in Sources */,
+				17DAF7C11DEBBC9900D11191 /* PopAnimator.m in Sources */,
 				17FA23001DE3CE0C00617651 /* WBHttpRequest+STalk.m in Sources */,
 				171BCCA81DD4B6FF009FF89E /* AppDelegate.m in Sources */,
 				177B21661DEB03AB005A1438 /* PhotoBrowerViewController.m in Sources */,
@@ -484,6 +495,7 @@
 				171BCCA51DD4B6FF009FF89E /* main.m in Sources */,
 				171BCD1A1DD7347D009FF89E /* WBStatusCell.m in Sources */,
 				171BCCF81DD698F3009FF89E /* constant.m in Sources */,
+				17DAF7BE1DEBBAB600D11191 /* PhotoBrowerControllerAnimatedDelegate.m in Sources */,
 				171BCD1D1DD7F666009FF89E /* WBStatusLayout.m in Sources */,
 				171BCD5A1DDBFC1F009FF89E /* EmotionHelper.m in Sources */,
 				1741E6621DDF165D00C887D0 /* UserViewController.m in Sources */,

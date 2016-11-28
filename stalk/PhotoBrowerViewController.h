@@ -7,6 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
+typedef NS_ENUM(NSInteger, ControllerDisappearMode) {
+    ControllerDisappearModeTap=0,
+    ControllerDisappearModeTop,
+    ControllerDisappearModeBottom
+};
 
 @interface YYPhotoGroupItem : NSObject
 @property (nonatomic, strong) UIView *thumbView;
@@ -29,6 +34,7 @@
 @property (nonatomic, strong) YYPhotoGroupItem *item;
 @property (nonatomic, readonly) BOOL itemDidLoad;
 
+
 - (void)resetAlwaysBounceVertical;
 - (void)resizeSubviewSize;
 @end
@@ -36,5 +42,9 @@
 @interface PhotoBrowerViewController : UIViewController
 @property (nonatomic, weak) UIView *fromView;
 @property (nonatomic, copy) NSArray<YYPhotoGroupItem *> *groupItems;
+@property (nonatomic, strong) UIView *backgroundView;
+@property (nonatomic) ControllerDisappearMode disappearMode;
 - (void)show;
+- (void)dismissAntimateWithMode:(ControllerDisappearMode)disappearMode;
+- (UIView *)currentFromView;
 @end
