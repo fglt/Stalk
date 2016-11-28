@@ -79,7 +79,7 @@
     [_icon setImageWithURL:[NSURL URLWithString:layout.status.user.avatarLarge] //profileImageURL
                placeholder:nil
                    options:kNilOptions
-                   manager:[WBStatusHelper avatarImageManager] //< 圆角头像manager，内置圆角处理
+                   manager:[WBStatusHelper avatarImageManager] 
                   progress:nil
                  transform:nil
                 completion:nil];
