@@ -12,7 +12,6 @@
 
 @interface YYPhotoGroupItem : NSObject
 @property (nonatomic, strong) UIView *thumbView;
-@property (nonatomic, assign) CGSize largeImageSize;
 @property (nonatomic, strong) NSURL *largeImageURL;
 @property (nonatomic, readonly) UIImage *thumbImage;
 @property (nonatomic, readonly) BOOL thumbClippedToTop;

@@ -172,8 +172,7 @@
 //    brower.fromView = fromView;
 //    brower.groupItems = items;
 //    [self presentViewController:brower animated:NO completion:nil];
-   // [brower show];
-//    [self.navigationController pushViewController:brower animated:NO];
+//
     PhotoBrowerView *brower = [[PhotoBrowerView alloc] initWithItems:items];
     brower.fromView = fromView;
     [brower showWithAnimate:YES];
