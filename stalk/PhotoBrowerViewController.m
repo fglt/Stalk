@@ -655,6 +655,7 @@
             } else {
                 [UIView animateWithDuration:0.4 delay:0 usingSpringWithDamping:0.9 initialSpringVelocity:v.y / 1000 options:UIViewAnimationOptionCurveEaseInOut | UIViewAnimationOptionAllowUserInteraction | UIViewAnimationOptionBeginFromCurrentState animations:^{
                     _scrollView.top = 0;
+                    _backgroundView.alpha =1;
                 } completion:^(BOOL finished) {
                     
                 }];

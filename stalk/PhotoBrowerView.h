@@ -41,5 +41,5 @@
 @property (nonatomic, weak) UIView *fromView;
 @property (nonatomic, copy) NSArray<YYPhotoGroupItem *> *groupItems;
 - (instancetype)initWithItems:(NSArray<YYPhotoGroupItem *> *)items;
-- (void) startBrowing:(BOOL)animated toContainer:(UIView *)containerView completion:(void (^)(void))completion;
+- (void)showWithAnimate:(BOOL)animated;
 @end

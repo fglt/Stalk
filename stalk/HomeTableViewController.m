@@ -43,6 +43,9 @@
     self.navigationController.navigationBar.barStyle = UIBarStyleDefault;
 }
 
+//- (BOOL)prefersStatusBarHidden{
+//    return YES;
+//}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -164,20 +167,16 @@
         }
     }
     
-//    blackview = [[UIView alloc]initWithFrame:[UIScreen mainScreen].bounds];
-//    blackview.backgroundColor = [UIColor redColor];
- //   [self.tabBarController.view  addSubview:blackview];
-//    YYPhotoGroupView *photoGroupView = [[YYPhotoGroupView alloc] initWithGroupItems:items];
-//    [photoGroupView presentFromImageView:fromView toContainer:self.tabBarController.view animated:YES completion:nil];
-    PhotoBrowerViewController *brower = [[PhotoBrowerViewController alloc]init];
-    brower.fromView = fromView;
-    brower.groupItems = items;
-    [self presentViewController:brower animated:NO completion:nil];
+
+//    PhotoBrowerViewController *brower = [[PhotoBrowerViewController alloc]init];
+//    brower.fromView = fromView;
+//    brower.groupItems = items;
+//    [self presentViewController:brower animated:NO completion:nil];
    // [brower show];
 //    [self.navigationController pushViewController:brower animated:NO];
-//    PhotoBrowerView *brower = [[PhotoBrowerView alloc] initWithItems:items];
-//    brower.fromView = fromView;
-//    [brower startBrowing:YES toContainer:self.tabBarController.view completion:nil];
+    PhotoBrowerView *brower = [[PhotoBrowerView alloc] initWithItems:items];
+    brower.fromView = fromView;
+    [brower showWithAnimate:YES];
 }
 
 - (UIImage *)snapImage{

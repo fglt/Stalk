@@ -232,6 +232,7 @@
 @property (nonatomic, assign) BOOL isPresented;
 @property (nonatomic, assign) CGPoint panGestureBeginPoint;
 @property (nonatomic) BOOL rotation;
+@property (nonatomic, assign) BOOL fromNavigationBarHidden;
 @end
 
 @implementation PhotoBrowerView
@@ -318,7 +319,10 @@
     _rotation = NO;
 }
 
-- (void) startBrowing:(BOOL)animated toContainer:(UIView *)containerView completion:(void (^)(void))completion{
+- (void)showWithAnimate:(BOOL)animated{
+    [UIView setAnimationsEnabled:YES];
+    _fromNavigationBarHidden = [UIApplication sharedApplication].statusBarHidden;
+    [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationFade];
     NSInteger page = -1;
     for (NSUInteger i = 0; i < self.groupItems.count; i++) {
         if (_fromView == ((YYPhotoGroupItem *)self.groupItems[i]).thumbView) {
@@ -331,8 +335,10 @@
     self.currentIndex = page;
     self.backgroundColor = [UIColor blackColor];
     self.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-    self.frame = containerView.bounds;
-    [containerView addSubview:self];
+    
+    UIView  *rootView =[UIApplication sharedApplication].keyWindow.rootViewController.view;
+    self.frame = rootView.bounds;
+    [rootView addSubview:self];
     
     _scrollView.contentSize = CGSizeMake(_scrollView.width * self.groupItems.count, 1);
     CGRect visable = CGRectMake(_scrollView.width * _currentIndex, 0, _scrollView.width, 1);
@@ -385,6 +391,8 @@
 
 - (void)dismissAnimated:(BOOL)animated completion:(void (^)(void))completion {
     [UIView setAnimationsEnabled:YES];
+    [[UIApplication sharedApplication] setStatusBarHidden:_fromNavigationBarHidden withAnimation:animated ? UIStatusBarAnimationFade : UIStatusBarAnimationNone];
+
     self.backgroundColor = [UIColor clearColor];
     self.layer.contents = (id)_backImg.CGImage;
     YYPhotoGroupCell *cell = [self cellForPage:_currentIndex];
@@ -419,7 +427,6 @@
             self.scrollView.layer.transformScale = 1;
             [self cancelAllImageLoad];
             [self removeFromSuperview];
-//            [self animatationDidEnd];
         }];
         return;
     }
@@ -448,7 +455,6 @@
         }
     }completion:^(BOOL finished) {
         [self removeFromSuperview];
-//        [self animatationDidEnd];
     }];
 }
 
@@ -672,6 +678,8 @@
             if (fabs(v.y) > 1000 || fabs(deltaY) > 120) {
                 [self cancelAllImageLoad];
                 _isPresented = NO;
+                [[UIApplication sharedApplication] setStatusBarHidden:_fromNavigationBarHidden withAnimation:UIStatusBarAnimationFade];
+
                 BOOL moveToTop = (v.y < - 50 || (v.y < 50 && deltaY < 0));
                 CGFloat vy = fabs(v.y);
                 if (vy < 1) vy = 1;
@@ -695,7 +703,7 @@
             } else {
                 [UIView animateWithDuration:0.4 delay:0 usingSpringWithDamping:0.9 initialSpringVelocity:v.y / 1000 options:UIViewAnimationOptionCurveEaseInOut | UIViewAnimationOptionAllowUserInteraction | UIViewAnimationOptionBeginFromCurrentState animations:^{
                     _scrollView.top = 0;
-                    //                    _pager.alpha = 1;
+                    self.alpha = 1;
                 } completion:^(BOOL finished) {
                     
                 }];
