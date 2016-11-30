@@ -312,7 +312,6 @@
     }
     _rotation = NO;
 }
-
 - (void)showWithAnimate:(BOOL)animated{
     [UIView setAnimationsEnabled:YES];
     _fromNavigationBarHidden = [UIApplication sharedApplication].statusBarHidden;
@@ -323,6 +322,7 @@
             page = (int)i;
             break;
         }
+
     }
     if (page == -1) page = 0;
     _fromItemIndex = page;
@@ -357,7 +357,7 @@
         cell.imageView.image = item.thumbImage;
         [cell resizeSubviewSize];
     }
-    CGRect fromFrame = [_fromView convertRect:_fromView.bounds toView:cell.imageContainerView];
+    CGRect fromFrame = [_fromView convertRect:_fromView.bounds toView:_scrollView];
     
     cell.imageContainerView.clipsToBounds = NO;
     cell.imageView.frame = fromFrame;
@@ -423,12 +423,12 @@
         [cell scrollToTopAnimated:NO];
         CGRect fromFrame = [fromView convertRect:fromView.bounds toView:cell];
         cell.imageContainerView.height = MIN( cell.height *cell.zoomScale,cell.imageContainerView.height);
-        cell.imageContainerView.layer.contentsRect = CGRectMake(0, 0, 1, fromFrame.size.height/fromFrame.size.width/(cell.imageView.height/cell.imageView.width));
+        cell.imageContainerView.layer.contentsRect = CGRectMake(0, 0, 1, cell.imageContainerView.height/cell.imageContainerView.width/(cell.imageView.height/cell.imageView.width));
         
         CGFloat scale = fromFrame.size.width / cell.imageContainerView.width * cell.zoomScale;
         CGFloat height = fromFrame.size.height / fromFrame.size.width * cell.imageContainerView.width;
         if (isnan(height)) height = cell.imageContainerView.height;
-        [UIView animateWithDuration:animated ? 1 : 0 delay:0 options:UIViewAnimationOptionBeginFromCurrentState|UIViewAnimationOptionCurveEaseOut animations:^{
+        [UIView animateWithDuration:animated ? 0.2 : 0 delay:0 options:UIViewAnimationOptionBeginFromCurrentState|UIViewAnimationOptionCurveEaseOut animations:^{
             cell.imageContainerView.height = height;
             cell.imageContainerView.center = CGPointMake(CGRectGetMidX(fromFrame), CGRectGetMinY(fromFrame));
             cell.imageContainerView.layer.transformScale = scale;

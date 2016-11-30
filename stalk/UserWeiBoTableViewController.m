@@ -28,9 +28,9 @@
     
     AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
     [WBHttpRequest requestForStatusesOfPath:@"user_timeline" withAccessToken:appDelegate.wbAuthorizeResponse.accessToken andOtherProperties:nil queue:[WBRequestQueue queueForWBRequest] withCompletionHandler:^(WBHttpRequest *httpRequest, id result, NSError *error) {
-        NSDictionary *dict = [result objectForKey:@"statuses"];
+        NSArray *dictes = [result objectForKey:@"statuses"];
         
-        self.statuesList = [WBStatusLayout statusLayoutsWithStatuses:[WBStatus statuesWithDict:dict]];
+        self.statuesList = [WBStatusLayout statusLayoutsWithStatuses:[WBStatus statuesWithArray:dictes]];
         dispatch_async(dispatch_get_main_queue(), ^{
             [self.tableView reloadData];
         });

@@ -15,19 +15,19 @@
 /**
  *	微博创建时间
  */
-@property (nonatomic, copy)NSString *createdAt;
+@property (nonatomic, copy)NSDate *createdAt;
 
 
 /**
  *	微博ID
  */
-@property (nonatomic, copy)NSString *statusId;
+@property (nonatomic)int64_t statusId;
 
 
 /**
  *	微博MID
  */
-@property (nonatomic, copy)NSString *statusMId;
+@property (nonatomic)int64_t statusMId;
 
 
 /**
@@ -151,5 +151,5 @@
 @property (nonatomic, strong) NSArray<WBPicture *> *pictures;
 
 + (instancetype) statusWithDict:(NSDictionary *) dict;
-+ (NSMutableArray *)statuesWithDict:(NSDictionary *) statues;
++ (NSMutableArray *)statuesWithArray:(NSArray *) statues;
 @end

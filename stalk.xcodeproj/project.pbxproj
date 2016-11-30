@@ -43,6 +43,7 @@
 		1741E66E1DE1AB6A00C887D0 /* WBRequestQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 1741E66D1DE1AB6A00C887D0 /* WBRequestQueue.m */; };
 		1741E6711DE1D44300C887D0 /* NSObject+runtime.m in Sources */ = {isa = PBXBuildFile; fileRef = 1741E6701DE1D44300C887D0 /* NSObject+runtime.m */; };
 		1741E6741DE1DEBD00C887D0 /* YYFPSLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 1741E6731DE1DEBD00C887D0 /* YYFPSLabel.m */; };
+		1743DCF01DEF16AB009D5298 /* NSDate+STalk.m in Sources */ = {isa = PBXBuildFile; fileRef = 1743DCEF1DEF16AB009D5298 /* NSDate+STalk.m */; };
 		177B20F11DE43650005A1438 /* TopicController.m in Sources */ = {isa = PBXBuildFile; fileRef = 177B20F01DE43650005A1438 /* TopicController.m */; };
 		177B20F41DE43CB0005A1438 /* SendStatusViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 177B20F31DE43CB0005A1438 /* SendStatusViewController.m */; };
 		177B20F71DE43F11005A1438 /* APPHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 177B20F61DE43F11005A1438 /* APPHelper.m */; };
@@ -126,6 +127,8 @@
 		1741E6701DE1D44300C887D0 /* NSObject+runtime.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+runtime.m"; sourceTree = "<group>"; };
 		1741E6721DE1DEBD00C887D0 /* YYFPSLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YYFPSLabel.h; sourceTree = "<group>"; };
 		1741E6731DE1DEBD00C887D0 /* YYFPSLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YYFPSLabel.m; sourceTree = "<group>"; };
+		1743DCEE1DEF16AB009D5298 /* NSDate+STalk.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDate+STalk.h"; sourceTree = "<group>"; };
+		1743DCEF1DEF16AB009D5298 /* NSDate+STalk.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDate+STalk.m"; sourceTree = "<group>"; };
 		177B20EF1DE43650005A1438 /* TopicController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TopicController.h; sourceTree = "<group>"; };
 		177B20F01DE43650005A1438 /* TopicController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TopicController.m; sourceTree = "<group>"; };
 		177B20F21DE43CB0005A1438 /* SendStatusViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SendStatusViewController.h; sourceTree = "<group>"; };
@@ -343,6 +346,8 @@
 				1741E6701DE1D44300C887D0 /* NSObject+runtime.m */,
 				17FA22FE1DE3CE0C00617651 /* WBHttpRequest+STalk.h */,
 				17FA22FF1DE3CE0C00617651 /* WBHttpRequest+STalk.m */,
+				1743DCEE1DEF16AB009D5298 /* NSDate+STalk.h */,
+				1743DCEF1DEF16AB009D5298 /* NSDate+STalk.m */,
 			);
 			name = category;
 			sourceTree = "<group>";
@@ -493,6 +498,7 @@
 				171BCD0C1DD7025A009FF89E /* NSString+Additions.m in Sources */,
 				177B20F71DE43F11005A1438 /* APPHelper.m in Sources */,
 				177B20F11DE43650005A1438 /* TopicController.m in Sources */,
+				1743DCF01DEF16AB009D5298 /* NSDate+STalk.m in Sources */,
 				177B20FD1DE52CB0005A1438 /* WBPicture.m in Sources */,
 				171BCCE41DD60210009FF89E /* WBUser.m in Sources */,
 				171BCD521DDB4D5E009FF89E /* STalkTextView.m in Sources */,

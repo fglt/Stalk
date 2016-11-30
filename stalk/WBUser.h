@@ -109,7 +109,7 @@
 /**
  *	用户创建（注册）时间
  */
-@property (nonatomic, copy)NSString *createdAt;
+@property (nonatomic, copy)NSDate *createdAt;
 
 
 /**

@@ -10,13 +10,14 @@
 @class WBStatusLayout;
 
 typedef void (^ConfigureCellBlock)(id cell, id statusLayout);
-typedef void (^LoadDataCompletionHandler)(NSError *error);
+typedef void (^LoadDataCompletionHandler)();
 
 @interface StatusDataSource : NSObject<UITableViewDataSource>
 
 - (instancetype)initWithCellIdentifer:(NSString *)identifer block:(ConfigureCellBlock)block;
-- (void)loadDataWithCompletionHandler:(LoadDataCompletionHandler)handler;
+- (void)loadDataWithCompletion:(void(^)())completion;
 - (void)loadDataAboutTopic:(NSString *)topic completionHandler:(LoadDataCompletionHandler)handler;
 - (WBStatusLayout *)objectAtIndex:(NSInteger)index;
 - (void)addStatus:(NSArray *)statusList;
+- (void)updateStatusesWithCompletion:(void (^)())completion;
 @end

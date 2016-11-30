@@ -41,9 +41,8 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     [self clearImage];
-    self.title = _user.screenName;
- 
-    //_screenName.text = _user.screenName;
+    
+    _screenName.text = _user.screenName;
     _iconImage.layer.cornerRadius = _iconImage.frame.size.width/2;
     _iconImage.clipsToBounds =YES;
     _iconImage.imageURL = [NSURL URLWithString:_user.avatarLarge];

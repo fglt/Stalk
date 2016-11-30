@@ -30,31 +30,44 @@ static NSString *const LastCachedStatues = @"LastCachedStatues";
     return self;
 }
 
-- (void)loadDataWithCompletionHandler:(LoadDataCompletionHandler)handler;{
+- (void)loadDataWithCompletion:(void (^)())completion{
 
     YYCache *statusCache = [[YYCache alloc] initWithName:StatusesCacheName];
     AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
-    NSDictionary *dict = (NSDictionary *)[statusCache objectForKey:LastCachedStatues];
-    if(dict){
-        _statusLayoutList = [WBStatusLayout statusLayoutsWithStatuses:[WBStatus statuesWithDict:dict]];
-        handler(nil);
+    NSArray *dicts = (NSArray *)[statusCache objectForKey:LastCachedStatues];
+    if(dicts){
+        _statusLayoutList = [WBStatusLayout statusLayoutsWithStatuses:[WBStatus statuesWithArray:dicts]];
+        completion();
     }else{
         NSDictionary *parms = @{@"count":[NSString stringWithFormat:@"%d",100]};
         [WBHttpRequest requestForStatusesOfPath:@"friends_timeline" withAccessToken:appDelegate.wbAuthorizeResponse.accessToken andOtherProperties:parms queue:[WBRequestQueue queueForWBRequest] withCompletionHandler:^(WBHttpRequest *httpRequest, id result, NSError *error) {
-            NSDictionary *statusDict = [result objectForKey:@"statuses"];
-            [statusCache setObject:statusDict forKey:LastCachedStatues];
-            _statusLayoutList = [WBStatusLayout statusLayoutsWithStatuses:[WBStatus statuesWithDict:statusDict]];
-            handler(error);
+            NSArray *dicts = [result objectForKey:@"statuses"];
+            [statusCache setObject:dicts forKey:LastCachedStatues];
+            _statusLayoutList = [WBStatusLayout statusLayoutsWithStatuses:[WBStatus statuesWithArray:dicts]];
+             completion();
         }];
     }
+}
+
+- (void)updateStatusesWithCompletion:(void (^)())completion{
+    AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+    YYCache *statusCache = [[YYCache alloc] initWithName:StatusesCacheName];
+    NSDictionary *parms = @{@"count":[NSString stringWithFormat:@"%d",100]};
+    
+    [WBHttpRequest requestForStatusesOfPath:@"friends_timeline" withAccessToken:appDelegate.wbAuthorizeResponse.accessToken andOtherProperties:parms queue:[WBRequestQueue queueForWBRequest] withCompletionHandler:^(WBHttpRequest *httpRequest, id result, NSError *error) {
+        NSArray *dicts = [result objectForKey:@"statuses"];
+        [statusCache setObject:dicts forKey:LastCachedStatues];
+        _statusLayoutList = [WBStatusLayout statusLayoutsWithStatuses:[WBStatus statuesWithArray:dicts]];
+        completion();
+    }];
 }
 
 - (void)loadDataAboutTopic:(NSString *)topic completionHandler:(LoadDataCompletionHandler)handler{
     
     AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
     [WBHttpRequest requestForStatusesAboutTopic:topic withAccessToken:appDelegate.wbAuthorizeResponse.accessToken andOtherProperties:nil queue:[WBRequestQueue queueForWBRequest] withCompletionHandler:^(WBHttpRequest *httpRequest, id result, NSError *error) {
-        NSDictionary *dict = [result objectForKey:@"statuses"];
-        _statusLayoutList = [WBStatusLayout statusLayoutsWithStatuses:[WBStatus statuesWithDict:dict]];
+        NSArray *dictes = [result objectForKey:@"statuses"];
+        _statusLayoutList = [WBStatusLayout statusLayoutsWithStatuses:[WBStatus statuesWithArray:dictes]];
         handler(error);
     }];
 }

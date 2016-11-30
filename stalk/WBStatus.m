@@ -8,6 +8,7 @@
 
 #import "WBStatus.h"
 #import "WBUser.h"
+#import "NSDate+STalk.h"
 
 @implementation WBStatus
 
@@ -18,9 +19,9 @@
 
 + (instancetype)statusWithDict:(NSDictionary *) dict {
     WBStatus *aStatus = [[WBStatus alloc] init];
-    aStatus.createdAt = [dict objectForKey:@"created_at"];
-    aStatus.statusId = [dict objectForKey:@"id"];
-    aStatus.statusMId = [dict objectForKey:@"mid"];
+    aStatus.createdAt = [NSDate USDateFromString:[dict objectForKey:@"created_at"] format:@"EEE MMM dd HH:mm:ss Z yyyy"];
+    aStatus.statusId = [[dict objectForKey:@"id"] longLongValue];
+    aStatus.statusMId = [[dict objectForKey:@"mid"] longLongValue];
     aStatus.text = [dict objectForKey:@"text"];
     aStatus.source = [dict objectForKey:@"source"];
     aStatus.favorited = [[dict objectForKey:@"favorited"] boolValue];
@@ -94,9 +95,9 @@
     return aStatus;
 }
 
-+ (NSMutableArray *)statuesWithDict:(NSDictionary *) statues{
++ (NSMutableArray *)statuesWithArray:(NSArray *) sourceDictes{
     NSMutableArray *array =[ NSMutableArray array];
-    for(NSDictionary *dict in statues){
+    for(NSDictionary *dict in sourceDictes){
         WBStatus *status = [WBStatus statusWithDict:dict];
         [array addObject:status];
     }

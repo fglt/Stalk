@@ -59,6 +59,7 @@
         wbcell.delegate = self;
     }];
     self.tableView.dataSource = _dataSource;
+    [self setRefresh];
 
     _fpsLabel = [YYFPSLabel new];
     [_fpsLabel sizeToFit];
@@ -72,7 +73,7 @@
     UIActivityIndicatorView *indicator = [self activityIndicatorView];
     [indicator startAnimating];
     [self.view addSubview:indicator];
-    [self.dataSource loadDataWithCompletionHandler:^(NSError *error) {
+    [self.dataSource loadDataWithCompletion:^(void) {
         dispatch_async(dispatch_get_main_queue(), ^{
             [indicator removeFromSuperview];
             self.navigationController.view.userInteractionEnabled = YES;
@@ -95,6 +96,21 @@
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+- (void)setRefresh{
+    UIRefreshControl *rc = [ [UIRefreshControl alloc] init];
+    [rc addTarget:self action:@selector(refreshData) forControlEvents:UIControlEventValueChanged];
+    self.refreshControl = rc;
+}
+
+- (void)refreshData{
+    if(self.refreshControl.isRefreshing){
+        [_dataSource updateStatusesWithCompletion:^{
+            [self.tableView reloadData];
+            [self.refreshControl endRefreshing];
+        }];
+    }
 }
 
 #pragma mark - UITableViewDelegate

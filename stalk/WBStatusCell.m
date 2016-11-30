@@ -84,7 +84,7 @@
                  transform:nil
                 completion:nil];
     _name.text =layout.status.user.screenName;
-    _from.text = [NSString stringWithFormat:@"%@ 来自%@", [layout.status.createdAt substringToIndex:11], [ self sourceWithString:layout.status.source]];
+    _from.text = [NSString stringWithFormat:@"%@ 来自%@", [WBStatusHelper stringWithTimelineDate:layout.status.createdAt], [ self sourceWithString:layout.status.source]];
     [self layoutStatusTextWithLayout:layout];
     [self layoutRetweetWithLayout:layout];
     [self addPicViewWithLayout:layout];
