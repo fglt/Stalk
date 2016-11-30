@@ -221,16 +221,12 @@
     _scrollView.userInteractionEnabled = NO;
     [UIView animateWithDuration:oneTime delay:0 options:UIViewAnimationOptionBeginFromCurrentState|UIViewAnimationOptionCurveEaseInOut animations:^{
         cell.imageView.frame = cell.imageContainerView.bounds;
-        cell.imageView.layer.transformScale = 1.01;
     }completion:^(BOOL finished) {
-        [UIView animateWithDuration:oneTime delay:0 options:UIViewAnimationOptionBeginFromCurrentState|UIViewAnimationOptionCurveEaseInOut animations:^{
-            cell.imageView.layer.transformScale = 1.0;
-        }completion:^(BOOL finished) {
-            cell.imageContainerView.clipsToBounds = YES;
-            _isPresented = YES;
-            [self scrollViewDidScroll:_scrollView];
-            _scrollView.userInteractionEnabled = YES;
-        }];
+        cell.imageContainerView.clipsToBounds = YES;
+        _isPresented = YES;
+        [self scrollViewDidScroll:_scrollView];
+        _scrollView.userInteractionEnabled = YES;
+
     }];
     
 }

@@ -58,6 +58,8 @@
 		17DAF7BE1DEBBAB600D11191 /* PhotoBrowerControllerAnimatedDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 17DAF7BD1DEBBAB600D11191 /* PhotoBrowerControllerAnimatedDelegate.m */; };
 		17DAF7C11DEBBC9900D11191 /* PhotoBrowerAnimator.m in Sources */ = {isa = PBXBuildFile; fileRef = 17DAF7C01DEBBC9900D11191 /* PhotoBrowerAnimator.m */; };
 		17DAF7C41DEC628D00D11191 /* PhotoBrowerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 17DAF7C31DEC628D00D11191 /* PhotoBrowerView.m */; };
+		17DAF7C71DEC81A500D11191 /* AtMeTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 17DAF7C61DEC81A500D11191 /* AtMeTableViewController.m */; };
+		17DAF7CA1DED506700D11191 /* WBTextStorage.m in Sources */ = {isa = PBXBuildFile; fileRef = 17DAF7C91DED506700D11191 /* WBTextStorage.m */; };
 		17FA23001DE3CE0C00617651 /* WBHttpRequest+STalk.m in Sources */ = {isa = PBXBuildFile; fileRef = 17FA22FF1DE3CE0C00617651 /* WBHttpRequest+STalk.m */; };
 		17FA23091DE3DD8D00617651 /* StatusDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 17FA23081DE3DD8D00617651 /* StatusDataSource.m */; };
 		94EB5C9CEFE6D90560C4BBA6 /* libPods-stalk.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A428582C3D25FA0ACB23CE58 /* libPods-stalk.a */; };
@@ -150,6 +152,10 @@
 		17DAF7C01DEBBC9900D11191 /* PhotoBrowerAnimator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PhotoBrowerAnimator.m; sourceTree = "<group>"; };
 		17DAF7C21DEC628D00D11191 /* PhotoBrowerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PhotoBrowerView.h; sourceTree = "<group>"; };
 		17DAF7C31DEC628D00D11191 /* PhotoBrowerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PhotoBrowerView.m; sourceTree = "<group>"; };
+		17DAF7C51DEC81A500D11191 /* AtMeTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AtMeTableViewController.h; sourceTree = "<group>"; };
+		17DAF7C61DEC81A500D11191 /* AtMeTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AtMeTableViewController.m; sourceTree = "<group>"; };
+		17DAF7C81DED506700D11191 /* WBTextStorage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WBTextStorage.h; sourceTree = "<group>"; };
+		17DAF7C91DED506700D11191 /* WBTextStorage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WBTextStorage.m; sourceTree = "<group>"; };
 		17FA22FE1DE3CE0C00617651 /* WBHttpRequest+STalk.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "WBHttpRequest+STalk.h"; sourceTree = "<group>"; };
 		17FA22FF1DE3CE0C00617651 /* WBHttpRequest+STalk.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "WBHttpRequest+STalk.m"; sourceTree = "<group>"; };
 		17FA23071DE3DD8D00617651 /* StatusDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StatusDataSource.h; sourceTree = "<group>"; };
@@ -242,6 +248,8 @@
 				177B20F31DE43CB0005A1438 /* SendStatusViewController.m */,
 				177B20F51DE43F11005A1438 /* APPHelper.h */,
 				177B20F61DE43F11005A1438 /* APPHelper.m */,
+				17DAF7C51DEC81A500D11191 /* AtMeTableViewController.h */,
+				17DAF7C61DEC81A500D11191 /* AtMeTableViewController.m */,
 			);
 			path = stalk;
 			sourceTree = "<group>";
@@ -316,6 +324,8 @@
 				177B20FC1DE52CB0005A1438 /* WBPicture.m */,
 				177B21591DEA7341005A1438 /* WBModel.h */,
 				177B215A1DEA7341005A1438 /* WBModel.m */,
+				17DAF7C81DED506700D11191 /* WBTextStorage.h */,
+				17DAF7C91DED506700D11191 /* WBTextStorage.m */,
 			);
 			name = modal;
 			sourceTree = "<group>";
@@ -488,6 +498,7 @@
 				171BCD521DDB4D5E009FF89E /* STalkTextView.m in Sources */,
 				177B215B1DEA7341005A1438 /* WBModel.m in Sources */,
 				17DAF7C11DEBBC9900D11191 /* PhotoBrowerAnimator.m in Sources */,
+				17DAF7CA1DED506700D11191 /* WBTextStorage.m in Sources */,
 				17FA23001DE3CE0C00617651 /* WBHttpRequest+STalk.m in Sources */,
 				171BCCA81DD4B6FF009FF89E /* AppDelegate.m in Sources */,
 				177B21661DEB03AB005A1438 /* PhotoBrowerViewController.m in Sources */,
@@ -499,6 +510,7 @@
 				171BCCEA1DD60E71009FF89E /* HomeTableViewController.m in Sources */,
 				171BCCFE1DD6C110009FF89E /* UserWeiBoTableViewController.m in Sources */,
 				171BCCA51DD4B6FF009FF89E /* main.m in Sources */,
+				17DAF7C71DEC81A500D11191 /* AtMeTableViewController.m in Sources */,
 				171BCD1A1DD7347D009FF89E /* WBStatusCell.m in Sources */,
 				171BCCF81DD698F3009FF89E /* constant.m in Sources */,
 				17DAF7BE1DEBBAB600D11191 /* PhotoBrowerControllerAnimatedDelegate.m in Sources */,

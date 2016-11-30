@@ -20,12 +20,17 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+//    [self.navigationController.navigationBar.backItem setTitle:@"取消"];
     // Do any additional setup after loading the view.
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+- (IBAction)cancel:(id)sender {
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 - (IBAction)sendStatus:(UIBarButtonItem *)sender {

@@ -8,6 +8,12 @@
 
 #import <UIKit/UIKit.h>
 
+//typedef  NS_ENUM(NSInteger, WBAttachmentType){
+//    WBAttachmentTypeEmotion, 
+//    WBAttachmentType
+//};
+
 @interface STalkTextAttachment : NSTextAttachment
 - (instancetype)initWithImage:(UIImage *)image;
+
 @end

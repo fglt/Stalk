@@ -189,7 +189,7 @@
                 } else {
                     
                     weakThumb.contentMode = UIViewContentModeScaleToFill;
-                    weakThumb.layer.contentsRect = CGRectMake(0, 0, 1, (float)width / height);
+                    weakThumb.layer.contentsRect = CGRectMake(0, 0, 1, 1/scale);
                 }
                 weakThumb.image = image;
                 if (from != YYWebImageFromMemoryCacheFast) {

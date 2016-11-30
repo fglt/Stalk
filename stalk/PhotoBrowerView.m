@@ -343,7 +343,6 @@
      2016-11-25 20:39:48
      **/
     [self scrollViewDidScroll:_scrollView];
-    [UIView setAnimationsEnabled:YES];
     
     YYPhotoGroupCell *cell = [self cellForPage:self.currentIndex];
     YYPhotoGroupItem *item = _groupItems[self.currentIndex];
@@ -369,16 +368,11 @@
     _scrollView.userInteractionEnabled = NO;
     [UIView animateWithDuration:oneTime delay:0 options:UIViewAnimationOptionBeginFromCurrentState|UIViewAnimationOptionCurveEaseInOut animations:^{
         cell.imageView.frame = cell.imageContainerView.bounds;
-        cell.imageView.layer.transformScale = 1.01;
     }completion:^(BOOL finished) {
-        [UIView animateWithDuration:oneTime delay:0 options:UIViewAnimationOptionBeginFromCurrentState|UIViewAnimationOptionCurveEaseInOut animations:^{
-            cell.imageView.layer.transformScale = 1.0;
-        }completion:^(BOOL finished) {
-            cell.imageContainerView.clipsToBounds = YES;
-            _isPresented = YES;
-            [self scrollViewDidScroll:_scrollView];
-            _scrollView.userInteractionEnabled = YES;
-        }];
+        cell.imageContainerView.clipsToBounds = YES;
+        _isPresented = YES;
+        [self scrollViewDidScroll:_scrollView];
+        _scrollView.userInteractionEnabled = YES;
     }];
     
 }
@@ -427,26 +421,31 @@
     
     if (isFromImageClipped) {
         [cell scrollToTopAnimated:NO];
-    }
-    
-    [UIView animateWithDuration:animated ? 0.2 : 0 delay:0 options:UIViewAnimationOptionBeginFromCurrentState|UIViewAnimationOptionCurveEaseOut animations:^{
-        if (isFromImageClipped) {
-            
-            CGRect fromFrame = [fromView convertRect:fromView.bounds toView:cell];
-            CGFloat scale = fromFrame.size.width / cell.imageContainerView.width * cell.zoomScale;
-            CGFloat height = fromFrame.size.height / fromFrame.size.width * cell.imageContainerView.width;
-            if (isnan(height)) height = cell.imageContainerView.height;
-            
+        CGRect fromFrame = [fromView convertRect:fromView.bounds toView:cell];
+        cell.imageContainerView.height = MIN( cell.height *cell.zoomScale,cell.imageContainerView.height);
+        cell.imageContainerView.layer.contentsRect = CGRectMake(0, 0, 1, fromFrame.size.height/fromFrame.size.width/(cell.imageView.height/cell.imageView.width));
+        
+        CGFloat scale = fromFrame.size.width / cell.imageContainerView.width * cell.zoomScale;
+        CGFloat height = fromFrame.size.height / fromFrame.size.width * cell.imageContainerView.width;
+        if (isnan(height)) height = cell.imageContainerView.height;
+        [UIView animateWithDuration:animated ? 1 : 0 delay:0 options:UIViewAnimationOptionBeginFromCurrentState|UIViewAnimationOptionCurveEaseOut animations:^{
             cell.imageContainerView.height = height;
             cell.imageContainerView.center = CGPointMake(CGRectGetMidX(fromFrame), CGRectGetMinY(fromFrame));
             cell.imageContainerView.layer.transformScale = scale;
-            
-        } else {
-            CGRect fromFrame = [fromView convertRect:fromView.bounds toView:cell.imageContainerView];
-            cell.imageContainerView.clipsToBounds = NO;
-            cell.imageView.contentMode = fromView.contentMode;
-            cell.imageView.frame = fromFrame;
-        }
+        }completion:^(BOOL finished) {
+            [self removeFromSuperview];
+        }];
+        return;
+    }
+    
+    
+    [UIView animateWithDuration:animated ? 0.2 : 0 delay:0 options:UIViewAnimationOptionBeginFromCurrentState|UIViewAnimationOptionCurveEaseOut animations:^{
+        
+        CGRect fromFrame = [fromView convertRect:fromView.bounds toView:cell.imageContainerView];
+        cell.imageContainerView.clipsToBounds = NO;
+        cell.imageView.contentMode = fromView.contentMode;
+        cell.imageView.frame = fromFrame;
+        
     }completion:^(BOOL finished) {
         [self removeFromSuperview];
     }];
