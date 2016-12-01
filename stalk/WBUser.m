@@ -35,7 +35,7 @@
     user.friendsCount = [[dic objectForKey:@"friends_count"] intValue];
     user.statusesCount = [[dic objectForKey:@"statuses_count"] intValue];
     user.favouritesCount = [[dic objectForKey:@"favourites_count"] intValue];
-    user.createdAt =  [NSDate USDateFromString:[dic objectForKey:@"created_at"] format:@"EEE MMM dd HH:mm:ss Z yyyy"];
+    user.createdAt =  [NSDate USDateFromString:[dic objectForKey:@"created_at"]];
     user.allowAllActMsg = [[dic objectForKey:@"allow_all_act_msg"] boolValue];
     user.geoEnabled = [[dic objectForKey:@"geo_enabled"] boolValue];
     user.verified = [[dic objectForKey:@"verified"] boolValue];

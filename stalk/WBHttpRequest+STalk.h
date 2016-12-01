@@ -9,6 +9,8 @@
 #import "WBHttpRequest.h"
 
 @interface WBHttpRequest (STalk)
+
+#pragma mark - userRequest
 + (void)requestForUserWithAccessToken:(NSString*)accessToken
                           screen_name:(NSString*)screen_name
                                 queue:(NSOperationQueue*)queue
@@ -19,22 +21,45 @@
                                 queue:(NSOperationQueue*)queue
                 withCompletionHandler:(WBRequestHandler)handler;
 
-
+#pragma mark - emotionRequest
 + (void)requestForEmotionWithAccessToken:(NSString *)accessToken
                                     type:(NSString *)type
                       andOtherProperties:(NSDictionary*)otherProperties
                                    queue:(NSOperationQueue*)queue
                    withCompletionHandler:(WBRequestHandler)handler;
 
+#pragma mark - statusRequest
 + (void)requestForStatusesOfPath:(NSString*)jsonName
-                 withAccessToken:(NSString*)accessToken
+                     accessToken:(NSString*)accessToken
               andOtherProperties:(NSDictionary*)otherProperties
                            queue:(NSOperationQueue*)queue
            withCompletionHandler:(WBRequestHandler)handler;
 
+#pragma mark - topicStatusRequest
 + (void)requestForStatusesAboutTopic:(NSString*)topic
-                 withAccessToken:(NSString*)accessToken
-              andOtherProperties:(NSDictionary*)otherProperties
-                           queue:(NSOperationQueue*)queue
-           withCompletionHandler:(WBRequestHandler)handler;
+                         accessToken:(NSString*)accessToken
+                  andOtherProperties:(NSDictionary*)otherProperties
+                               queue:(NSOperationQueue*)queue
+               withCompletionHandler:(WBRequestHandler)handler;
+
+//获取提到@我的微博
++ (void)requestForMentionStatusWithAccessToken:(NSString *)accessToken
+                            andOtherProperties:(NSDictionary*)otherProperties
+                                         queue:(NSOperationQueue*)queue
+                         withCompletionHandler:(WBRequestHandler)handler;
+
+//获取转发微博列表
++ (void)requestForRepostStatusWithStatusID:(NSString *)statusID
+                                accessToke:(NSString *)accessToken
+                        andOtherProperties:(NSDictionary *)otherProperties
+                                     queue:(NSOperationQueue*)queue
+                     withCompletionHandler:(WBRequestHandler)handler;
+
+
+//获取微博评论列表
++ (void)requestForCommentsWithAccessToken:(NSString *)accessToken
+                                statusID:(NSString *)statusID
+                      andOtherProperties:(NSDictionary *)otherProperties
+                                   queue:(NSOperationQueue*)queue
+                   withCompletionHandler:(WBRequestHandler)handler;
 @end

@@ -25,8 +25,8 @@
 #import "TopicController.h"
 #import "PhotoBrowerViewController.h"
 #import "WBStatusHelper.h"
-#import "PhotoBrowerControllerAnimatedDelegate.h"
 #import "PhotoBrowerView.h"
+#import "SendStatusViewController.h"
 
 @interface HomeTableViewController ()<WBStatusCellDelegate,SFSafariViewControllerDelegate>
 @property (nonatomic, strong) StatusDataSource *dataSource;
@@ -253,14 +253,14 @@
 }
 
 - (void)cellDidClick:(WBStatusCell *)cell;{
-    StatusDetailViewController *detailViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"StatusDetailViewController"];
+    StatusDetailViewController *detailViewController = [StatusDetailViewController new];
     detailViewController.layout = cell.layout;
     detailViewController.title = @"微博正文";
     [self.navigationController pushViewController:detailViewController animated:YES];
 }
 
 - (void)cellDidClickRetweet:(WBStatusCell *)cell;{
-    StatusDetailViewController *detailViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"StatusDetailViewController"];
+    StatusDetailViewController *detailViewController = [StatusDetailViewController new];
     WBStatus *status = cell.layout.status.retweetedStatus;
     detailViewController.layout = [[WBStatusLayout alloc] initWithStatus:status];
     detailViewController.title = @"微博正文";
@@ -273,10 +273,33 @@
     [self.navigationController pushViewController:userViewController animated:YES];
 }
 
+- (void)cellDidClickRepost:(WBStatusCell *)cell{
+    SendStatusViewController *sendController = [SendStatusViewController new];
+    sendController.messageType = SendMessageTypeRepost;
+    sendController.status = cell.layout.status;
+    [self.navigationController pushViewController:sendController animated:YES];
+}
+
+- (void)cellDidClickComment:(WBStatusCell *)cell{
+    SendStatusViewController *sendController = [SendStatusViewController new];
+    sendController.messageType = SendMessageTypeComment;
+    sendController.status = cell.layout.status;
+    [self.navigationController pushViewController:sendController animated:YES];
+}
+
+- (void)cellDidClickLike:(WBStatusCell *)cell{
+    
+}
+
+#pragma mark - safariViewControllerDelegate
 - (void)safariViewControllerDidFinish:(SFSafariViewController *)controller{
     [controller dismissViewControllerAnimated:YES completion:nil];
 }
+
 - (IBAction)sendStatus:(UIBarButtonItem *)sender {
+    SendStatusViewController *sendController = [SendStatusViewController new];
+    sendController.messageType = SendMessageTypeStatus;
+    [self.navigationController pushViewController:sendController animated:YES];
 }
 
 

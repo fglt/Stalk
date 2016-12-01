@@ -7,6 +7,9 @@
 //
 
 #import "WBModel.h"
+#import "WBStatus.h"
+#import "WBUser.h"
+#import "NSDate+STalk.h"
 
 @implementation WBEmoticon
 + (NSArray *)modelPropertyBlacklist {
@@ -32,4 +35,21 @@
     }];
     return YES;
 }
+@end
+
+@implementation WBComment
+
++ (instancetype)commentWithDictionary:(NSDictionary *)dict{
+    WBComment *comment = [WBComment new];
+    comment.commentID = [dict[@"id"] longLongValue];
+    comment.createdAt = [NSDate USDateFromString:dict[@"created_at"]];
+    comment.mid = dict[@"mid"];
+    comment.text =dict[@"text"];
+    comment.source =dict[@"source"];
+    comment.user = [WBUser userWithDict:dict[@"user"]];
+    comment.status = [WBStatus statusWithDict:dict[@"status"]];
+    comment.replyComment = [WBComment commentWithDictionary:dict[@"replay_comment"]];
+    return comment;
+}
+
 @end

@@ -19,7 +19,7 @@
 
 + (instancetype)statusWithDict:(NSDictionary *) dict {
     WBStatus *aStatus = [[WBStatus alloc] init];
-    aStatus.createdAt = [NSDate USDateFromString:[dict objectForKey:@"created_at"] format:@"EEE MMM dd HH:mm:ss Z yyyy"];
+    aStatus.createdAt = [NSDate USDateFromString:[dict objectForKey:@"created_at"]];
     aStatus.statusId = [[dict objectForKey:@"id"] longLongValue];
     aStatus.statusMId = [[dict objectForKey:@"mid"] longLongValue];
     aStatus.text = [dict objectForKey:@"text"];

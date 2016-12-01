@@ -51,6 +51,7 @@
     _imgHeight = _imgWidth *0.75;
     CGFloat picHeight=0;
     UIFont *font = [UIFont systemFontOfSize:SIZE_FONT_CONTENT];
+    
     NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
     style.alignment = NSTextAlignmentLeft;
     style.minimumLineHeight = font.lineHeight;
@@ -69,8 +70,8 @@
     //文字内容
     CGSize textSize = [self sizeWithText:attributedStr maxSize:CGSizeMake(viewWidth, MAXFLOAT)];
 
-    self.statusTextFrame = CGRectMake(PADDING, ICONWIDTH + PADDING * 2, viewWidth, textSize.height);
-    _height = CGRectGetMaxY(_statusTextFrame);
+    self.statusTextFrame = CGRectMake(PADDING, ICONWIDTH + PADDING, viewWidth, textSize.height);
+    _statusViewHeight = CGRectGetMaxY(_statusTextFrame)+PADDING*2;
     
     if(_status.retweetedStatus){
         UIFont *font = [UIFont systemFontOfSize:SIZE_FONT_CONTENT-1];
@@ -94,17 +95,54 @@
         }else{
             self.retweetContentFrame = CGRectMake(0, CGRectGetMaxY(self.statusTextFrame) + PADDING, CELL_WIDTH, retweetSize.height);
         }
-        _height += self.retweetContentFrame.size.height +PADDING;
+        _statusViewHeight += self.retweetContentFrame.size.height +PADDING;
     } else{
         _pictures = _status.pictures;
         picHeight = [self heightForPic:_pictures.count];
         if(picHeight>0){
             self.statusPictureFrame = CGRectMake(PADDING, CGRectGetMaxY( self.statusTextFrame) + PADDING, viewWidth,  picHeight);
-            _height += self.statusPictureFrame.size.height + PADDING;
+            _statusViewHeight += self.statusPictureFrame.size.height + PADDING;
         }
     }
-    _height += PADDING;
-    _height = ceil(_height);
+    _statusViewHeight = ceil(_statusViewHeight);
+    _height = _statusViewHeight + ToolbarHeight;
+
+    [self _layoutToolbar];
+    _fromText = [NSString stringWithFormat:@"%@ 来自%@", [WBStatusHelper stringWithTimelineDate:_status.createdAt], [ self sourceWithString:_status.source]];
+    _fromWidth = [_fromText boundingRectWithSize:CGSizeMake(500, 500) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:SIZE_FONT_CONTENT-5]} context:nil].size.width;
+    
+    _nameWidth = [_status.user.screenName boundingRectWithSize:CGSizeMake(500, 500) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:SIZE_FONT_CONTENT]} context:nil].size.width;
+}
+
+- (NSString *) sourceWithString:(NSString *)source{
+    u_long i = source.length-1;
+    char j=0;
+    for(; i>0; i--){
+        if([source characterAtIndex:i] == '>'){
+            if(j==1)break;
+            j++;
+        }
+    }
+    return [source substringWithRange:NSMakeRange(i+1, source.length-4 -i-1 )];
+}
+                 
+- (CGFloat)widthForToolbarButton:(NSMutableAttributedString *)str{
+    UIFont *font = [UIFont systemFontOfSize:ToolbarFontSize];
+    str.font = font;
+    str.color = kWBCellToolbarTitleColor;
+    return [self sizeWithText:str maxSize:CGSizeMake(CellContentWidth/3.0, MAXFLOAT)].width;
+}
+
+- (void)_layoutToolbar {
+    
+    _repostText = [[NSMutableAttributedString alloc] initWithString:_status.repostsCount <= 0 ? @"转发" : [WBStatusHelper shortedNumberDesc:_status.repostsCount]];
+    _repostTextWidth =[self widthForToolbarButton:_repostText];
+    
+    _commentText = [[NSMutableAttributedString alloc] initWithString:_status.commentsCount <= 0 ? @"评论" : [WBStatusHelper shortedNumberDesc:_status.commentsCount]];
+    _commentTextWidth = [self widthForToolbarButton:_commentText];
+    
+    _likeText = [[NSMutableAttributedString alloc] initWithString:_status.attitudesCount <= 0 ? @"赞" : [WBStatusHelper shortedNumberDesc:_status.attitudesCount]];
+    _likeTextWidth = [self widthForToolbarButton:_likeText];
 }
 
 - (CGFloat) heightForPic:(NSUInteger) count{

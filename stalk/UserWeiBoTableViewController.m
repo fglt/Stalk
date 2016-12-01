@@ -22,12 +22,12 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-
+    
     [self.tableView setSeparatorInset:UIEdgeInsetsZero];
     [self.tableView setLayoutMargins:UIEdgeInsetsZero];
     
     AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
-    [WBHttpRequest requestForStatusesOfPath:@"user_timeline" withAccessToken:appDelegate.wbAuthorizeResponse.accessToken andOtherProperties:nil queue:[WBRequestQueue queueForWBRequest] withCompletionHandler:^(WBHttpRequest *httpRequest, id result, NSError *error) {
+    [WBHttpRequest requestForStatusesOfPath:@"user_timeline" accessToken:appDelegate.wbAuthorizeResponse.accessToken andOtherProperties:nil queue:[WBRequestQueue queueForWBRequest] withCompletionHandler:^(WBHttpRequest *httpRequest, id result, NSError *error) {
         NSArray *dictes = [result objectForKey:@"statuses"];
         
         self.statuesList = [WBStatusLayout statusLayoutsWithStatuses:[WBStatus statuesWithArray:dictes]];
@@ -73,7 +73,7 @@
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     
     WBStatusLayout *layout = _statuesList[indexPath.row];
-    return layout.height;
+    return layout.height + CellPadding;
 }
 
 /*

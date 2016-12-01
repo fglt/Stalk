@@ -18,7 +18,7 @@ NSString * const UserUrl = @"https://api.weibo.com/2/users/show.json";
                                 queue:(NSOperationQueue*)queue
                 withCompletionHandler:(WBRequestHandler)handler{
     NSDictionary *params = @{AccessTokenKey:accessToken, @"screen_name":screen_name};
-    [WBHttpRequest requestWithAccessToken:accessToken url:UserUrl httpMethod:@"get" params:params queue:nil withCompletionHandler:handler];
+    [WBHttpRequest requestWithAccessToken:accessToken url:UserUrl httpMethod:@"get" params:params queue:queue withCompletionHandler:handler];
     
 }
 
@@ -27,7 +27,7 @@ NSString * const UserUrl = @"https://api.weibo.com/2/users/show.json";
                                 queue:(NSOperationQueue*)queue
                 withCompletionHandler:(WBRequestHandler)handler{
     NSDictionary *params = @{AccessTokenKey:accessToken, @"uid":uid};
-    [WBHttpRequest requestWithAccessToken:accessToken url:UserUrl httpMethod:@"get" params:params queue:nil withCompletionHandler:handler];
+    [WBHttpRequest requestWithAccessToken:accessToken url:UserUrl httpMethod:@"get" params:params queue:queue withCompletionHandler:handler];
 }
 
 + (void)requestForEmotionWithAccessToken:(NSString*)accessToken
@@ -43,7 +43,7 @@ NSString * const UserUrl = @"https://api.weibo.com/2/users/show.json";
 }
 
 + (void)requestForStatusesOfPath:(NSString*)jsonName
-                 withAccessToken:(NSString*)accessToken
+                     accessToken:(NSString*)accessToken
               andOtherProperties:(NSDictionary*)otherProperties
                            queue:(NSOperationQueue*)queue
            withCompletionHandler:(WBRequestHandler)handler{
@@ -51,19 +51,53 @@ NSString * const UserUrl = @"https://api.weibo.com/2/users/show.json";
     NSMutableDictionary *params = [[NSMutableDictionary alloc]initWithDictionary:otherProperties];
     [params setObject:accessToken forKey:AccessTokenKey];
     
-    [WBHttpRequest requestWithAccessToken:accessToken url:url httpMethod:@"get" params:params queue:nil withCompletionHandler:handler];
+    [WBHttpRequest requestWithAccessToken:accessToken url:url httpMethod:@"get" params:params queue:queue withCompletionHandler:handler];
 }
 
 + (void)requestForStatusesAboutTopic:(NSString*)topic
-                     withAccessToken:(NSString*)accessToken
+                         accessToken:(NSString*)accessToken
                   andOtherProperties:(NSDictionary*)otherProperties
                                queue:(NSOperationQueue*)queue
                withCompletionHandler:(WBRequestHandler)handler{
     NSMutableDictionary *params = [[NSMutableDictionary alloc]initWithDictionary:otherProperties];
     [params setObject:accessToken forKey:AccessTokenKey];
     [params setObject:[topic stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]] forKey:@"q"];
-    [WBHttpRequest requestWithAccessToken:accessToken url:topicURL httpMethod:@"get" params:params queue:nil withCompletionHandler:handler];
+    [WBHttpRequest requestWithAccessToken:accessToken url:topicURL httpMethod:@"get" params:params queue:queue withCompletionHandler:handler];
 }
 
++ (void)requestForMentionStatusWithAccessToken:(NSString *)accessToken
+                            andOtherProperties:(NSDictionary*)otherProperties
+                                         queue:(NSOperationQueue*)queue
+                         withCompletionHandler:(WBRequestHandler)handler{
+     NSString *url = @"https://api.weibo.com/2/statuses/mentions.json";
+    NSMutableDictionary *params = [[NSMutableDictionary alloc]initWithDictionary:otherProperties];
+    [params setObject:accessToken forKey:AccessTokenKey];
+    [WBHttpRequest requestWithAccessToken:accessToken url:url httpMethod:@"get" params:params queue:queue withCompletionHandler:handler];
+}
+
+
++ (void)requestForRepostStatusWithStatusID:(NSString *)statusID
+                                accessToke:(NSString *)accessToken
+                        andOtherProperties:(NSDictionary *)otherProperties
+                                     queue:(NSOperationQueue*)queue
+                     withCompletionHandler:(WBRequestHandler)handler{
+    NSString *url = @"https://api.weibo.com/2/statuses/repost_timeline.json";
+    NSMutableDictionary *params = [[NSMutableDictionary alloc]initWithDictionary:otherProperties];
+    [params setObject:accessToken forKey:AccessTokenKey];
+    [WBHttpRequest requestWithAccessToken:accessToken url:url httpMethod:@"get" params:params queue:queue withCompletionHandler:handler];
+}
+
++ (void)requestForCommentsWithAccessToken:(NSString *)accessToken
+                                statusID:(NSString *)statusID
+                      andOtherProperties:(NSDictionary *)otherProperties
+                                   queue:(NSOperationQueue*)queue
+                   withCompletionHandler:(WBRequestHandler)handler{
+    NSString *url = @"https://api.weibo.com/2/comments/show.json";
+    NSMutableDictionary *params = [[NSMutableDictionary alloc]initWithDictionary:otherProperties];
+    [params setObject:accessToken forKey:AccessTokenKey];
+    [params setObject:statusID forKey:@"id"];
+    [WBHttpRequest requestWithAccessToken:accessToken url:url httpMethod:@"get" params:params queue:queue withCompletionHandler:handler];
+
+}
 
 @end

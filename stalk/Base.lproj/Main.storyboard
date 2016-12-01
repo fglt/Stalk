@@ -70,7 +70,6 @@
                         <barButtonItem key="rightBarButtonItem" title="写微博" id="UdT-wY-u49">
                             <connections>
                                 <action selector="sendStatus:" destination="0PB-Om-BrJ" id="yCS-At-lt5"/>
-                                <segue destination="nPL-Z7-cIS" kind="show" id="G6J-Y4-EBH"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -96,7 +95,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="V3l-mW-C0s" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-3312" y="-1031"/>
+            <point key="canvasLocation" x="-3436" y="-1152"/>
         </scene>
         <!--微博-->
         <scene sceneID="30Y-Rg-eam">
@@ -138,7 +137,7 @@
         <scene sceneID="efa-JK-GMr">
             <objects>
                 <tableViewController storyboardIdentifier="UserStatusesCellID" title="我的微博" id="fqQ-ij-RYV" customClass="UserWeiBoTableViewController" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="y2X-x7-gUi">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="y2X-x7-gUi">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -147,7 +146,7 @@
                                 <rect key="frame" x="0.0" y="28" width="375" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="cmR-PZ-6zg" id="vkj-t8-LTK">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </tableViewCellContentView>
                                 <connections>
@@ -182,7 +181,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="v74-Zg-Sbp" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-809" y="265"/>
+            <point key="canvasLocation" x="-1084" y="188"/>
         </scene>
         <!--我-->
         <scene sceneID="VOC-EK-QhC">
@@ -200,28 +199,6 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="K96-So-eAP" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-2144" y="73"/>
-        </scene>
-        <!--微博详情-->
-        <scene sceneID="rqF-zR-JXO">
-            <objects>
-                <viewController storyboardIdentifier="StatusDetailViewController" title="微博详情" hidesBottomBarWhenPushed="YES" id="Ykq-RH-jbN" customClass="StatusDetailViewController" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="7yf-HD-wJO"/>
-                        <viewControllerLayoutGuide type="bottom" id="1a2-lk-Y6k"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="RDU-Zg-uip">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                    </view>
-                    <navigationItem key="navigationItem" title="Title" id="lcH-xA-d67">
-                        <barButtonItem key="rightBarButtonItem" title="Item" id="8yn-D0-e5P"/>
-                    </navigationItem>
-                    <nil key="simulatedBottomBarMetrics"/>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="NK3-S9-lY5" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="-311" y="-716"/>
         </scene>
         <!--user-->
         <scene sceneID="Chp-Rc-EWu">
@@ -304,139 +281,6 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="cQw-Wl-p4P" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-188" y="-1034.0329835082459"/>
-        </scene>
-        <!--发微博-->
-        <scene sceneID="Dtp-4b-5tz">
-            <objects>
-                <viewController title="发微博" hidesBottomBarWhenPushed="YES" id="nPL-Z7-cIS" customClass="SendStatusViewController" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="bri-9r-gMj"/>
-                        <viewControllerLayoutGuide type="bottom" id="gbQ-Xa-CmP"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="3VH-ou-0Sz">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" text="发微博" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="mhA-ev-dMO">
-                                <rect key="frame" x="0.0" y="64" width="375" height="543"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
-                            </textView>
-                        </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <constraints>
-                            <constraint firstItem="mhA-ev-dMO" firstAttribute="top" secondItem="bri-9r-gMj" secondAttribute="bottom" id="42q-k8-3Qj"/>
-                            <constraint firstItem="mhA-ev-dMO" firstAttribute="leading" secondItem="3VH-ou-0Sz" secondAttribute="leading" id="AdX-4V-h8g"/>
-                            <constraint firstItem="gbQ-Xa-CmP" firstAttribute="top" secondItem="mhA-ev-dMO" secondAttribute="bottom" constant="60" id="SBd-uv-RxQ"/>
-                            <constraint firstAttribute="trailing" secondItem="mhA-ev-dMO" secondAttribute="trailing" id="a61-tC-vuW"/>
-                        </constraints>
-                    </view>
-                    <toolbarItems/>
-                    <navigationItem key="navigationItem" title="发微博" id="Vn1-Ps-fLg">
-                        <barButtonItem key="leftBarButtonItem" title="取消" id="iDV-tu-SQe">
-                            <connections>
-                                <action selector="cancel:" destination="nPL-Z7-cIS" id="sbF-xT-xfk"/>
-                            </connections>
-                        </barButtonItem>
-                        <barButtonItem key="rightBarButtonItem" title="发送" id="efb-ds-28v">
-                            <connections>
-                                <action selector="sendStatus:" destination="nPL-Z7-cIS" id="zJP-Cy-8Ie"/>
-                            </connections>
-                        </barButtonItem>
-                        <connections>
-                            <outlet property="backBarButtonItem" destination="iDV-tu-SQe" id="a9Y-1E-gO6"/>
-                        </connections>
-                    </navigationItem>
-                    <nil key="simulatedBottomBarMetrics"/>
-                    <connections>
-                        <outlet property="statusTextView" destination="mhA-ev-dMO" id="SfJ-xw-Qg8"/>
-                    </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="J3K-td-6BO" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-        </scene>
-        <!--Photo Brower View Controller-->
-        <scene sceneID="s5e-Dt-KcH">
-            <objects>
-                <viewController storyboardIdentifier="PhotoBrowerViewController" hidesBottomBarWhenPushed="YES" id="Yld-Jb-iXl" customClass="PhotoBrowerViewController" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="Eyd-dI-OXr"/>
-                        <viewControllerLayoutGuide type="bottom" id="bS3-3u-nHu"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="9uK-YC-49p">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="M0F-y7-p8v" customClass="YYPhotoGroupView">
-                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                                <subviews>
-                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="BRS-XL-Ajx">
-                                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                                    </imageView>
-                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="dp7-pi-FCE">
-                                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                                    </imageView>
-                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="46s-Xd-Bga">
-                                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                                        <subviews>
-                                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="6RJ-9m-ycw">
-                                                <rect key="frame" x="-10" y="0.0" width="395" height="667"/>
-                                            </scrollView>
-                                        </subviews>
-                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                        <constraints>
-                                            <constraint firstItem="6RJ-9m-ycw" firstAttribute="centerX" secondItem="46s-Xd-Bga" secondAttribute="centerX" id="3Wa-gK-tWk"/>
-                                            <constraint firstItem="6RJ-9m-ycw" firstAttribute="width" secondItem="46s-Xd-Bga" secondAttribute="width" constant="20" id="H6H-CP-gNm"/>
-                                            <constraint firstItem="6RJ-9m-ycw" firstAttribute="height" secondItem="46s-Xd-Bga" secondAttribute="height" id="LhF-nC-jKA"/>
-                                            <constraint firstItem="6RJ-9m-ycw" firstAttribute="centerY" secondItem="46s-Xd-Bga" secondAttribute="centerY" id="kQU-1y-RtP"/>
-                                        </constraints>
-                                    </view>
-                                </subviews>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <constraints>
-                                    <constraint firstItem="dp7-pi-FCE" firstAttribute="height" secondItem="M0F-y7-p8v" secondAttribute="height" id="0CE-Sh-C1Q"/>
-                                    <constraint firstItem="BRS-XL-Ajx" firstAttribute="centerY" secondItem="M0F-y7-p8v" secondAttribute="centerY" id="2Fg-BU-9ry"/>
-                                    <constraint firstItem="46s-Xd-Bga" firstAttribute="centerX" secondItem="M0F-y7-p8v" secondAttribute="centerX" id="3fH-70-WMU"/>
-                                    <constraint firstItem="BRS-XL-Ajx" firstAttribute="width" secondItem="M0F-y7-p8v" secondAttribute="width" id="ECO-pR-Cd0"/>
-                                    <constraint firstItem="46s-Xd-Bga" firstAttribute="height" secondItem="M0F-y7-p8v" secondAttribute="height" id="QzE-ba-QaC"/>
-                                    <constraint firstItem="46s-Xd-Bga" firstAttribute="width" secondItem="M0F-y7-p8v" secondAttribute="width" id="Swy-th-ARO"/>
-                                    <constraint firstItem="dp7-pi-FCE" firstAttribute="centerY" secondItem="M0F-y7-p8v" secondAttribute="centerY" id="UXL-LK-edx"/>
-                                    <constraint firstItem="BRS-XL-Ajx" firstAttribute="centerX" secondItem="M0F-y7-p8v" secondAttribute="centerX" id="nKR-rX-qeP"/>
-                                    <constraint firstItem="BRS-XL-Ajx" firstAttribute="height" secondItem="M0F-y7-p8v" secondAttribute="height" id="p7B-5m-SM9"/>
-                                    <constraint firstItem="46s-Xd-Bga" firstAttribute="centerY" secondItem="M0F-y7-p8v" secondAttribute="centerY" id="qXk-Gt-Orl"/>
-                                    <constraint firstItem="dp7-pi-FCE" firstAttribute="width" secondItem="M0F-y7-p8v" secondAttribute="width" id="vCS-MR-Cs5"/>
-                                    <constraint firstItem="dp7-pi-FCE" firstAttribute="centerX" secondItem="M0F-y7-p8v" secondAttribute="centerX" id="xKW-19-pEr"/>
-                                </constraints>
-                                <connections>
-                                    <outlet property="background" destination="BRS-XL-Ajx" id="LXz-Q2-zPm"/>
-                                    <outlet property="blurBackground" destination="dp7-pi-FCE" id="yao-w7-dNK"/>
-                                    <outlet property="contentView" destination="46s-Xd-Bga" id="FKx-Uk-oRb"/>
-                                    <outlet property="scrollView" destination="6RJ-9m-ycw" id="DQJ-me-ZZU"/>
-                                </connections>
-                            </view>
-                        </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <constraints>
-                            <constraint firstAttribute="trailing" secondItem="M0F-y7-p8v" secondAttribute="trailing" id="5NA-HY-HXZ"/>
-                            <constraint firstItem="M0F-y7-p8v" firstAttribute="top" secondItem="9uK-YC-49p" secondAttribute="top" id="Fcy-Hv-zvw"/>
-                            <constraint firstItem="M0F-y7-p8v" firstAttribute="leading" secondItem="9uK-YC-49p" secondAttribute="leading" id="I6Z-bB-uMN"/>
-                            <constraint firstAttribute="bottom" secondItem="M0F-y7-p8v" secondAttribute="bottom" id="uzt-fd-SgX"/>
-                        </constraints>
-                        <connections>
-                            <outlet property="background" destination="BRS-XL-Ajx" id="fu2-Um-EAJ"/>
-                            <outlet property="blurBackground" destination="dp7-pi-FCE" id="wBe-HG-rfs"/>
-                            <outlet property="contentView" destination="46s-Xd-Bga" id="IOV-WK-Sye"/>
-                            <outlet property="scrollView" destination="6RJ-9m-ycw" id="2CP-yx-2FS"/>
-                        </connections>
-                    </view>
-                    <extendedEdge key="edgesForExtendedLayout" bottom="YES"/>
-                    <connections>
-                        <outlet property="photoGroup" destination="M0F-y7-p8v" id="5ps-F6-qeC"/>
-                    </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="hGN-jF-CAH" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
         </scene>
     </scenes>
 </document>

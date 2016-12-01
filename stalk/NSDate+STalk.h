@@ -9,5 +9,5 @@
 #import <Foundation/Foundation.h>
 
 @interface NSDate (STalk)
-+(NSDate *)USDateFromString:(NSString *)dateString format:(NSString *)format;
++(NSDate *)USDateFromString:(NSString *)dateString;
 @end

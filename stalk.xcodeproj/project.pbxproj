@@ -44,9 +44,9 @@
 		1741E6711DE1D44300C887D0 /* NSObject+runtime.m in Sources */ = {isa = PBXBuildFile; fileRef = 1741E6701DE1D44300C887D0 /* NSObject+runtime.m */; };
 		1741E6741DE1DEBD00C887D0 /* YYFPSLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 1741E6731DE1DEBD00C887D0 /* YYFPSLabel.m */; };
 		1743DCF01DEF16AB009D5298 /* NSDate+STalk.m in Sources */ = {isa = PBXBuildFile; fileRef = 1743DCEF1DEF16AB009D5298 /* NSDate+STalk.m */; };
+		1743DCF31DF05653009D5298 /* CommentsDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 1743DCF21DF05653009D5298 /* CommentsDataSource.m */; };
 		177B20F11DE43650005A1438 /* TopicController.m in Sources */ = {isa = PBXBuildFile; fileRef = 177B20F01DE43650005A1438 /* TopicController.m */; };
 		177B20F41DE43CB0005A1438 /* SendStatusViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 177B20F31DE43CB0005A1438 /* SendStatusViewController.m */; };
-		177B20F71DE43F11005A1438 /* APPHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 177B20F61DE43F11005A1438 /* APPHelper.m */; };
 		177B20FD1DE52CB0005A1438 /* WBPicture.m in Sources */ = {isa = PBXBuildFile; fileRef = 177B20FC1DE52CB0005A1438 /* WBPicture.m */; };
 		177B21021DE56F61005A1438 /* clear.png in Resources */ = {isa = PBXBuildFile; fileRef = 177B21011DE56F61005A1438 /* clear.png */; };
 		177B21041DE5797A005A1438 /* clear247.png in Resources */ = {isa = PBXBuildFile; fileRef = 177B21031DE5797A005A1438 /* clear247.png */; };
@@ -129,12 +129,12 @@
 		1741E6731DE1DEBD00C887D0 /* YYFPSLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YYFPSLabel.m; sourceTree = "<group>"; };
 		1743DCEE1DEF16AB009D5298 /* NSDate+STalk.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDate+STalk.h"; sourceTree = "<group>"; };
 		1743DCEF1DEF16AB009D5298 /* NSDate+STalk.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDate+STalk.m"; sourceTree = "<group>"; };
+		1743DCF11DF05653009D5298 /* CommentsDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommentsDataSource.h; sourceTree = "<group>"; };
+		1743DCF21DF05653009D5298 /* CommentsDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommentsDataSource.m; sourceTree = "<group>"; };
 		177B20EF1DE43650005A1438 /* TopicController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TopicController.h; sourceTree = "<group>"; };
 		177B20F01DE43650005A1438 /* TopicController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TopicController.m; sourceTree = "<group>"; };
 		177B20F21DE43CB0005A1438 /* SendStatusViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SendStatusViewController.h; sourceTree = "<group>"; };
 		177B20F31DE43CB0005A1438 /* SendStatusViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SendStatusViewController.m; sourceTree = "<group>"; };
-		177B20F51DE43F11005A1438 /* APPHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APPHelper.h; sourceTree = "<group>"; };
-		177B20F61DE43F11005A1438 /* APPHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = APPHelper.m; sourceTree = "<group>"; };
 		177B20FB1DE52CB0005A1438 /* WBPicture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WBPicture.h; sourceTree = "<group>"; };
 		177B20FC1DE52CB0005A1438 /* WBPicture.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WBPicture.m; sourceTree = "<group>"; };
 		177B21011DE56F61005A1438 /* clear.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = clear.png; sourceTree = "<group>"; };
@@ -213,46 +213,46 @@
 		171BCCA21DD4B6FF009FF89E /* stalk */ = {
 			isa = PBXGroup;
 			children = (
-				177B215F1DEAD3A8005A1438 /* EmoticonWeibo.bundle */,
-				177B21441DE816E2005A1438 /* ResourceWeibo.bundle */,
-				177B21031DE5797A005A1438 /* clear247.png */,
-				177B21011DE56F61005A1438 /* clear.png */,
-				171BCD141DD70299009FF89E /* category */,
-				171BCD131DD70277009FF89E /* modal */,
-				171BCD121DD7026D009FF89E /* view */,
-				171BCCE81DD60E71009FF89E /* HomeTableViewController.h */,
-				171BCCE91DD60E71009FF89E /* HomeTableViewController.m */,
-				1741E6601DDF165D00C887D0 /* UserViewController.h */,
-				1741E6611DDF165D00C887D0 /* UserViewController.m */,
-				1741E66C1DE1AB6A00C887D0 /* WBRequestQueue.h */,
-				1741E66D1DE1AB6A00C887D0 /* WBRequestQueue.m */,
-				177B21641DEB03AB005A1438 /* PhotoBrowerViewController.h */,
-				177B21651DEB03AB005A1438 /* PhotoBrowerViewController.m */,
-				17DAF7BC1DEBBAB600D11191 /* PhotoBrowerControllerAnimatedDelegate.h */,
-				17DAF7BD1DEBBAB600D11191 /* PhotoBrowerControllerAnimatedDelegate.m */,
-				171BCCF41DD696F5009FF89E /* constant.h */,
-				171BCCF71DD698F3009FF89E /* constant.m */,
-				171BCCF91DD69BE3009FF89E /* WeiBoTabBarController.h */,
-				171BCCFA1DD69BE3009FF89E /* WeiBoTabBarController.m */,
 				171BCCA61DD4B6FF009FF89E /* AppDelegate.h */,
 				171BCCA71DD4B6FF009FF89E /* AppDelegate.m */,
-				171BCCA91DD4B6FF009FF89E /* LoginViewController.h */,
-				171BCCAA1DD4B6FF009FF89E /* LoginViewController.m */,
-				17AFD3F51DDED731007C7DB9 /* StatusDetailViewController.h */,
-				17AFD3F61DDED732007C7DB9 /* StatusDetailViewController.m */,
-				171BCCFC1DD6C110009FF89E /* UserWeiBoTableViewController.h */,
-				171BCCFD1DD6C110009FF89E /* UserWeiBoTableViewController.m */,
-				171BCCAC1DD4B6FF009FF89E /* Main.storyboard */,
-				17FA23071DE3DD8D00617651 /* StatusDataSource.h */,
-				17FA23081DE3DD8D00617651 /* StatusDataSource.m */,
-				177B20EF1DE43650005A1438 /* TopicController.h */,
-				177B20F01DE43650005A1438 /* TopicController.m */,
-				177B20F21DE43CB0005A1438 /* SendStatusViewController.h */,
-				177B20F31DE43CB0005A1438 /* SendStatusViewController.m */,
-				177B20F51DE43F11005A1438 /* APPHelper.h */,
-				177B20F61DE43F11005A1438 /* APPHelper.m */,
 				17DAF7C51DEC81A500D11191 /* AtMeTableViewController.h */,
 				17DAF7C61DEC81A500D11191 /* AtMeTableViewController.m */,
+				171BCD141DD70299009FF89E /* category */,
+				177B21011DE56F61005A1438 /* clear.png */,
+				177B21031DE5797A005A1438 /* clear247.png */,
+				171BCCF41DD696F5009FF89E /* constant.h */,
+				171BCCF71DD698F3009FF89E /* constant.m */,
+				177B215F1DEAD3A8005A1438 /* EmoticonWeibo.bundle */,
+				171BCCE81DD60E71009FF89E /* HomeTableViewController.h */,
+				171BCCE91DD60E71009FF89E /* HomeTableViewController.m */,
+				171BCCA91DD4B6FF009FF89E /* LoginViewController.h */,
+				171BCCAA1DD4B6FF009FF89E /* LoginViewController.m */,
+				171BCCAC1DD4B6FF009FF89E /* Main.storyboard */,
+				171BCD131DD70277009FF89E /* modal */,
+				17DAF7BC1DEBBAB600D11191 /* PhotoBrowerControllerAnimatedDelegate.h */,
+				17DAF7BD1DEBBAB600D11191 /* PhotoBrowerControllerAnimatedDelegate.m */,
+				177B21641DEB03AB005A1438 /* PhotoBrowerViewController.h */,
+				177B21651DEB03AB005A1438 /* PhotoBrowerViewController.m */,
+				177B21441DE816E2005A1438 /* ResourceWeibo.bundle */,
+				177B20F21DE43CB0005A1438 /* SendStatusViewController.h */,
+				177B20F31DE43CB0005A1438 /* SendStatusViewController.m */,
+				17FA23071DE3DD8D00617651 /* StatusDataSource.h */,
+				17FA23081DE3DD8D00617651 /* StatusDataSource.m */,
+				17AFD3F51DDED731007C7DB9 /* StatusDetailViewController.h */,
+				17AFD3F61DDED732007C7DB9 /* StatusDetailViewController.m */,
+				177B20EF1DE43650005A1438 /* TopicController.h */,
+				177B20F01DE43650005A1438 /* TopicController.m */,
+				1741E6601DDF165D00C887D0 /* UserViewController.h */,
+				1741E6611DDF165D00C887D0 /* UserViewController.m */,
+				171BCCFC1DD6C110009FF89E /* UserWeiBoTableViewController.h */,
+				171BCCFD1DD6C110009FF89E /* UserWeiBoTableViewController.m */,
+				171BCD121DD7026D009FF89E /* view */,
+				1741E66C1DE1AB6A00C887D0 /* WBRequestQueue.h */,
+				1741E66D1DE1AB6A00C887D0 /* WBRequestQueue.m */,
+				171BCCF91DD69BE3009FF89E /* WeiBoTabBarController.h */,
+				171BCCFA1DD69BE3009FF89E /* WeiBoTabBarController.m */,
+				1743DCF11DF05653009D5298 /* CommentsDataSource.h */,
+				1743DCF21DF05653009D5298 /* CommentsDataSource.m */,
 			);
 			path = stalk;
 			sourceTree = "<group>";
@@ -294,12 +294,12 @@
 			children = (
 				17DAF7C21DEC628D00D11191 /* PhotoBrowerView.h */,
 				17DAF7C31DEC628D00D11191 /* PhotoBrowerView.m */,
-				1741E6721DE1DEBD00C887D0 /* YYFPSLabel.h */,
-				1741E6731DE1DEBD00C887D0 /* YYFPSLabel.m */,
-				171BCD181DD7347D009FF89E /* WBStatusCell.h */,
-				171BCD191DD7347D009FF89E /* WBStatusCell.m */,
 				171BCD501DDB4D5E009FF89E /* STalkTextView.h */,
 				171BCD511DDB4D5E009FF89E /* STalkTextView.m */,
+				171BCD181DD7347D009FF89E /* WBStatusCell.h */,
+				171BCD191DD7347D009FF89E /* WBStatusCell.m */,
+				1741E6721DE1DEBD00C887D0 /* YYFPSLabel.h */,
+				1741E6731DE1DEBD00C887D0 /* YYFPSLabel.m */,
 			);
 			name = view;
 			sourceTree = "<group>";
@@ -496,7 +496,6 @@
 				171BCCAB1DD4B6FF009FF89E /* LoginViewController.m in Sources */,
 				177B20F41DE43CB0005A1438 /* SendStatusViewController.m in Sources */,
 				171BCD0C1DD7025A009FF89E /* NSString+Additions.m in Sources */,
-				177B20F71DE43F11005A1438 /* APPHelper.m in Sources */,
 				177B20F11DE43650005A1438 /* TopicController.m in Sources */,
 				1743DCF01DEF16AB009D5298 /* NSDate+STalk.m in Sources */,
 				177B20FD1DE52CB0005A1438 /* WBPicture.m in Sources */,
@@ -512,6 +511,7 @@
 				171BCD0D1DD7025A009FF89E /* UIScreen+Additions.m in Sources */,
 				1741E6741DE1DEBD00C887D0 /* YYFPSLabel.m in Sources */,
 				17AFD3F71DDED732007C7DB9 /* StatusDetailViewController.m in Sources */,
+				1743DCF31DF05653009D5298 /* CommentsDataSource.m in Sources */,
 				17DAF7C41DEC628D00D11191 /* PhotoBrowerView.m in Sources */,
 				171BCCEA1DD60E71009FF89E /* HomeTableViewController.m in Sources */,
 				171BCCFE1DD6C110009FF89E /* UserWeiBoTableViewController.m in Sources */,

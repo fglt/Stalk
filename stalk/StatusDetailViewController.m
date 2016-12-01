@@ -11,20 +11,42 @@
 
 @interface StatusDetailViewController ()
 @property (nonatomic, strong) WBStatusView *statusView;
-@property (nonatomic, strong) UIView *contentView;
+@property (nonatomic, strong) UITableView *commentView;
 @end
 
 @implementation StatusDetailViewController
 
+- (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id <UIViewControllerTransitionCoordinator>)coordinator{
+    
+    [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
+        CGPoint origin = CGPointMake((size.width - CELL_WIDTH)/2, 0);
+        _statusView.origin =origin;
+    } completion:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
+    }];
+}
+
+- (instancetype)init{
+    self = [super init];
+    _statusView  = [WBStatusView new];
+    _commentView = [UITableView new];
+    return self;
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
-    _statusView  = [WBStatusView new];
+    self.view.backgroundColor = [UIColor whiteColor];
+
     [_statusView setWithLayout:_layout];
-    CGPoint origin = CGPointMake(([UIScreen mainScreen].bounds.size.width - CELL_WIDTH)/2, CGRectGetMaxY(self.navigationController.navigationBar.frame));
-    CGSize size = CGSizeMake(CELL_WIDTH, _layout.height);
-    _contentView = [[UIView alloc] initWithFrame:(CGRect){origin, size}];
-    [_contentView addSubview:_statusView];
-    [self.view addSubview:_contentView];
+    CGPoint origin = CGPointMake(([UIScreen mainScreen].bounds.size.width - CELL_WIDTH)/2, 0);
+    CGSize size = CGSizeMake(CELL_WIDTH, _layout.statusViewHeight);
+    _statusView.frame =(CGRect){origin, size};
+    
+    _commentView.frame = CGRectMake(origin.x, CGRectGetMaxY(_statusView.frame) +PADDING, CELL_WIDTH, self.view.height - _statusView.height);
+    
+    [self.view addSubview:_statusView];
+    [self.view addSubview:_commentView];
+    
+    
 }
 
 - (void)didReceiveMemoryWarning {

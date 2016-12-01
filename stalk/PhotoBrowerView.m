@@ -233,6 +233,10 @@
 
 - (instancetype)initWithItems:(NSArray<YYPhotoGroupItem *> *)items{
     self = [super init];
+    self.backgroundColor = [UIColor blackColor];
+    self.clipsToBounds = YES;
+    self.frame = [UIScreen mainScreen].bounds;
+    self.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     _groupItems = [items copy];
     [self start];
     return self;
@@ -327,11 +331,8 @@
     if (page == -1) page = 0;
     _fromItemIndex = page;
     self.currentIndex = page;
-    self.backgroundColor = [UIColor blackColor];
-    self.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-    
+
     UIView  *rootView =[UIApplication sharedApplication].keyWindow.rootViewController.view;
-    self.frame = rootView.bounds;
     [rootView addSubview:self];
     
     _scrollView.contentSize = CGSizeMake(_scrollView.width * self.groupItems.count, 1);
@@ -357,14 +358,38 @@
         cell.imageView.image = item.thumbImage;
         [cell resizeSubviewSize];
     }
-    CGRect fromFrame = [_fromView convertRect:_fromView.bounds toView:_scrollView];
-    
-    cell.imageContainerView.clipsToBounds = NO;
-    cell.imageView.frame = fromFrame;
-    cell.imageView.contentMode = UIViewContentModeScaleAspectFill;
     
     float oneTime = animated ? 0.2 : 0;
     
+    
+    if (item.thumbClippedToTop) {
+        CGRect fromFrame = [_fromView convertRect:_fromView.bounds toView:cell];
+        CGRect originFrame = cell.imageContainerView.frame;
+        CGFloat scale = fromFrame.size.width / cell.imageContainerView.width;
+        
+        cell.imageContainerView.centerX = CGRectGetMidX(fromFrame);
+        cell.imageContainerView.height = fromFrame.size.height / scale;
+        cell.imageContainerView.layer.transformScale = scale;
+        cell.imageContainerView.centerY = CGRectGetMidY(fromFrame);
+        
+        _scrollView.userInteractionEnabled = NO;
+        [UIView animateWithDuration:oneTime delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+            cell.imageContainerView.layer.transformScale = 1;
+            cell.imageContainerView.frame = originFrame;
+
+        }completion:^(BOOL finished) {
+            _isPresented = YES;
+            [self scrollViewDidScroll:_scrollView];
+            _scrollView.userInteractionEnabled = YES;
+        }];
+        
+    } else {
+        CGRect fromFrame = [_fromView convertRect:_fromView.bounds toView:cell.imageContainerView];
+        
+        cell.imageContainerView.clipsToBounds = NO;
+        cell.imageView.frame = fromFrame;
+        cell.imageView.contentMode = UIViewContentModeScaleAspectFill;
+
     _scrollView.userInteractionEnabled = NO;
     [UIView animateWithDuration:oneTime delay:0 options:UIViewAnimationOptionBeginFromCurrentState|UIViewAnimationOptionCurveEaseInOut animations:^{
         cell.imageView.frame = cell.imageContainerView.bounds;
@@ -374,7 +399,7 @@
         [self scrollViewDidScroll:_scrollView];
         _scrollView.userInteractionEnabled = YES;
     }];
-    
+    }
 }
 
 - (void)dismissAnimated:(BOOL)animated completion:(void (^)(void))completion {

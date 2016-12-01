@@ -9,9 +9,9 @@
 #import "NSDate+STalk.h"
 
 @implementation NSDate (STalk)
-+(NSDate *)USDateFromString:(NSString *)dateString format:(NSString *)format{
++(NSDate *)USDateFromString:(NSString *)dateString{
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-    [formatter setDateFormat:format];
+    [formatter setDateFormat:@"EEE MMM dd HH:mm:ss Z yyyy"];
     formatter.locale = [NSLocale localeWithLocaleIdentifier:@"US"];
     return [formatter dateFromString:dateString];
 }

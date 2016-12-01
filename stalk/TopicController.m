@@ -33,7 +33,7 @@
     UIActivityIndicatorView *indicator = [self activityIndicatorView];
     [indicator startAnimating];
     [self.view addSubview:indicator];
-    [self.dataSource loadDataAboutTopic:self.topic completionHandler:^(NSError *error) {
+    [self.dataSource loadDataAboutTopic:self.topic completion:^() {
         dispatch_async(dispatch_get_main_queue(), ^{
             [indicator removeFromSuperview];
             self.navigationController.view.userInteractionEnabled = YES;

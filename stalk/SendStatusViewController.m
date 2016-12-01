@@ -9,10 +9,11 @@
 #import "SendStatusViewController.h"
 #import "AppDelegate.h"
 #import "WBRequestQueue.h"
+#import "WBStatus.h"
 
 
 @interface SendStatusViewController ()
-@property (weak, nonatomic) IBOutlet UITextView *statusTextView;
+@property (strong, nonatomic) UITextView *statusTextView;
 
 @end
 
@@ -20,24 +21,49 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-//    [self.navigationController.navigationBar.backItem setTitle:@"取消"];
-    // Do any additional setup after loading the view.
+    UIBarButtonItem *cancelButton = [[UIBarButtonItem alloc] initWithTitle:@"取消" style:UIBarButtonItemStylePlain target:self action:@selector(cancel)];
+    [self.navigationItem setLeftBarButtonItem:cancelButton];
+    
+    UIBarButtonItem *sendButton = [[UIBarButtonItem alloc] initWithTitle:@"发送" style:UIBarButtonItemStylePlain target:self action:@selector(send)];
+
+    [self.navigationItem setRightBarButtonItem:sendButton] ;
+    self.navigationController.navigationBarHidden = NO;
+    _statusTextView = [UITextView new];
+    _statusTextView.frame = self.view.bounds;
+    _statusTextView.autoresizingMask = UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleHeight;
+    [self.view addSubview:_statusTextView];
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
 }
 
-- (IBAction)cancel:(id)sender {
+- (void)send{
+    AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+    switch (_messageType) {
+        case SendMessageTypeStatus:{
+            [WBHttpRequest requestForShareAStatus:_statusTextView.text contatinsAPicture:nil orPictureUrl:nil withAccessToken:appDelegate.wbAuthorizeResponse.accessToken andOtherProperties:nil queue:[WBRequestQueue queueForWBRequest] withCompletionHandler:^(WBHttpRequest *httpRequest, id result, NSError *error) {
+                NSLog(@"%@", result);
+            }];
+        }
+            break;
+        case SendMessageTypeRepost:{
+            [WBHttpRequest requestForRepostAStatus:[NSString stringWithFormat:@"%lld",_status.statusId] repostText:_statusTextView.text withAccessToken:appDelegate.wbAuthorizeResponse.accessToken andOtherProperties:nil queue:[WBRequestQueue queueForWBRequest] withCompletionHandler:^(WBHttpRequest *httpRequest, id result, NSError *error) {
+                NSLog(@"%@", result);
+            }];
+        }
+        case SendMessageTypeComment:{
+            
+        }
+            break;
+        default:
+            break;
+    }
+}
+
+- (void)cancel{
     [self.navigationController popViewControllerAnimated:YES];
 }
 
-- (IBAction)sendStatus:(UIBarButtonItem *)sender {
-    AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
-    [WBHttpRequest requestForShareAStatus:_statusTextView.text contatinsAPicture:nil orPictureUrl:nil withAccessToken:appDelegate.wbAuthorizeResponse.accessToken andOtherProperties:nil queue:[WBRequestQueue queueForWBRequest] withCompletionHandler:^(WBHttpRequest *httpRequest, id result, NSError *error) {
-        NSLog(@"%@", result);
-    }];
-}
 
 @end

@@ -20,9 +20,184 @@
 #import "AppDelegate.h"
 #import "WBStatusHelper.h"
 
+@implementation WBUserView
 
-@interface WBStatusView()
+- (instancetype)init{
+    self= [super init];
+    self.frame = CGRectMake(0, 0, CellContentWidth, ICONWIDTH);
+    _icon = [[UIImageView alloc] init];
+    
+    _icon.frame = CGRectMake(PADDING, 0, ICONWIDTH, ICONWIDTH);
+    _icon.layer.cornerRadius = ICONWIDTH>>1;
+    _icon.clipsToBounds = YES;
+    
+    _name = [[UILabel alloc] init];
+    _name.font =[UIFont systemFontOfSize:SIZE_FONT_CONTENT];
+    
+    _name.frame = CGRectMake(CGRectGetMaxX(_icon.frame)+PADDING, 0, 100, _name.font.lineHeight);
+    _from = [[UILabel alloc] init];
+    
+    _from.font =[UIFont systemFontOfSize:SIZE_FONT_CONTENT-5];
+    
+    _from.frame = CGRectMake(self.name.frame.origin.x, CGRectGetMaxY(self.name.frame)+5, 100,_from.font.lineHeight);
 
+    [self addSubview:_icon];
+    [self addSubview:_name];
+    [self addSubview:_from];
+    return self;
+}
+
+- (void)setWithLayout:(WBStatusLayout *)layout{
+    self.width = MAX(layout.nameWidth, layout.fromWidth) + ICONWIDTH + PADDING*2;
+    [_icon setImageWithURL:[NSURL URLWithString:layout.status.user.avatarLarge] //profileImageURL
+               placeholder:nil
+                   options:kNilOptions
+                   manager:[WBStatusHelper avatarImageManager]
+                  progress:nil
+                 transform:nil
+                completion:nil];
+    _name.text = layout.status.user.screenName;
+    _name.width =layout.nameWidth;
+    _from.text = layout.fromText;
+    _from.width =layout.fromWidth;
+    
+}
+
+- (NSString *) sourceWithString:(NSString *)source{
+    u_long i = source.length-1;
+    char j=0;
+    for(; i>0; i--){
+        if([source characterAtIndex:i] == '>'){
+            if(j==1)break;
+            j++;
+        }
+    }
+    return [source substringWithRange:NSMakeRange(i+1, source.length-4 -i-1 )];
+}
+@end
+
+@implementation WBToolbarView
+
+- (instancetype)init{
+    self= [super init];
+    self.frame = CGRectMake(0, 0, CellContentWidth, ToolbarHeight);
+    CGFloat width = CellContentWidth/3.0;
+    _repostButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    _repostButton.frame = CGRectMake(0, 0, width, ToolbarHeight);
+    
+    
+    _commentButton= [UIButton buttonWithType:UIButtonTypeCustom];
+    _commentButton.frame = CGRectMake(width, 0, width, ToolbarHeight);
+    
+    _likeButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    _likeButton.frame = CGRectMake(width*2, 0, width, ToolbarHeight);
+    
+    _repostImageView = [[UIImageView alloc] initWithImage:[WBStatusHelper imageNamed:@"timeline_icon_retweet"]];
+    _repostImageView.centerY = self.height / 2;
+    [_repostButton addSubview:_repostImageView];
+    _commentImageView = [[UIImageView alloc] initWithImage:[WBStatusHelper imageNamed:@"timeline_icon_comment"]];
+    _commentImageView.centerY = self.height / 2;
+    [_commentButton addSubview:_commentImageView];
+    _likeImageView = [[UIImageView alloc] initWithImage:[WBStatusHelper imageNamed:@"timeline_icon_unlike"]];
+    _likeImageView.centerY = self.height / 2;
+    [_likeButton addSubview:_likeImageView];
+    
+    
+    _repostLabel = [UILabel new];
+    _repostLabel.userInteractionEnabled = NO;
+    _repostLabel.height = self.height;
+    [_repostButton addSubview:_repostLabel];
+    
+    _commentLabel = [UILabel new];
+    _commentLabel.userInteractionEnabled = NO;
+    _commentLabel.height = self.height;
+    [_commentButton addSubview:_commentLabel];
+    
+    _likeLabel = [UILabel new];
+    _likeLabel.userInteractionEnabled = NO;
+    _likeLabel.height = self.height;
+    [_likeButton addSubview:_likeLabel];
+    
+    
+    UIColor *dark = [UIColor colorWithWhite:0 alpha:0.2];
+    UIColor *clear = [UIColor colorWithWhite:0 alpha:0];
+    NSArray *colors = @[(id)clear.CGColor,(id)dark.CGColor, (id)clear.CGColor];
+    NSArray *locations = @[@0.2, @0.5, @0.8];
+    _line1 = [CAGradientLayer layer];
+    _line1.colors = colors;
+    _line1.locations = locations;
+    _line1.startPoint = CGPointMake(0, 0);
+    _line1.endPoint = CGPointMake(0, 1);
+    _line1.size = CGSizeMake(CGFloatFromPixel(1), self.height);
+    _line1.left = _repostButton.right;
+    
+    _line2 = [CAGradientLayer layer];
+    _line2.colors = colors;
+    _line2.locations = locations;
+    _line2.startPoint = CGPointMake(0, 0);
+    _line2.endPoint = CGPointMake(0, 1);
+    _line2.size = CGSizeMake(CGFloatFromPixel(1), self.height);
+    _line2.left = _commentButton.right;
+    
+    _topLine = [CALayer layer];
+    _topLine.size = CGSizeMake(self.width, CGFloatFromPixel(1));
+    _topLine.backgroundColor = kWBCellLineColor.CGColor;
+    
+    _bottomLine = [CALayer layer];
+    _bottomLine.size = _topLine.size;
+    _bottomLine.bottom = self.height;
+    _bottomLine.backgroundColor = UIColorHex(e8e8e8).CGColor;
+    
+    [self addSubview:_repostButton];
+    [self addSubview:_commentButton];
+    [self addSubview:_likeButton];
+    [self.layer addSublayer:_line1];
+    [self.layer addSublayer:_line2];
+    [self.layer addSublayer:_topLine];
+    [self.layer addSublayer:_bottomLine];
+    
+    __weak typeof(self) weakself = self;
+    [_repostButton addBlockForControlEvents:UIControlEventTouchUpInside block:^(id sender) {
+        WBStatusCell *cell = weakself.cell;
+        if ([cell.delegate respondsToSelector:@selector(cellDidClickRepost:)]) {
+            [cell.delegate cellDidClickRepost:cell];
+        }
+    }];
+    
+    [_commentButton addBlockForControlEvents:UIControlEventTouchUpInside block:^(id sender) {
+        WBStatusCell *cell = weakself.cell;
+        if ([cell.delegate respondsToSelector:@selector(cellDidClickComment:)]) {
+            [cell.delegate cellDidClickComment:cell];
+        }
+    }];
+    
+    [_likeButton addBlockForControlEvents:UIControlEventTouchUpInside block:^(id sender) {
+        WBStatusCell *cell = weakself.cell;
+        if ([cell.delegate respondsToSelector:@selector(cellDidClickLike:)]) {
+            [cell.delegate cellDidClickLike:cell];
+        }
+    }];
+
+    return self;
+}
+
+- (void)setWithLayout:(WBStatusLayout *)layout{
+    _repostLabel.attributedText = layout.repostText;
+    _repostLabel.width = layout.repostTextWidth;
+    _repostImageView.left = (_repostButton.width - _repostImageView.width - _repostLabel.width-ToolbarGap)/2;
+    _repostLabel.right = _repostButton.width -_repostImageView.left;
+    
+    _commentLabel.attributedText = layout.commentText;
+    _commentLabel.width = layout.commentTextWidth;
+    _commentImageView.left = (_commentButton.width - _commentImageView.width - _commentLabel.width-ToolbarGap)/2;
+    _commentLabel.right = _commentButton.left - _commentImageView.left;
+    
+    _likeLabel.attributedText = layout.likeText;
+    _likeLabel.width = layout.likeTextWidth;
+    _likeImageView.left = (_likeButton.width - _likeImageView.width - _likeLabel.width-ToolbarGap)/2;
+    _likeLabel.right = _likeButton.width  - _likeImageView.left;
+    
+}
 
 @end
 
@@ -35,24 +210,9 @@
     _contentView = [UIView new];
     self.width = CELL_WIDTH;
     _contentView.width = CELL_WIDTH;
-    //头像
-    _icon = [[UIImageView alloc] init];
-    [self.contentView addSubview:_icon];
-    
-    _icon.frame = CGRectMake(PADDING, PADDING, ICONWIDTH, ICONWIDTH);
-    _icon.layer.cornerRadius = ICONWIDTH>>1;
-    _icon.clipsToBounds = YES;
-    
-    //名字
-    _name = [[UILabel alloc] init];
-    _name.font =[UIFont systemFontOfSize:SIZE_FONT_CONTENT];
-    [self.contentView addSubview:_name];
-    
-    _name.frame = CGRectMake(ICONWIDTH + PADDING *2, PADDING, 250, 20);
-    _from = [[UILabel alloc] init];
-    _from.font =[UIFont systemFontOfSize:SIZE_FONT_CONTENT-5];
-    [self.contentView addSubview:_from];
-    _from.frame = CGRectMake(self.name.frame.origin.x, CGRectGetMaxY(self.name.frame) +PADDING, 250,ICONWIDTH -self.name.frame.size.height-PADDING);
+ 
+    _userView = [WBUserView new];
+    [self.contentView addSubview:_userView];
     //内容
     _statusText = [[MLLinkLabel alloc] init];
     [self.contentView addSubview:_statusText];
@@ -67,24 +227,16 @@
     
     _retweetPictureHolder = [[UIView alloc]init];
     [_retweetContentView addSubview:_retweetPictureHolder];
-    
+
     [self addSubview:_contentView];
     return self;
 }
 
 - (void)setWithLayout:(WBStatusLayout *)layout{
-    self.height = layout.height;
-    _contentView.height = layout.height;
-    //_icon.imageURL =[NSURL URLWithString:layout.status.user.avatarLarge];
-    [_icon setImageWithURL:[NSURL URLWithString:layout.status.user.avatarLarge] //profileImageURL
-               placeholder:nil
-                   options:kNilOptions
-                   manager:[WBStatusHelper avatarImageManager] 
-                  progress:nil
-                 transform:nil
-                completion:nil];
-    _name.text =layout.status.user.screenName;
-    _from.text = [NSString stringWithFormat:@"%@ 来自%@", [WBStatusHelper stringWithTimelineDate:layout.status.createdAt], [ self sourceWithString:layout.status.source]];
+    self.height = layout.statusViewHeight;
+    _contentView.top = PADDING;
+    _contentView.height = self.height - PADDING*2;
+    [_userView setWithLayout:layout];
     [self layoutStatusTextWithLayout:layout];
     [self layoutRetweetWithLayout:layout];
     [self addPicViewWithLayout:layout];
@@ -173,8 +325,8 @@
             [thumbView.layer setImageWithURL:[WBStatusHelper defaultURLForImageURL:url] placeholder:nil options:YYWebImageOptionAvoidSetImage completion:^(UIImage * _Nullable image, NSURL * _Nonnull url, YYWebImageFromType from, YYWebImageStage stage, NSError * _Nullable error) {
                 if(!image) return;
                 if(stage != YYWebImageStageFinished) return;
-                int width = image.size.width;
-                int height = image.size.height;
+                CGFloat width = image.size.width;
+                CGFloat height = image.size.height;
                 
                 CGFloat factor= (CGFloat)height/width;
                 if(pictures.count==1){
@@ -183,7 +335,7 @@
                     weakThumb.width = weakThumb.height/factor;
                 }
                 CGFloat scale = (height/width) / (weakThumb.height / weakThumb.width);
-                if (scale < 0.99 || isnan(scale)) {
+                if (scale <= 1 || isnan(scale)) {
                     weakThumb.contentMode = UIViewContentModeScaleAspectFill;
                     weakThumb.layer.contentsRect = CGRectMake(0, 0, 1, 1);
                 } else {
@@ -229,11 +381,6 @@
                 case WBPictureBadgeTypeGIF: {
                     badge.layer.contents = (__bridge id)([WBStatusHelper imageNamed:@"timeline_image_gif"].CGImage);
                     badge.hidden = NO;
-//                    __weak __typeof__(thumbView) weakThumb = thumbView;
-//                    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithActionBlock:^(id  _Nonnull sender) {
-//                        weakThumb.autoPlayAnimatedImage = !weakThumb.autoPlayAnimatedImage;
-//                    }];
-//                    [badge addGestureRecognizer:tap];
                 } break;
             }
 
@@ -257,37 +404,25 @@
     [self.statusCell.delegate cell:self.statusCell didClickImageAt:recognizer.view.tag];
 }
 
-- (NSString *) sourceWithString:(NSString *)source{
-    u_long i = source.length-1;
-    char j=0;
-    for(; i>0; i--){
-        if([source characterAtIndex:i] == '>'){
-            if(j==1)break;
-            j++;
-        }
-    }
-    return [source substringWithRange:NSMakeRange(i+1, source.length-4 -i-1 )];
-}
-
-- (NSString *)imageFilePath:(NSString *)urlstr{
-    u_long i = urlstr.length-1;
-    for(; i>0; i--){
-        if([urlstr characterAtIndex:i] == '/'){
-            break;
-        }
-    }
-    return [urlstr substringToIndex:i+1];
-}
-
-- (NSString *)imageName:(NSString *)urlstr{
-    u_long i = urlstr.length-1;
-    for(; i>0; i--){
-        if([urlstr characterAtIndex:i] == '/'){
-            break;
-        }
-    }
-    return [urlstr substringFromIndex:i+1];
-}
+//- (NSString *)imageFilePath:(NSString *)urlstr{
+//    u_long i = urlstr.length-1;
+//    for(; i>0; i--){
+//        if([urlstr characterAtIndex:i] == '/'){
+//            break;
+//        }
+//    }
+//    return [urlstr substringToIndex:i+1];
+//}
+//
+//- (NSString *)imageName:(NSString *)urlstr{
+//    u_long i = urlstr.length-1;
+//    for(; i>0; i--){
+//        if([urlstr characterAtIndex:i] == '/'){
+//            break;
+//        }
+//    }
+//    return [urlstr substringFromIndex:i+1];
+//}
 
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
@@ -312,7 +447,7 @@
             [_statusCell.delegate cellDidClickRetweet:_statusCell];
         }
     } else {
-        if(CGRectContainsPoint(_icon.frame, location) || CGRectContainsPoint(_name.frame, location)){
+        if(CGRectContainsPoint(_userView.frame, location)){
             [_statusCell.delegate cellDidClickUser:_statusCell];
         }else{
             [_statusCell.delegate cellDidClick:_statusCell];
@@ -333,174 +468,6 @@
 }
 @end
 
-//@implementation WBStatusToolbarView
-//- (instancetype)initWithFrame:(CGRect)frame {
-//    if (frame.size.width == 0 && frame.size.height == 0) {
-//        frame.size.width =  CELL_WIDTH;
-//        frame.size.height = kWBCellToolbarHeight;
-//    }
-//    self = [super initWithFrame:frame];
-//    self.exclusiveTouch = YES;
-//    
-//    _repostButton = [UIButton buttonWithType:UIButtonTypeCustom];
-//    _repostButton.exclusiveTouch = YES;
-//    _repostButton.size = CGSizeMake(CGFloatPixelRound(self.width / 3.0), self.height);
-//    [_repostButton setBackgroundImage:[UIImage imageWithColor:kWBCellHighlightColor] forState:UIControlStateHighlighted];
-//    
-//    _commentButton = [UIButton buttonWithType:UIButtonTypeCustom];
-//    _commentButton.exclusiveTouch = YES;
-//    _commentButton.size = CGSizeMake(CGFloatPixelRound(self.width / 3.0), self.height);
-//    _commentButton.left = CGFloatPixelRound(self.width / 3.0);
-//    [_commentButton setBackgroundImage:[UIImage imageWithColor:kWBCellHighlightColor] forState:UIControlStateHighlighted];
-//    
-//    _likeButton = [UIButton buttonWithType:UIButtonTypeCustom];
-//    _likeButton.exclusiveTouch = YES;
-//    _likeButton.size = CGSizeMake(CGFloatPixelRound(self.width / 3.0), self.height);
-//    _likeButton.left = CGFloatPixelRound(self.width / 3.0 * 2.0);
-//    [_likeButton setBackgroundImage:[UIImage imageWithColor:kWBCellHighlightColor] forState:UIControlStateHighlighted];
-//    NSString *bundleName = @"ResourceWeibo.bundle";
-//    _repostImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:[bundleName stringByAppendingPathComponent:@"timeline_icon_retweet"]]];
-//    _repostImageView.centerY = self.height / 2;
-//    [_repostButton addSubview:_repostImageView];
-//    _commentImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:[bundleName stringByAppendingPathComponent:@"timeline_icon_comment"]]];
-//    _commentImageView.centerY = self.height / 2;
-//    [_commentButton addSubview:_commentImageView];
-//    _likeImageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:[bundleName stringByAppendingPathComponent:@"timeline_icon_unlike"]]];
-//    _likeImageView.centerY = self.height / 2;
-//    [_likeButton addSubview:_likeImageView];
-//    
-//    _repostLabel = [YYLabel new];
-//    _repostLabel.userInteractionEnabled = NO;
-//    _repostLabel.height = self.height;
-//    _repostLabel.textVerticalAlignment = YYTextVerticalAlignmentCenter;
-//    _repostLabel.displaysAsynchronously = YES;
-//    _repostLabel.ignoreCommonProperties = YES;
-//    _repostLabel.fadeOnHighlight = NO;
-//    _repostLabel.fadeOnAsynchronouslyDisplay = NO;
-//    [_repostButton addSubview:_repostLabel];
-//    
-//    _commentLabel = [YYLabel new];
-//    _commentLabel.userInteractionEnabled = NO;
-//    _commentLabel.height = self.height;
-//    _commentLabel.textVerticalAlignment = YYTextVerticalAlignmentCenter;
-//    _commentLabel.displaysAsynchronously = YES;
-//    _commentLabel.ignoreCommonProperties = YES;
-//    _commentLabel.fadeOnHighlight = NO;
-//    _commentLabel.fadeOnAsynchronouslyDisplay = NO;
-//    [_commentButton addSubview:_commentLabel];
-//    
-//    _likeLabel = [YYLabel new];
-//    _likeLabel.userInteractionEnabled = NO;
-//    _likeLabel.height = self.height;
-//    _likeLabel.textVerticalAlignment = YYTextVerticalAlignmentCenter;
-//    _likeLabel.displaysAsynchronously = YES;
-//    _likeLabel.ignoreCommonProperties = YES;
-//    _likeLabel.fadeOnHighlight = NO;
-//    _likeLabel.fadeOnAsynchronouslyDisplay = NO;
-//    [_likeButton addSubview:_likeLabel];
-//    
-//    UIColor *dark = [UIColor colorWithWhite:0 alpha:0.2];
-//    UIColor *clear = [UIColor colorWithWhite:0 alpha:0];
-//    NSArray *colors = @[(id)clear.CGColor,(id)dark.CGColor, (id)clear.CGColor];
-//    NSArray *locations = @[@0.2, @0.5, @0.8];
-//    
-//    _line1 = [CAGradientLayer layer];
-//    _line1.colors = colors;
-//    _line1.locations = locations;
-//    _line1.startPoint = CGPointMake(0, 0);
-//    _line1.endPoint = CGPointMake(0, 1);
-//    _line1.size = CGSizeMake(CGFloatFromPixel(1), self.height);
-//    _line1.left = _repostButton.right;
-//    
-//    _line2 = [CAGradientLayer layer];
-//    _line2.colors = colors;
-//    _line2.locations = locations;
-//    _line2.startPoint = CGPointMake(0, 0);
-//    _line2.endPoint = CGPointMake(0, 1);
-//    _line2.size = CGSizeMake(CGFloatFromPixel(1), self.height);
-//    _line2.left = _commentButton.right;
-//    
-//    _topLine = [CALayer layer];
-//    _topLine.size = CGSizeMake(self.width, CGFloatFromPixel(1));
-//    _topLine.backgroundColor = kWBCellLineColor.CGColor;
-//    
-//    _bottomLine = [CALayer layer];
-//    _bottomLine.size = _topLine.size;
-//    _bottomLine.bottom = self.height;
-//    _bottomLine.backgroundColor = UIColorHex(e8e8e8).CGColor;
-//    
-//    [self addSubview:_repostButton];
-//    [self addSubview:_commentButton];
-//    [self addSubview:_likeButton];
-//    [self.layer addSublayer:_line1];
-//    [self.layer addSublayer:_line2];
-//    [self.layer addSublayer:_topLine];
-//    [self.layer addSublayer:_bottomLine];
-//    
-//    @weakify(self);
-//    [_repostButton addBlockForControlEvents:UIControlEventTouchUpInside block:^(id sender) {
-//        WBStatusCell *cell = weak_self.cell;
-//        if ([cell.delegate respondsToSelector:@selector(cellDidClickRepost:)]) {
-//            [cell.delegate cellDidClickRepost:cell];
-//        }
-//    }];
-//    
-//    [_commentButton addBlockForControlEvents:UIControlEventTouchUpInside block:^(id sender) {
-//        WBStatusCell *cell = weak_self.cell;
-//        if ([cell.delegate respondsToSelector:@selector(cellDidClickComment:)]) {
-//            [cell.delegate cellDidClickComment:cell];
-//        }
-//    }];
-//    
-//    [_likeButton addBlockForControlEvents:UIControlEventTouchUpInside block:^(id sender) {
-//        WBStatusCell *cell = weak_self.cell;
-//        if ([cell.delegate respondsToSelector:@selector(cellDidClickLike:)]) {
-//            [cell.delegate cellDidClickLike:cell];
-//        }
-//    }];
-//    return self;
-//}
-//
-//- (void)setWithLayout:(WBStatusLayout *)layout {
-//    _repostLabel.width = 30;
-//    _commentLabel.width = 30;
-//    _likeLabel.width = 30;
-//    
-//    [self adjustImage:_repostImageView label:_repostLabel inButton:_repostButton];
-//    [self adjustImage:_commentImageView label:_commentLabel inButton:_commentButton];
-//    [self adjustImage:_likeImageView label:_likeLabel inButton:_likeButton];
-//    
-//    _likeImageView.image = layout.status.attitudesCount>0 ? [self likeImage] : [self unlikeImage];
-//}
-//
-//- (UIImage *)likeImage {
-//    static UIImage *img;
-//    static dispatch_once_t onceToken;
-//    dispatch_once(&onceToken, ^{
-//        img = [WBStatusHelper imageNamed:@"timeline_icon_like"];
-//    });
-//    return img;
-//}
-//
-//- (UIImage *)unlikeImage {
-//    static UIImage *img;
-//    static dispatch_once_t onceToken;
-//    dispatch_once(&onceToken, ^{
-//        img = [WBStatusHelper imageNamed:@"timeline_icon_unlike"];
-//    });
-//    return img;
-//}
-//
-//- (void)adjustImage:(UIImageView *)image label:(YYLabel *)label inButton:(UIButton *)button {
-//    CGFloat imageWidth = image.bounds.size.width;
-//    CGFloat labelWidth = label.width;
-//    CGFloat paddingMid = 5;
-//    CGFloat paddingSide = (button.width - imageWidth - labelWidth - paddingMid) / 2.0;
-//    image.centerX = CGFloatPixelRound(paddingSide + imageWidth / 2);
-//    label.right = CGFloatPixelRound(button.width - paddingSide);
-//}
-//
-//@end
 
 
 @interface WBStatusCell ()
@@ -535,7 +502,11 @@
         self.selectionStyle = UITableViewCellSelectionStyleNone;
         _statusView  = [[WBStatusView alloc] init];
         _statusView.statusCell = self;
+        _toolbar = WBToolbarView.new;
+        _toolbar.cell = self;
+        
         [self.contentView addSubview:_statusView];
+        [self.contentView addSubview:_toolbar];
     }
     return self;
 }
@@ -543,7 +514,12 @@
 //重写set方法，模型传递
 - (void)setLayout:(WBStatusLayout *)layout{
     _layout = layout;
+    
     [self.statusView setWithLayout:_layout];
+    
+    _toolbar.frame = CGRectMake(PADDING, layout.height-ToolbarHeight, CellContentWidth, ToolbarHeight);
+    
+    [_toolbar setWithLayout:layout];
 }
 
 

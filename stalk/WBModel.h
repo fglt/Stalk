@@ -8,8 +8,9 @@
 
 #import <Foundation/Foundation.h>
 
-
+@class WBUser;
 @class WBEmoticonGroup;
+@class WBStatus;
 
 typedef NS_ENUM(NSUInteger, WBEmoticonType) {
     WBEmoticonTypeImage = 0, ///< 图片表情
@@ -26,7 +27,6 @@ typedef NS_ENUM(NSUInteger, WBEmoticonType) {
 @property (nonatomic, weak) WBEmoticonGroup *group;
 @end
 
-
 @interface WBEmoticonGroup : NSObject
 @property (nonatomic, strong) NSString *groupID; ///< 例如 com.sina.default
 @property (nonatomic, assign) NSInteger version;
@@ -36,4 +36,17 @@ typedef NS_ENUM(NSUInteger, WBEmoticonType) {
 @property (nonatomic, assign) NSInteger displayOnly;
 @property (nonatomic, assign) NSInteger groupType;
 @property (nonatomic, strong) NSArray<WBEmoticon *> *emoticons;
+@end
+
+@interface WBComment : NSObject
+@property (nonatomic) int64_t commentID;
+@property (nonatomic, strong) NSDate *createdAt;
+@property (nonatomic, strong) NSString *text;
+@property (nonatomic, strong) NSString *source;
+@property (nonatomic, strong) WBUser *user;
+@property (nonatomic, strong) NSString *mid;
+@property (nonatomic, strong) WBStatus *status;
+@property (nonatomic, strong) WBComment *replyComment;
+
++ (instancetype)commentWithDictionary:(NSDictionary *)dict;
 @end
