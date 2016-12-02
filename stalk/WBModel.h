@@ -44,4 +44,5 @@ typedef NS_ENUM(NSUInteger, WBEmoticonType) {
 @property (nonatomic, strong) WBComment *replyComment;
 
 + (instancetype)commentWithDictionary:(NSDictionary *)dict;
++ (NSArray *)commentsWithArray:(NSArray *)array;
 @end

@@ -91,12 +91,6 @@
 
 
 /**
- *	微博作者的用户信息字段
- */
-@property (nonatomic, copy)NSString *userId;
-
-
-/**
  *	地理信息字段
  */
 //@property (nonatomic, retain)Geo *geo;

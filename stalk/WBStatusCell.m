@@ -57,9 +57,11 @@
                  transform:nil
                 completion:nil];
     _name.text = layout.message.user.screenName;
+    _name.font = layout.nameFont;
     _name.width =layout.nameWidth;
     _from.text = layout.fromText;
     _from.width =layout.fromWidth;
+    _from.font = layout.fromFont;
 }
 
 - (NSString *) sourceWithString:(NSString *)source{
@@ -515,9 +517,33 @@
     return self;
 }
 
+- (void)setFrame:(CGRect)frame {
+    CGFloat startX = ( [UIScreen mainScreen].bounds.size.width-CELL_WIDTH)/2;
+    frame.origin.x += startX;
+    frame.size.width -= 2 * startX;
+    [super setFrame:frame];
+}
+
+- (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
+{
+    self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
+    if(!self) return nil;
+  
+    self.selectionStyle = UITableViewCellSelectionStyleNone;
+    _userView  = [[WBUserView alloc] init];
+    _commentTextLabel = [MLLabel new];
+    
+    [self.contentView addSubview:_userView];
+    [self.contentView addSubview:_commentTextLabel];
+    
+    return self;
+}
+
 - (void)setLayout:(WBCommentLayout *)layout{
     [_userView setWithLayout:layout.userLayout];
     _commentTextLabel.frame = CGRectMake(PADDING, CGRectGetMaxY(self.userView.frame)+PADDING, layout.commentSize.width, layout.commentSize.height);
+    _commentTextLabel.numberOfLines = 0;
+    _commentTextLabel.attributedText = layout.commentText;
 }
 
 @end

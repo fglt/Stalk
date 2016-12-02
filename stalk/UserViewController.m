@@ -40,8 +40,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    [self clearImage];
-    
+    self.view.backgroundColor = [UIColor whiteColor];
     _screenName.text = _user.screenName;
     _iconImage.layer.cornerRadius = _iconImage.frame.size.width/2;
     _iconImage.clipsToBounds =YES;

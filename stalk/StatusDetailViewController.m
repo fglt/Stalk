@@ -8,60 +8,72 @@
 
 #import "StatusDetailViewController.h"
 #import "WBStatusCell.h"
+#import "CommentsDataSource.h"
+#import "WBStatusCellDelegateIMP.h"
 
 @interface StatusDetailViewController ()
-@property (nonatomic, strong) WBStatusView *statusView;
+@property (nonatomic, strong) WBStatusCell *statusCell;
 @property (nonatomic, strong) UITableView *commentView;
+@property (nonatomic, strong) CommentsDataSource *dataSource;
+@property (nonatomic, strong) WBStatusCellDelegateIMP *cellDelegate;
 @end
 
 @implementation StatusDetailViewController
 
-- (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id <UIViewControllerTransitionCoordinator>)coordinator{
-    
-    [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
-        CGPoint origin = CGPointMake((size.width - CELL_WIDTH)/2, 0);
-        _statusView.origin =origin;
-    } completion:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
-    }];
-}
+//- (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id <UIViewControllerTransitionCoordinator>)coordinator{
+//    
+//    [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
+//        CGPoint origin = CGPointMake((size.width - CELL_WIDTH)/2, 0);
+//        _statusCell.origin =origin;
+//    } completion:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
+//    }];
+//}
 
-- (instancetype)init{
-    self = [super init];
-    _statusView  = [WBStatusView new];
-    _commentView = [UITableView new];
-    return self;
-}
+//- (void)loadView{
+//    UITableView *tableView = [[UITableView alloc] initWithFrame:[UIScreen mainScreen].bounds style:UITableViewStylePlain];
+//    
+//    tableView.
+//}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.view.backgroundColor = [UIColor whiteColor];
+    
+    _cellDelegate = [[WBStatusCellDelegateIMP alloc] initWithController:self];
 
-    [_statusView setWithLayout:_layout];
-    CGPoint origin = CGPointMake(([UIScreen mainScreen].bounds.size.width - CELL_WIDTH)/2, 0);
-    CGSize size = CGSizeMake(CELL_WIDTH, _layout.statusViewHeight);
-    _statusView.frame =(CGRect){origin, size};
-    
-    _commentView.frame = CGRectMake(origin.x, CGRectGetMaxY(_statusView.frame) +PADDING, CELL_WIDTH, self.view.height - _statusView.height);
-    
-    [self.view addSubview:_statusView];
-    [self.view addSubview:_commentView];
-    
-    
+    _statusCell  = [WBStatusCell new];
+    _statusCell.layout = _layout;
+    _statusCell.delegate = _cellDelegate;
+    UIView *headerView = [UIView new];
+   
+    _dataSource = [[CommentsDataSource alloc]initWithCellIdentifer:@"CommentIdentifer"];
+   
+    CGPoint origin = CGPointMake(([UIScreen mainScreen].bounds.size.width - CELL_WIDTH)/2 - PADDING, 0);
+    CGSize size = CGSizeMake(CELL_WIDTH, _layout.height);
+    _statusCell.frame =(CGRect){origin, size};
+    [headerView addSubview:_statusCell];
+    headerView.height = size.height+5;
+    self.tableView.tableHeaderView = headerView;
+
+    self.tableView.delegate = _dataSource;
+    self.tableView.dataSource = _dataSource;
+    [_dataSource loadCommentsForStatus:_layout.status.lid withCompletion:^{
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self.tableView reloadData];
+        });
+        
+    }];
+
 }
+
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
 
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
+-(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
+    return [_dataSource cellHeightAtIndex:indexPath.row];
 }
-*/
+
 
 @end

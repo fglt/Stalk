@@ -41,6 +41,8 @@
 #define TopicRegular @"#[^#]+#"
 
 @interface WBUserLayout : NSObject
+@property (nonatomic) UIFont *nameFont;
+@property (nonatomic) UIFont *fromFont;
 @property (nonatomic) CGFloat fromWidth;
 @property (nonatomic) CGFloat nameWidth;
 @property (nonatomic, strong) NSString *fromText;
@@ -49,6 +51,7 @@
 
 - (instancetype)initWithMessage:(WBBaseMessage *)message;
 - (instancetype)initWithMessage:(WBBaseMessage *)message displaySource:(BOOL)displaySource;
+- (void)layout;
 @end
 
 @interface WBToolbarLayout : NSObject
@@ -98,4 +101,5 @@
 @property (nonatomic) CGSize commentSize;
 @property (nonatomic) CGFloat cellHeight;
 - (instancetype)initWithComment:(WBComment *)comment;
++ (NSMutableArray *)layoutsWithComments:(NSArray *)comments;
 @end

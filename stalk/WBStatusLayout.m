@@ -21,7 +21,6 @@
     self = [super init];
     _displaySource = displaySource;
     _message = message;
-    [self layout];
     return self;
 }
 
@@ -29,7 +28,6 @@
     self = [super init];
     _displaySource = NO;
     _message = message;
-    [self layout];
     return self;
 }
 
@@ -40,9 +38,9 @@
         _fromText = [self.dateFormatter stringFromDate:_message.createdAt];
     }
     
-    _fromWidth = [_fromText boundingRectWithSize:CGSizeMake(500, 500) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:SIZE_FONT_CONTENT-5]} context:nil].size.width;
+    _fromWidth = [_fromText boundingRectWithSize:CGSizeMake(500, 500) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName:_fromFont} context:nil].size.width;
     
-    _nameWidth = [_message.user.screenName boundingRectWithSize:CGSizeMake(500, 500) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:SIZE_FONT_CONTENT]} context:nil].size.width;
+    _nameWidth = [_message.user.screenName boundingRectWithSize:CGSizeMake(500, 500) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName:_nameFont} context:nil].size.width;
 }
 
 - (NSDateFormatter *)dateFormatter{
@@ -176,7 +174,11 @@
     _toolbarLayout = [WBToolbarLayout new];
     [_toolbarLayout layoutWithStatus:_status];
     
+
     _userLayout = [[WBUserLayout alloc] initWithMessage:_status displaySource:YES];
+    _userLayout.nameFont = [UIFont systemFontOfSize:SIZE_FONT_CONTENT-2];
+    _userLayout.fromFont = [UIFont systemFontOfSize:SIZE_FONT_CONTENT-5];
+    [_userLayout layout];
 }
 
 - (CGFloat) heightForPic:(NSUInteger) count{
@@ -202,10 +204,21 @@
 
 - (void)layout{
     _userLayout = [[WBUserLayout alloc] initWithMessage:_comment];
+    _userLayout.nameFont = [UIFont systemFontOfSize:SIZE_FONT_CONTENT-4];
+    _userLayout.fromFont = [UIFont systemFontOfSize:SIZE_FONT_CONTENT-7];
+    [_userLayout layout];
     _commentText = [[NSMutableAttributedString alloc]initWithString:_comment.text attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:SIZE_FONT_CONTENT-3]}];
     [_commentText replaceEmotion];
     _commentSize = [_commentText boundingRectWithSize:CGSizeMake(CellContentWidth-ICONWIDTH, 1000) options:NSStringDrawingUsesLineFragmentOrigin context:nil].size;
     _cellHeight  = PADDING*3 + ICONWIDTH  + _commentSize.height;
 }
 
++ (NSMutableArray *)layoutsWithComments:(NSArray *)comments{
+    NSMutableArray *layouts= [NSMutableArray arrayWithCapacity:comments.count];
+    for(WBComment *comment in comments){
+        WBCommentLayout *layout = [[WBCommentLayout alloc]initWithComment:comment];
+        [layouts addObject:layout];
+    }
+    return layouts;
+}
 @end

@@ -9,6 +9,6 @@
 #import <UIKit/UIKit.h>
 @class WBStatusLayout;
 
-@interface StatusDetailViewController : UIViewController
+@interface StatusDetailViewController : UITableViewController
 @property (nonatomic, strong) WBStatusLayout *layout;
 @end

@@ -85,5 +85,5 @@
 @interface WBCommentCell : UITableViewCell
 @property (nonatomic, strong) WBUserView *userView;
 @property (nonatomic, strong) MLLabel *commentTextLabel;
-@property (nonatomic, strong)WBCommentLayout *layout;
+@property (nonatomic, strong) WBCommentLayout *layout;
 @end

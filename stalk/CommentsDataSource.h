@@ -7,7 +7,13 @@
 //
 
 #import <Foundation/Foundation.h>
+@class WBCommentLayout;
 
-@interface CommentsDataSource : NSObject<UITableViewDataSource>
-@property (nonatomic, strong) NSMutableArray *commentLayoutsList;
+@interface CommentsDataSource : NSObject<UITableViewDataSource, UITableViewDelegate>
+@property (nonatomic, strong) NSMutableArray<WBCommentLayout *> *commentLayoutsList;
+
+
+- (instancetype)initWithCellIdentifer:(NSString *)identifer;
+- (void)loadCommentsForStatus:(int64_t)statusId withCompletion:(void(^)())completion;
+- (CGFloat)cellHeightAtIndex:(NSUInteger)index;
 @end

@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-@class WBUser;
+#import"WBUser.h"
 
 @interface WBBaseMessage : NSObject
 @property (nonatomic, copy)NSDate *createdAt;

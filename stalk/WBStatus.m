@@ -18,6 +18,7 @@
 //}
 
 + (instancetype)statusWithDict:(NSDictionary *) dict {
+    if(!dict) return nil;
     WBStatus *aStatus = [[WBStatus alloc] init];
     aStatus.createdAt = [NSDate USDateFromString:[dict objectForKey:@"created_at"]];
     aStatus.lid = [[dict objectForKey:@"id"] longLongValue];
@@ -47,7 +48,7 @@
     if ([dict objectForKey:@"user"] != nil) {
         aStatus.user = [WBUser userWithDict:[dict objectForKey:@"user"]];
     }
-    aStatus.userId = [dict objectForKey:@"user_id"];
+
     if ([dict objectForKey:@"retweeted_status"] != nil) {
         aStatus.retweetedStatus = [WBStatus statusWithDict:[dict objectForKey:@"retweeted_status"]];
     }

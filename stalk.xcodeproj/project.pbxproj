@@ -47,6 +47,9 @@
 		1743DCF31DF05653009D5298 /* CommentsDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 1743DCF21DF05653009D5298 /* CommentsDataSource.m */; };
 		1743DCFF1DF1488A009D5298 /* NSMutableAttributedString+emotion.m in Sources */ = {isa = PBXBuildFile; fileRef = 1743DCFE1DF1488A009D5298 /* NSMutableAttributedString+emotion.m */; };
 		1743DD021DF15529009D5298 /* WBBaseMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 1743DD011DF15529009D5298 /* WBBaseMessage.m */; };
+		1743DD051DF18704009D5298 /* WBStatusCellDelegateIMP.m in Sources */ = {isa = PBXBuildFile; fileRef = 1743DD041DF18704009D5298 /* WBStatusCellDelegateIMP.m */; };
+		1743DD071DF18C4F009D5298 /* UserDetailView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1743DD061DF18C4F009D5298 /* UserDetailView.xib */; };
+		1743DD0A1DF18EE4009D5298 /* UserDetailView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1743DD091DF18EE4009D5298 /* UserDetailView.m */; };
 		177B20F11DE43650005A1438 /* TopicController.m in Sources */ = {isa = PBXBuildFile; fileRef = 177B20F01DE43650005A1438 /* TopicController.m */; };
 		177B20F41DE43CB0005A1438 /* SendStatusViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 177B20F31DE43CB0005A1438 /* SendStatusViewController.m */; };
 		177B20FD1DE52CB0005A1438 /* WBPicture.m in Sources */ = {isa = PBXBuildFile; fileRef = 177B20FC1DE52CB0005A1438 /* WBPicture.m */; };
@@ -137,6 +140,11 @@
 		1743DCFE1DF1488A009D5298 /* NSMutableAttributedString+emotion.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSMutableAttributedString+emotion.m"; sourceTree = "<group>"; };
 		1743DD001DF15529009D5298 /* WBBaseMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WBBaseMessage.h; sourceTree = "<group>"; };
 		1743DD011DF15529009D5298 /* WBBaseMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WBBaseMessage.m; sourceTree = "<group>"; };
+		1743DD031DF18704009D5298 /* WBStatusCellDelegateIMP.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WBStatusCellDelegateIMP.h; sourceTree = "<group>"; };
+		1743DD041DF18704009D5298 /* WBStatusCellDelegateIMP.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WBStatusCellDelegateIMP.m; sourceTree = "<group>"; };
+		1743DD061DF18C4F009D5298 /* UserDetailView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = UserDetailView.xib; sourceTree = "<group>"; };
+		1743DD081DF18EE4009D5298 /* UserDetailView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserDetailView.h; sourceTree = "<group>"; };
+		1743DD091DF18EE4009D5298 /* UserDetailView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserDetailView.m; sourceTree = "<group>"; };
 		177B20EF1DE43650005A1438 /* TopicController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TopicController.h; sourceTree = "<group>"; };
 		177B20F01DE43650005A1438 /* TopicController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TopicController.m; sourceTree = "<group>"; };
 		177B20F21DE43CB0005A1438 /* SendStatusViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SendStatusViewController.h; sourceTree = "<group>"; };
@@ -298,6 +306,7 @@
 		171BCD121DD7026D009FF89E /* view */ = {
 			isa = PBXGroup;
 			children = (
+				1743DD061DF18C4F009D5298 /* UserDetailView.xib */,
 				17DAF7C21DEC628D00D11191 /* PhotoBrowerView.h */,
 				17DAF7C31DEC628D00D11191 /* PhotoBrowerView.m */,
 				171BCD501DDB4D5E009FF89E /* STalkTextView.h */,
@@ -306,6 +315,10 @@
 				171BCD191DD7347D009FF89E /* WBStatusCell.m */,
 				1741E6721DE1DEBD00C887D0 /* YYFPSLabel.h */,
 				1741E6731DE1DEBD00C887D0 /* YYFPSLabel.m */,
+				1743DD031DF18704009D5298 /* WBStatusCellDelegateIMP.h */,
+				1743DD041DF18704009D5298 /* WBStatusCellDelegateIMP.m */,
+				1743DD081DF18EE4009D5298 /* UserDetailView.h */,
+				1743DD091DF18EE4009D5298 /* UserDetailView.m */,
 			);
 			name = view;
 			sourceTree = "<group>";
@@ -433,6 +446,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1743DD071DF18C4F009D5298 /* UserDetailView.xib in Resources */,
 				171BCCB31DD4B6FF009FF89E /* LaunchScreen.storyboard in Resources */,
 				177B21021DE56F61005A1438 /* clear.png in Resources */,
 				177B21041DE5797A005A1438 /* clear247.png in Resources */,
@@ -520,11 +534,13 @@
 				171BCCF01DD61C57009FF89E /* WBAuthorizeResponse+copy.m in Sources */,
 				171BCD0D1DD7025A009FF89E /* UIScreen+Additions.m in Sources */,
 				1741E6741DE1DEBD00C887D0 /* YYFPSLabel.m in Sources */,
+				1743DD051DF18704009D5298 /* WBStatusCellDelegateIMP.m in Sources */,
 				17AFD3F71DDED732007C7DB9 /* StatusDetailViewController.m in Sources */,
 				1743DCF31DF05653009D5298 /* CommentsDataSource.m in Sources */,
 				17DAF7C41DEC628D00D11191 /* PhotoBrowerView.m in Sources */,
 				171BCCEA1DD60E71009FF89E /* HomeTableViewController.m in Sources */,
 				171BCCFE1DD6C110009FF89E /* UserWeiBoTableViewController.m in Sources */,
+				1743DD0A1DF18EE4009D5298 /* UserDetailView.m in Sources */,
 				171BCCA51DD4B6FF009FF89E /* main.m in Sources */,
 				17DAF7C71DEC81A500D11191 /* AtMeTableViewController.m in Sources */,
 				171BCD1A1DD7347D009FF89E /* WBStatusCell.m in Sources */,

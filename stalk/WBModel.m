@@ -40,6 +40,7 @@
 @implementation WBComment
 
 + (instancetype)commentWithDictionary:(NSDictionary *)dict{
+    if(!dict) return nil;
     WBComment *comment = [WBComment new];
     comment.lid = [dict[@"id"] longLongValue];
     comment.createdAt = [NSDate USDateFromString:dict[@"created_at"]];
@@ -48,8 +49,23 @@
     comment.source =dict[@"source"];
     comment.user = [WBUser userWithDict:dict[@"user"]];
     comment.status = [WBStatus statusWithDict:dict[@"status"]];
-    comment.replyComment = [WBComment commentWithDictionary:dict[@"replay_comment"]];
+    /**
+     要先判断dict[@"replay_comment"]是否存在；否则导致大量系统资源被占用名，导致错误
+     **/
+    if(dict[@"replay_comment"]){
+        comment.replyComment = [WBComment commentWithDictionary:dict[@"replay_comment"]];
+    }
     return comment;
+}
+
++ (NSArray *)commentsWithArray:(NSArray *)array{
+    NSMutableArray *comments = [NSMutableArray arrayWithCapacity:array.count];
+    for(NSDictionary *dict in array){
+        WBComment *comment = [WBComment commentWithDictionary:dict];
+        [comments addObject:comment];
+    }
+    
+    return comments;
 }
 
 @end

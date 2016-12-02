@@ -10,9 +10,10 @@
 
 @implementation NSDate (STalk)
 +(NSDate *)USDateFromString:(NSString *)dateString{
+    if(!dateString) return nil;
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
     [formatter setDateFormat:@"EEE MMM dd HH:mm:ss Z yyyy"];
-    formatter.locale = [NSLocale localeWithLocaleIdentifier:@"US"];
+    [formatter setLocale:[NSLocale localeWithLocaleIdentifier:@"US"]] ;
     return [formatter dateFromString:dateString];
 }
 @end
