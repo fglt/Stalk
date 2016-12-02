@@ -13,6 +13,51 @@
 #import "WBUser.h"
 #import "STalkTextAttachment.h"
 #import "WBStatusHelper.h"
+#import "NSMutableAttributedString+emotion.h"
+
+@implementation WBUserLayout
+
+- (instancetype)initWithMessage:(WBBaseMessage *)message displaySource:(BOOL)displaySource{
+    self = [super init];
+    _displaySource = displaySource;
+    _message = message;
+    [self layout];
+    return self;
+}
+
+- (instancetype)initWithMessage:(WBBaseMessage *)message{
+    self = [super init];
+    _displaySource = NO;
+    _message = message;
+    [self layout];
+    return self;
+}
+
+- (void)layout{
+    if(_displaySource){
+         _fromText = [NSString stringWithFormat:@"%@ 来自%@", [WBStatusHelper stringWithTimelineDate:_message.createdAt], [_message sourceForDisplay]];
+    }else{
+        _fromText = [self.dateFormatter stringFromDate:_message.createdAt];
+    }
+    
+    _fromWidth = [_fromText boundingRectWithSize:CGSizeMake(500, 500) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:SIZE_FONT_CONTENT-5]} context:nil].size.width;
+    
+    _nameWidth = [_message.user.screenName boundingRectWithSize:CGSizeMake(500, 500) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:SIZE_FONT_CONTENT]} context:nil].size.width;
+}
+
+- (NSDateFormatter *)dateFormatter{
+    static NSDateFormatter *formatter;;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        formatter = [[NSDateFormatter alloc]init];
+    });
+    [formatter setLocale:[NSLocale currentLocale]];
+    [formatter setTimeZone:[NSTimeZone localTimeZone]];
+    [formatter setDateFormat:@"MM-dd hh:mm"];
+    
+    return formatter;
+}
+@end
 
 @implementation WBStatusLayout
 
@@ -64,7 +109,7 @@
     
     //Create attributed string, with applied syntax highlighting
     NSMutableAttributedString *attributedStr = [[NSMutableAttributedString alloc] initWithString:self.status.text attributes:nil];
-    attributedStr = [self replaceEmotion:attributedStr];
+    [attributedStr replaceEmotion];
     [attributedStr addAttributes:attributes range:NSMakeRange(0, attributedStr.length)];
     self.statusAttributedText = attributedStr;
     //文字内容
@@ -81,7 +126,7 @@
         NSString * str = [NSString stringWithFormat:@"@%@ %@",_status.retweetedStatus.user.screenName,_status.retweetedStatus.text];
         //Create attributed string, with applied syntax highlighting
         NSMutableAttributedString *attributedStr = [[NSMutableAttributedString alloc] initWithString:str attributes:nil];
-        attributedStr = [self replaceEmotion:attributedStr];
+        [attributedStr replaceEmotion];
         [attributedStr addAttributes:attributes range:NSMakeRange(0, attributedStr.length)];
         self.retweetAttributedText = attributedStr;
         //文字内容
@@ -105,25 +150,11 @@
         }
     }
     _statusViewHeight = ceil(_statusViewHeight);
-    _height = _statusViewHeight + ToolbarHeight;
+    _height = _statusViewHeight + ToolbarHeight + PADDING;
 
     [self _layoutToolbar];
-    _fromText = [NSString stringWithFormat:@"%@ 来自%@", [WBStatusHelper stringWithTimelineDate:_status.createdAt], [ self sourceWithString:_status.source]];
-    _fromWidth = [_fromText boundingRectWithSize:CGSizeMake(500, 500) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:SIZE_FONT_CONTENT-5]} context:nil].size.width;
     
-    _nameWidth = [_status.user.screenName boundingRectWithSize:CGSizeMake(500, 500) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:SIZE_FONT_CONTENT]} context:nil].size.width;
-}
-
-- (NSString *) sourceWithString:(NSString *)source{
-    u_long i = source.length-1;
-    char j=0;
-    for(; i>0; i--){
-        if([source characterAtIndex:i] == '>'){
-            if(j==1)break;
-            j++;
-        }
-    }
-    return [source substringWithRange:NSMakeRange(i+1, source.length-4 -i-1 )];
+    _userLayout = [[WBUserLayout alloc] initWithMessage:_status displaySource:YES];
 }
                  
 - (CGFloat)widthForToolbarButton:(NSMutableAttributedString *)str{
@@ -155,25 +186,23 @@
     return (count/3 * _imgHeight +_imgHeight + count/3 *SIZE_GAP_IMG);
 }
 
-- (NSMutableAttributedString *)replaceEmotion:(NSMutableAttributedString *)coloredString{
-    
-    NSUInteger lengthDetail = 0;
-    NSRange newRange;
-    
-    NSArray* matches = [[NSRegularExpression regularExpressionWithPattern:EmojiRegular options:NSRegularExpressionDotMatchesLineSeparators error:nil] matchesInString:coloredString.string options:0 range:NSMakeRange(0,coloredString.string.length)];
-    for(NSTextCheckingResult* match in matches) {
-        newRange = NSMakeRange(match.range.location - lengthDetail, match.range.length);
-        NSString *emotionstr = [coloredString.string substringWithRange:newRange];
-        STalkTextAttachment *attachment = [[STalkTextAttachment alloc] init];
-        NSDictionary *emotions = [WBStatusHelper emoticonDic];
-        attachment.image = [UIImage imageNamed:emotions[emotionstr]];
-        NSAttributedString * attachStr = [NSAttributedString attributedStringWithAttachment:attachment];
-        NSUInteger prelength = coloredString.length;
-        [coloredString replaceCharactersInRange:newRange withAttributedString:attachStr];
-        lengthDetail += prelength - coloredString.length;
-    }
-    
-    return coloredString;
+@end
+
+@implementation WBCommentLayout
+
+- (instancetype)initWithComment:(WBComment *)comment{
+    self = [super init];
+    _comment = comment;
+    [self layout];
+    return self;
+}
+
+- (void)layout{
+    _userLayout = [[WBUserLayout alloc] initWithMessage:_comment];
+    _commentText = [[NSMutableAttributedString alloc]initWithString:_comment.text attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:SIZE_FONT_CONTENT-3]}];
+    [_commentText replaceEmotion];
+    _commentSize = [_commentText boundingRectWithSize:CGSizeMake(600, 2000) options:NSStringDrawingUsesLineFragmentOrigin context:nil].size;
+    _cellHeight  = PADDING*3 + ICONWIDTH  + _commentSize.height;
 }
 
 @end

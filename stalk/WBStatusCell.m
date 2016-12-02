@@ -47,16 +47,16 @@
     return self;
 }
 
-- (void)setWithLayout:(WBStatusLayout *)layout{
+- (void)setWithLayout:(WBUserLayout *)layout{
     self.width = MAX(layout.nameWidth, layout.fromWidth) + ICONWIDTH + PADDING*2;
-    [_icon setImageWithURL:[NSURL URLWithString:layout.status.user.avatarLarge] //profileImageURL
+    [_icon setImageWithURL:[NSURL URLWithString:layout.message.user.avatarLarge] //profileImageURL
                placeholder:nil
                    options:kNilOptions
                    manager:[WBStatusHelper avatarImageManager]
                   progress:nil
                  transform:nil
                 completion:nil];
-    _name.text = layout.status.user.screenName;
+    _name.text = layout.message.user.screenName;
     _name.width =layout.nameWidth;
     _from.text = layout.fromText;
     _from.width =layout.fromWidth;
@@ -236,7 +236,7 @@
     self.height = layout.statusViewHeight;
     _contentView.top = PADDING;
     _contentView.height = self.height - PADDING*2;
-    [_userView setWithLayout:layout];
+    [_userView setWithLayout:layout.userLayout];
     [self layoutStatusTextWithLayout:layout];
     [self layoutRetweetWithLayout:layout];
     [self addPicViewWithLayout:layout];
@@ -522,6 +522,25 @@
     [_toolbar setWithLayout:layout];
 }
 
+@end
+
+@implementation WBCommentCell
+
+- (instancetype)init{
+    self = [super init];
+    _userView = [WBUserView new];
+    
+    _commentTextLabel = [MLLabel new];
+    
+    [self.contentView addSubview:_userView];
+    [self.contentView addSubview:_commentTextLabel];
+    
+    return self;
+}
+
+- (void)setLayout:(WBCommentLayout *)layout{
+    [_userView setWithLayout:layout.userLayout];
+}
 
 
 @end

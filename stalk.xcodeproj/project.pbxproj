@@ -45,6 +45,8 @@
 		1741E6741DE1DEBD00C887D0 /* YYFPSLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 1741E6731DE1DEBD00C887D0 /* YYFPSLabel.m */; };
 		1743DCF01DEF16AB009D5298 /* NSDate+STalk.m in Sources */ = {isa = PBXBuildFile; fileRef = 1743DCEF1DEF16AB009D5298 /* NSDate+STalk.m */; };
 		1743DCF31DF05653009D5298 /* CommentsDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 1743DCF21DF05653009D5298 /* CommentsDataSource.m */; };
+		1743DCFF1DF1488A009D5298 /* NSMutableAttributedString+emotion.m in Sources */ = {isa = PBXBuildFile; fileRef = 1743DCFE1DF1488A009D5298 /* NSMutableAttributedString+emotion.m */; };
+		1743DD021DF15529009D5298 /* WBBaseMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 1743DD011DF15529009D5298 /* WBBaseMessage.m */; };
 		177B20F11DE43650005A1438 /* TopicController.m in Sources */ = {isa = PBXBuildFile; fileRef = 177B20F01DE43650005A1438 /* TopicController.m */; };
 		177B20F41DE43CB0005A1438 /* SendStatusViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 177B20F31DE43CB0005A1438 /* SendStatusViewController.m */; };
 		177B20FD1DE52CB0005A1438 /* WBPicture.m in Sources */ = {isa = PBXBuildFile; fileRef = 177B20FC1DE52CB0005A1438 /* WBPicture.m */; };
@@ -131,6 +133,10 @@
 		1743DCEF1DEF16AB009D5298 /* NSDate+STalk.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDate+STalk.m"; sourceTree = "<group>"; };
 		1743DCF11DF05653009D5298 /* CommentsDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommentsDataSource.h; sourceTree = "<group>"; };
 		1743DCF21DF05653009D5298 /* CommentsDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommentsDataSource.m; sourceTree = "<group>"; };
+		1743DCFD1DF1488A009D5298 /* NSMutableAttributedString+emotion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSMutableAttributedString+emotion.h"; sourceTree = "<group>"; };
+		1743DCFE1DF1488A009D5298 /* NSMutableAttributedString+emotion.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSMutableAttributedString+emotion.m"; sourceTree = "<group>"; };
+		1743DD001DF15529009D5298 /* WBBaseMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WBBaseMessage.h; sourceTree = "<group>"; };
+		1743DD011DF15529009D5298 /* WBBaseMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WBBaseMessage.m; sourceTree = "<group>"; };
 		177B20EF1DE43650005A1438 /* TopicController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TopicController.h; sourceTree = "<group>"; };
 		177B20F01DE43650005A1438 /* TopicController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TopicController.m; sourceTree = "<group>"; };
 		177B20F21DE43CB0005A1438 /* SendStatusViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SendStatusViewController.h; sourceTree = "<group>"; };
@@ -329,6 +335,8 @@
 				177B215A1DEA7341005A1438 /* WBModel.m */,
 				17DAF7C81DED506700D11191 /* WBTextStorage.h */,
 				17DAF7C91DED506700D11191 /* WBTextStorage.m */,
+				1743DD001DF15529009D5298 /* WBBaseMessage.h */,
+				1743DD011DF15529009D5298 /* WBBaseMessage.m */,
 			);
 			name = modal;
 			sourceTree = "<group>";
@@ -348,6 +356,8 @@
 				17FA22FF1DE3CE0C00617651 /* WBHttpRequest+STalk.m */,
 				1743DCEE1DEF16AB009D5298 /* NSDate+STalk.h */,
 				1743DCEF1DEF16AB009D5298 /* NSDate+STalk.m */,
+				1743DCFD1DF1488A009D5298 /* NSMutableAttributedString+emotion.h */,
+				1743DCFE1DF1488A009D5298 /* NSMutableAttributedString+emotion.m */,
 			);
 			name = category;
 			sourceTree = "<group>";
@@ -518,10 +528,12 @@
 				171BCCA51DD4B6FF009FF89E /* main.m in Sources */,
 				17DAF7C71DEC81A500D11191 /* AtMeTableViewController.m in Sources */,
 				171BCD1A1DD7347D009FF89E /* WBStatusCell.m in Sources */,
+				1743DCFF1DF1488A009D5298 /* NSMutableAttributedString+emotion.m in Sources */,
 				171BCCF81DD698F3009FF89E /* constant.m in Sources */,
 				17DAF7BE1DEBBAB600D11191 /* PhotoBrowerControllerAnimatedDelegate.m in Sources */,
 				171BCD1D1DD7F666009FF89E /* WBStatusLayout.m in Sources */,
 				171BCD5A1DDBFC1F009FF89E /* EmotionHelper.m in Sources */,
+				1743DD021DF15529009D5298 /* WBBaseMessage.m in Sources */,
 				1741E6621DDF165D00C887D0 /* UserViewController.m in Sources */,
 				171BCD291DDAD6A5009FF89E /* STalkTextAttachment.m in Sources */,
 				177B21581DEA72F5005A1438 /* WBStatusHelper.m in Sources */,

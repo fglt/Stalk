@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "WBBaseMessage.h"
 
 @class WBUser;
 @class WBEmoticonGroup;
@@ -38,13 +39,7 @@ typedef NS_ENUM(NSUInteger, WBEmoticonType) {
 @property (nonatomic, strong) NSArray<WBEmoticon *> *emoticons;
 @end
 
-@interface WBComment : NSObject
-@property (nonatomic) int64_t commentID;
-@property (nonatomic, strong) NSDate *createdAt;
-@property (nonatomic, strong) NSString *text;
-@property (nonatomic, strong) NSString *source;
-@property (nonatomic, strong) WBUser *user;
-@property (nonatomic, strong) NSString *mid;
+@interface WBComment : WBBaseMessage
 @property (nonatomic, strong) WBStatus *status;
 @property (nonatomic, strong) WBComment *replyComment;
 

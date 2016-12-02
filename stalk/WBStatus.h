@@ -8,40 +8,11 @@
 
 #import <Foundation/Foundation.h>
 #import "WBPicture.h"
+#import "WBBaseMessage.h"
 
 @class WBUser;
 
-@interface WBStatus : NSObject
-/**
- *	微博创建时间
- */
-@property (nonatomic, copy)NSDate *createdAt;
-
-
-/**
- *	微博ID
- */
-@property (nonatomic)int64_t statusId;
-
-
-/**
- *	微博MID
- */
-@property (nonatomic)int64_t statusMId;
-
-
-/**
- *	微博信息内容
- */
-@property (nonatomic, copy)NSString *text;
-
-
-/**
- *	微博来源
- */
-@property (nonatomic, copy)NSString *source;
-
-
+@interface WBStatus : WBBaseMessage
 /**
  *	是否已收藏，true：是，false：否
  */

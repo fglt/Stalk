@@ -13,6 +13,7 @@
 @class WBStatusCell;
 @class MLLink;
 @class MLLinkLabel;
+@class MLLabel;
 
 #define CellPadding 10;
 
@@ -33,7 +34,7 @@
 @property (nonatomic, strong) UIImageView *icon;
 @property (nonatomic, strong) UILabel *name;
 @property (nonatomic, strong) UILabel *from;
-- (void)setWithLayout:(WBStatusLayout *)layout;
+- (void)setWithLayout:(WBUserLayout *)layout;
 @end
 
 @interface WBToolbarView : UIView
@@ -106,4 +107,7 @@
 @end
 
 @interface WBCommentCell : UITableViewCell
+@property (nonatomic, strong) WBUserView *userView;
+@property (nonatomic, strong) MLLabel *commentTextLabel;
+@property (nonatomic, strong)WBCommentLayout *layout;
 @end

@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "WBStatus.h"
 @class WBStatus;
+@class WBComment;
 #define PADDING 10
 #define SIZE_GAP_IMG 8
 #define ICONWIDTH 40
@@ -36,19 +37,27 @@
 #define kRegexHighlightViewTypeEmoji @"emoji"
 
 #define URLRegular @"(http|https)://(t.cn/|weibo.com/|m.weibo.cn/)+(([a-zA-Z0-9/])*)"
-#define EmojiRegular @"(\\[\\w+\\])"
 #define AccountRegular @"@[\u4e00-\u9fa5a-zA-Z0-9_-]{2,30}"
 #define TopicRegular @"#[^#]+#"
 
-@interface WBStatusLayout : NSObject
-
-@property (nonatomic, copy) WBStatus *status;
-@property (nonatomic, strong) NSMutableAttributedString *statusAttributedText;
-@property (nonatomic, strong) NSMutableAttributedString *retweetAttributedText;
-
+@interface WBUserLayout : NSObject
 @property (nonatomic) CGFloat fromWidth;
 @property (nonatomic) CGFloat nameWidth;
 @property (nonatomic, strong) NSString *fromText;
+@property (nonatomic, strong) WBBaseMessage *message;
+@property (nonatomic) BOOL displaySource;
+
+- (instancetype)initWithMessage:(WBBaseMessage *)message;
+- (instancetype)initWithMessage:(WBBaseMessage *)message displaySource:(BOOL)displaySource;
+@end
+
+@interface WBStatusLayout : NSObject
+
+@property (nonatomic, strong) WBStatus *status;
+@property (nonatomic, strong) NSMutableAttributedString *statusAttributedText;
+@property (nonatomic, strong) NSMutableAttributedString *retweetAttributedText;
+
+@property (nonatomic, strong) WBUserLayout *userLayout;
 
 @property (nonatomic) CGRect statusTextFrame;
 @property (nonatomic) CGRect statusPictureFrame;
@@ -68,9 +77,20 @@
 @property (nonatomic) NSMutableAttributedString * commentText;
 @property (nonatomic) CGFloat likeTextWidth;
 @property (nonatomic) NSMutableAttributedString *likeText;
-@property (nonatomic, copy) NSArray *pictures;
+@property (nonatomic, strong) NSArray *pictures;
 
 - (instancetype)initWithStatus:(WBStatus *)status;
 + (NSMutableArray *)statusLayoutsWithStatuses:(NSArray *)WBStatus;
 - (void)layout;
+@end
+
+@class WBComment;
+
+@interface WBCommentLayout : NSObject
+@property (nonatomic, strong) WBComment *comment;
+@property (nonatomic, strong) WBUserLayout *userLayout;
+@property (nonatomic, strong) NSMutableAttributedString *commentText;
+@property (nonatomic) CGSize commentSize;
+@property (nonatomic) CGFloat cellHeight;
+- (instancetype)initWithComment:(WBComment *)comment;
 @end

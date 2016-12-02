@@ -8,6 +8,6 @@
 
 #import <Foundation/Foundation.h>
 
-@interface CommentsDataSource : NSObject
-@property (nonatomic, strong) NSMutableArray *commentsList;
+@interface CommentsDataSource : NSObject<UITableViewDataSource>
+@property (nonatomic, strong) NSMutableArray *commentLayoutsList;
 @end

@@ -9,7 +9,6 @@
 #import <Foundation/Foundation.h>
 
 @interface NSObject (runtime)
-- (NSArray *)varList;
-+ (NSArray *)varList:(Class) class;
++ (NSArray *)varList;
 - (BOOL)existVar:(NSString *)varName;
 @end

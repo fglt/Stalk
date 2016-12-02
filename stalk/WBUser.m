@@ -53,4 +53,12 @@
     user.lang = [dic objectForKey:@"lang"];
     return user;
 }
+
+//- (instancetype)initWithCoder:(NSCoder *)aDecoder{
+//    self = [super init];
+//    
+//    _userId = [aDecoder decodeObjectForKey:@"id"];
+//    _name = [aDecoder decodeObjectForKey:@"name"];
+//    return self;
+//}
 @end

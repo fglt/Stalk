@@ -48,7 +48,7 @@
         }
             break;
         case SendMessageTypeRepost:{
-            [WBHttpRequest requestForRepostAStatus:[NSString stringWithFormat:@"%lld",_status.statusId] repostText:_statusTextView.text withAccessToken:appDelegate.wbAuthorizeResponse.accessToken andOtherProperties:nil queue:[WBRequestQueue queueForWBRequest] withCompletionHandler:^(WBHttpRequest *httpRequest, id result, NSError *error) {
+            [WBHttpRequest requestForRepostAStatus:[NSString stringWithFormat:@"%lld",_status.lid] repostText:_statusTextView.text withAccessToken:appDelegate.wbAuthorizeResponse.accessToken andOtherProperties:nil queue:[WBRequestQueue queueForWBRequest] withCompletionHandler:^(WBHttpRequest *httpRequest, id result, NSError *error) {
                 NSLog(@"%@", result);
             }];
         }
