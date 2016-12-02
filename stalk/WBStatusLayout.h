@@ -51,6 +51,16 @@
 - (instancetype)initWithMessage:(WBBaseMessage *)message displaySource:(BOOL)displaySource;
 @end
 
+@interface WBToolbarLayout : NSObject
+@property (nonatomic) CGFloat repostTextWidth;
+@property (nonatomic) NSMutableAttributedString *repostText;
+@property (nonatomic) CGFloat commentTextWidth;
+@property (nonatomic) NSMutableAttributedString * commentText;
+@property (nonatomic) CGFloat likeTextWidth;
+@property (nonatomic) NSMutableAttributedString *likeText;
+- (void)layoutWithStatus:(WBStatus *)status;
+@end
+
 @interface WBStatusLayout : NSObject
 
 @property (nonatomic, strong) WBStatus *status;
@@ -71,12 +81,7 @@
 @property (nonatomic) int statusViewHeight;
 @property (nonatomic) CGFloat height;
 
-@property (nonatomic) CGFloat repostTextWidth;
-@property (nonatomic) NSMutableAttributedString *repostText;
-@property (nonatomic) CGFloat commentTextWidth;
-@property (nonatomic) NSMutableAttributedString * commentText;
-@property (nonatomic) CGFloat likeTextWidth;
-@property (nonatomic) NSMutableAttributedString *likeText;
+@property (nonatomic) WBToolbarLayout *toolbarLayout;
 @property (nonatomic, strong) NSArray *pictures;
 
 - (instancetype)initWithStatus:(WBStatus *)status;

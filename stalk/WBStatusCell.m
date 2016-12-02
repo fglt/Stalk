@@ -60,7 +60,6 @@
     _name.width =layout.nameWidth;
     _from.text = layout.fromText;
     _from.width =layout.fromWidth;
-    
 }
 
 - (NSString *) sourceWithString:(NSString *)source{
@@ -181,7 +180,7 @@
     return self;
 }
 
-- (void)setWithLayout:(WBStatusLayout *)layout{
+- (void)setWithLayout:(WBToolbarLayout *)layout{
     _repostLabel.attributedText = layout.repostText;
     _repostLabel.width = layout.repostTextWidth;
     _repostImageView.left = (_repostButton.width - _repostImageView.width - _repostLabel.width-ToolbarGap)/2;
@@ -196,7 +195,6 @@
     _likeLabel.width = layout.likeTextWidth;
     _likeImageView.left = (_likeButton.width - _likeImageView.width - _likeLabel.width-ToolbarGap)/2;
     _likeLabel.right = _likeButton.width  - _likeImageView.left;
-    
 }
 
 @end
@@ -404,26 +402,6 @@
     [self.statusCell.delegate cell:self.statusCell didClickImageAt:recognizer.view.tag];
 }
 
-//- (NSString *)imageFilePath:(NSString *)urlstr{
-//    u_long i = urlstr.length-1;
-//    for(; i>0; i--){
-//        if([urlstr characterAtIndex:i] == '/'){
-//            break;
-//        }
-//    }
-//    return [urlstr substringToIndex:i+1];
-//}
-//
-//- (NSString *)imageName:(NSString *)urlstr{
-//    u_long i = urlstr.length-1;
-//    for(; i>0; i--){
-//        if([urlstr characterAtIndex:i] == '/'){
-//            break;
-//        }
-//    }
-//    return [urlstr substringFromIndex:i+1];
-//}
-
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
     UITouch *touch = touches.anyObject;
@@ -514,12 +492,11 @@
 //重写set方法，模型传递
 - (void)setLayout:(WBStatusLayout *)layout{
     _layout = layout;
-    
     [self.statusView setWithLayout:_layout];
     
     _toolbar.frame = CGRectMake(PADDING, layout.height-ToolbarHeight, CellContentWidth, ToolbarHeight);
     
-    [_toolbar setWithLayout:layout];
+    [_toolbar setWithLayout:layout.toolbarLayout];
 }
 
 @end
@@ -540,7 +517,7 @@
 
 - (void)setLayout:(WBCommentLayout *)layout{
     [_userView setWithLayout:layout.userLayout];
+    _commentTextLabel.frame = CGRectMake(PADDING, CGRectGetMaxY(self.userView.frame)+PADDING, layout.commentSize.width, layout.commentSize.height);
 }
-
 
 @end

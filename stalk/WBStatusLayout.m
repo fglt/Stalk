@@ -59,6 +59,27 @@
 }
 @end
 
+@implementation WBToolbarLayout
+
+- (void)layoutWithStatus:(WBStatus *)status{
+    _repostText = [[NSMutableAttributedString alloc] initWithString:status.repostsCount <= 0 ? @"转发" : [WBStatusHelper shortedNumberDesc:status.repostsCount]];
+    _repostTextWidth =[self widthForToolbarButton:_repostText];
+    
+    _commentText = [[NSMutableAttributedString alloc] initWithString:status.commentsCount <= 0 ? @"评论" : [WBStatusHelper shortedNumberDesc:status.commentsCount]];
+    _commentTextWidth = [self widthForToolbarButton:_commentText];
+    
+    _likeText = [[NSMutableAttributedString alloc] initWithString:status.attitudesCount <= 0 ? @"赞" : [WBStatusHelper shortedNumberDesc:status.attitudesCount]];
+    _likeTextWidth = [self widthForToolbarButton:_likeText];
+}
+
+- (CGFloat)widthForToolbarButton:(NSMutableAttributedString *)str{
+    UIFont *font = [UIFont systemFontOfSize:ToolbarFontSize];
+    str.font = font;
+    str.color = kWBCellToolbarTitleColor;
+    return [str boundingRectWithSize:CGSizeMake(CellContentWidth/3.0, MAXFLOAT) options:NSStringDrawingUsesLineFragmentOrigin context:nil].size.width;
+}
+@end
+
 @implementation WBStatusLayout
 
 - (void)setStatus:(WBStatus *)status{
@@ -150,30 +171,12 @@
         }
     }
     _statusViewHeight = ceil(_statusViewHeight);
-    _height = _statusViewHeight + ToolbarHeight + PADDING;
+    _height = _statusViewHeight + ToolbarHeight;
 
-    [self _layoutToolbar];
+    _toolbarLayout = [WBToolbarLayout new];
+    [_toolbarLayout layoutWithStatus:_status];
     
     _userLayout = [[WBUserLayout alloc] initWithMessage:_status displaySource:YES];
-}
-                 
-- (CGFloat)widthForToolbarButton:(NSMutableAttributedString *)str{
-    UIFont *font = [UIFont systemFontOfSize:ToolbarFontSize];
-    str.font = font;
-    str.color = kWBCellToolbarTitleColor;
-    return [self sizeWithText:str maxSize:CGSizeMake(CellContentWidth/3.0, MAXFLOAT)].width;
-}
-
-- (void)_layoutToolbar {
-    
-    _repostText = [[NSMutableAttributedString alloc] initWithString:_status.repostsCount <= 0 ? @"转发" : [WBStatusHelper shortedNumberDesc:_status.repostsCount]];
-    _repostTextWidth =[self widthForToolbarButton:_repostText];
-    
-    _commentText = [[NSMutableAttributedString alloc] initWithString:_status.commentsCount <= 0 ? @"评论" : [WBStatusHelper shortedNumberDesc:_status.commentsCount]];
-    _commentTextWidth = [self widthForToolbarButton:_commentText];
-    
-    _likeText = [[NSMutableAttributedString alloc] initWithString:_status.attitudesCount <= 0 ? @"赞" : [WBStatusHelper shortedNumberDesc:_status.attitudesCount]];
-    _likeTextWidth = [self widthForToolbarButton:_likeText];
 }
 
 - (CGFloat) heightForPic:(NSUInteger) count{
@@ -201,7 +204,7 @@
     _userLayout = [[WBUserLayout alloc] initWithMessage:_comment];
     _commentText = [[NSMutableAttributedString alloc]initWithString:_comment.text attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:SIZE_FONT_CONTENT-3]}];
     [_commentText replaceEmotion];
-    _commentSize = [_commentText boundingRectWithSize:CGSizeMake(600, 2000) options:NSStringDrawingUsesLineFragmentOrigin context:nil].size;
+    _commentSize = [_commentText boundingRectWithSize:CGSizeMake(CellContentWidth-ICONWIDTH, 1000) options:NSStringDrawingUsesLineFragmentOrigin context:nil].size;
     _cellHeight  = PADDING*3 + ICONWIDTH  + _commentSize.height;
 }
 
