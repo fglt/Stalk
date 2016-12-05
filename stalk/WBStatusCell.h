@@ -84,6 +84,12 @@
 
 @interface WBCommentCell : UITableViewCell
 @property (nonatomic, strong) WBUserView *userView;
-@property (nonatomic, strong) MLLabel *commentTextLabel;
+@property (nonatomic, strong) MLLinkLabel *commentTextLabel;
 @property (nonatomic, strong) WBCommentLayout *layout;
+@end
+
+@interface WBMessageCell : UITableViewCell
+@property (nonatomic, strong) WBUserView *userView;
+@property (nonatomic, strong) MLLinkLabel *messageLabel;
+@property (nonatomic, strong) WBMessageLayout *layout;
 @end

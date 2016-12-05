@@ -28,6 +28,7 @@
 #import "PhotoBrowerView.h"
 #import "SendStatusViewController.h"
 #import "WBStatusCellDelegateIMP.h"
+#import "UINavigationBar+Awesome.h"
 
 @interface HomeTableViewController ()
 @property (nonatomic, strong) StatusDataSource *dataSource;
@@ -35,19 +36,10 @@
 @end
 
 @implementation HomeTableViewController{
-    NSMutableArray *needLoadArr;
-    BOOL scrollToToping;
     YYFPSLabel *_fpsLabel;
 }
-- (void)viewDidAppear:(BOOL)animated{
-    [super viewDidAppear:animated];
-    self.navigationController.navigationBar.translucent = NO;
-    self.navigationController.navigationBar.barStyle = UIBarStyleDefault;
-}
 
-//- (BOOL)prefersStatusBarHidden{
-//    return YES;
-//}
+
 
 - (void)viewDidLoad {
     [super viewDidLoad];

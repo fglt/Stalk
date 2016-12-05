@@ -46,6 +46,10 @@
 @property (nonatomic, copy)NSString *location;
 
 
+@property (nonatomic, copy)NSString *coverImage;
+
+@property (nonatomic, copy) NSString *coverImagePhone;
+
 /**
  *	用户个人描述
  */

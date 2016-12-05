@@ -62,13 +62,22 @@ static NSString *const LastCachedStatues = @"LastCachedStatues";
     }];
 }
 
-- (void)loadDataAboutTopic:(NSString *)topic completion:(void (^)())handler{
+- (void)loadDataAboutTopic:(NSString *)topic completion:(void (^)())completion{
     
     AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
     [WBHttpRequest requestForStatusesAboutTopic:topic accessToken:appDelegate.wbAuthorizeResponse.accessToken andOtherProperties:nil queue:[WBRequestQueue queueForWBRequest] withCompletionHandler:^(WBHttpRequest *httpRequest, id result, NSError *error) {
         NSArray *dictes = [result objectForKey:@"statuses"];
         _statusLayoutList = [WBStatusLayout statusLayoutsWithStatuses:[WBStatus statuesWithArray:dictes]];
-        handler();
+        completion();
+    }];
+}
+
+- (void)loadAtMeStatusWithCompletion:(void(^)()) completion{
+    AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+    [WBHttpRequest requestForMentionStatusWithAccessToken:appDelegate.wbAuthorizeResponse.accessToken andOtherProperties:nil queue:[WBRequestQueue queueForWBRequest] withCompletionHandler:^(WBHttpRequest *httpRequest, id result, NSError *error) {
+        NSArray *dictes = [result objectForKey:@"statuses"];
+        _statusLayoutList = [WBStatusLayout statusLayoutsWithStatuses:[WBStatus statuesWithArray:dictes]];
+        completion();
     }];
 }
 

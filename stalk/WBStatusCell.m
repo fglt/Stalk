@@ -24,11 +24,11 @@
 
 - (instancetype)init{
     self= [super init];
-    self.frame = CGRectMake(0, 0, CellContentWidth, ICONWIDTH);
+    self.frame = CGRectMake(0, 0, CellContentWidth, IconWidth);
     _icon = [[UIImageView alloc] init];
     
-    _icon.frame = CGRectMake(PADDING, 0, ICONWIDTH, ICONWIDTH);
-    _icon.layer.cornerRadius = ICONWIDTH>>1;
+    _icon.frame = CGRectMake(PADDING, 0, IconWidth, IconWidth);
+    _icon.layer.cornerRadius = IconWidth>>1;
     _icon.clipsToBounds = YES;
     
     _name = [[UILabel alloc] init];
@@ -48,7 +48,7 @@
 }
 
 - (void)setWithLayout:(WBUserLayout *)layout{
-    self.width = MAX(layout.nameWidth, layout.fromWidth) + ICONWIDTH + PADDING*2;
+    self.width = MAX(layout.nameWidth, layout.fromWidth) + IconWidth + PADDING*2;
     [_icon setImageWithURL:[NSURL URLWithString:layout.message.user.avatarLarge] //profileImageURL
                placeholder:nil
                    options:kNilOptions
@@ -208,8 +208,8 @@
 - (instancetype)init{
     self = [super init];
     _contentView = [UIView new];
-    self.width = CELL_WIDTH;
-    _contentView.width = CELL_WIDTH;
+    self.width = CellWidth;
+    _contentView.width = CellWidth;
  
     _userView = [WBUserView new];
     [self.contentView addSubview:_userView];
@@ -309,9 +309,9 @@
         CGSize picSize = CGSizeMake(layout.imgWidth, layout.imgHeight);
         for (NSInteger i=0; i<pictures.count&& i<9; i++) {
             if(pictures.count == 4){
-                origin = CGPointMake(i%2*(SIZE_GAP_IMG+layout.imgWidth), i/2*(SIZE_GAP_IMG+layout.imgHeight));
+                origin = CGPointMake(i%2*(ImageGap+layout.imgWidth), i/2*(ImageGap+layout.imgHeight));
             }else{
-                origin = CGPointMake(i%3*(SIZE_GAP_IMG+layout.imgWidth), i/3*(SIZE_GAP_IMG+layout.imgHeight));
+                origin = CGPointMake(i%3*(ImageGap+layout.imgWidth), i/3*(ImageGap+layout.imgHeight));
             }
             YYAnimatedImageView *thumbView = [self _newImageViewWithTag:i];;
             [picview addSubview:thumbView];
@@ -457,7 +457,7 @@
 @implementation WBStatusCell
 
 - (void)setFrame:(CGRect)frame {
-    CGFloat startX = ( [UIScreen mainScreen].bounds.size.width-CELL_WIDTH)/2;
+    CGFloat startX = ( [UIScreen mainScreen].bounds.size.width-CellWidth)/2;
     frame.origin.x += startX;
     frame.size.width -= 2 * startX;
     frame.size.height -= CellPadding;
@@ -509,7 +509,7 @@
     self = [super init];
     _userView = [WBUserView new];
     
-    _commentTextLabel = [MLLabel new];
+    _commentTextLabel = [MLLinkLabel new];
     
     [self.contentView addSubview:_userView];
     [self.contentView addSubview:_commentTextLabel];
@@ -518,7 +518,7 @@
 }
 
 - (void)setFrame:(CGRect)frame {
-    CGFloat startX = ( [UIScreen mainScreen].bounds.size.width-CELL_WIDTH)/2;
+    CGFloat startX = ( [UIScreen mainScreen].bounds.size.width-CellWidth)/2;
     frame.origin.x += startX;
     frame.size.width -= 2 * startX;
     [super setFrame:frame];
@@ -531,7 +531,7 @@
   
     self.selectionStyle = UITableViewCellSelectionStyleNone;
     _userView  = [[WBUserView alloc] init];
-    _commentTextLabel = [MLLabel new];
+    _commentTextLabel = [MLLinkLabel new];
     
     [self.contentView addSubview:_userView];
     [self.contentView addSubview:_commentTextLabel];
@@ -544,6 +544,42 @@
     _commentTextLabel.frame = CGRectMake(PADDING, CGRectGetMaxY(self.userView.frame)+PADDING, layout.commentSize.width, layout.commentSize.height);
     _commentTextLabel.numberOfLines = 0;
     _commentTextLabel.attributedText = layout.commentText;
+}
+
+@end
+
+
+@implementation WBMessageCell
+
+
+- (void)setFrame:(CGRect)frame {
+    CGFloat startX = ( [UIScreen mainScreen].bounds.size.width-CellWidth)/2;
+    frame.origin.x += startX;
+    frame.size.width -= 2 * startX;
+    [super setFrame:frame];
+}
+
+- (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
+{
+    self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
+    if(!self) return nil;
+    
+    self.selectionStyle = UITableViewCellSelectionStyleNone;
+    _userView  = [[WBUserView alloc] init];
+    _messageLabel = [MLLinkLabel new];
+    _messageLabel.dataDetectorTypes = MLDataDetectorTypeURL |MLDataDetectorTypeHashtag|MLDataDetectorTypeUserHandle ;
+    
+    [self.contentView addSubview:_userView];
+    [self.contentView addSubview:_messageLabel];
+    
+    return self;
+}
+
+- (void)setLayout:(WBMessageLayout *)layout{
+    [_userView setWithLayout:layout.userLayout];
+    _messageLabel.frame = CGRectMake(PADDING, CGRectGetMaxY(self.userView.frame)+PADDING, layout.textSize.width, layout.textSize.height);
+    _messageLabel.numberOfLines = 0;
+    _messageLabel.attributedText = layout.messageText;
 }
 
 @end

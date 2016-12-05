@@ -19,4 +19,5 @@ typedef void (^ConfigureCellBlock)(id cell, id statusLayout);
 - (WBStatusLayout *)objectAtIndex:(NSInteger)index;
 - (void)addStatus:(NSArray *)statusList;
 - (void)updateStatusesWithCompletion:(void (^)())completion;
+- (void)loadAtMeStatusWithCompletion:(void(^)()) completion;
 @end

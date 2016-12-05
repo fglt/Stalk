@@ -107,7 +107,6 @@
                         UserViewController *userViewController = [storyboard instantiateViewControllerWithIdentifier:@"UserViewController"];
                         userViewController.user = user;
                         userViewController.hidesBottomBarWhenPushed = YES;
-                        userViewController.title = user.screenName;
                         [self.controller.navigationController pushViewController:userViewController animated:YES];
                     }
                 });
@@ -127,14 +126,14 @@
 }
 
 - (void)cellDidClick:(WBStatusCell *)cell;{
-    StatusDetailViewController *detailViewController = [StatusDetailViewController new];
+    StatusDetailViewController *detailViewController = [[StatusDetailViewController alloc] initWithStyle:UITableViewStylePlain];
     detailViewController.layout = cell.layout;
     detailViewController.title = @"微博正文";
     [self.controller.navigationController pushViewController:detailViewController animated:YES];
 }
 
 - (void)cellDidClickRetweet:(WBStatusCell *)cell;{
-    StatusDetailViewController *detailViewController = [StatusDetailViewController new];
+    StatusDetailViewController *detailViewController = [[StatusDetailViewController alloc] initWithStyle:UITableViewStylePlain];
     WBStatus *status = cell.layout.status.retweetedStatus;
     detailViewController.layout = [[WBStatusLayout alloc] initWithStatus:status];
     detailViewController.title = @"微博正文";

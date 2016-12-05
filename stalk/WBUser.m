@@ -11,46 +11,48 @@
 #import "NSDate+STalk.h"
 
 @implementation WBUser
-+(instancetype) userWithDict:(NSDictionary *) dic {
++(instancetype) userWithDict:(NSDictionary *) dict {
     WBUser *user = [[WBUser alloc] init];
-    user.userId = [dic objectForKey:@"id"];
+    user.userId = [dict objectForKey:@"id"];
     if(user.userId.intValue==0) return nil;
-    if ([dic objectForKey:@"screen_name"] != nil && ![[dic objectForKey:@"screen_name"] isEqualToString:@""] ) {
-        user.screenName = [dic objectForKey:@"screen_name"];
+    if ([dict objectForKey:@"screen_name"] != nil && ![[dict objectForKey:@"screen_name"] isEqualToString:@""] ) {
+        user.screenName = [dict objectForKey:@"screen_name"];
     }else{
-        user.screenName = [dic objectForKey:@"nickname"];
+        user.screenName = [dict objectForKey:@"nickname"];
     }
     
-    user.name = [dic objectForKey:@"name"];
-    user.province = [dic objectForKey:@"province"];
-    user.city = [dic objectForKey:@"city"];
-    user.location = [dic objectForKey:@"location"];
-    user.desc = [dic objectForKey:@"description"];
-    user.url = [dic objectForKey:@"url"];
-    user.profileImageUrl = [dic objectForKey:@"profile_image_url"];
-    user.profileUrl = [dic objectForKey:@"profile_url"];
-    user.domain = [dic objectForKey:@"domain"];
-    user.gender = [dic objectForKey:@"gender"];
-    user.followersCount = [[dic objectForKey:@"followers_count"] intValue];
-    user.friendsCount = [[dic objectForKey:@"friends_count"] intValue];
-    user.statusesCount = [[dic objectForKey:@"statuses_count"] intValue];
-    user.favouritesCount = [[dic objectForKey:@"favourites_count"] intValue];
-    user.createdAt =  [NSDate USDateFromString:[dic objectForKey:@"created_at"]];
-    user.allowAllActMsg = [[dic objectForKey:@"allow_all_act_msg"] boolValue];
-    user.geoEnabled = [[dic objectForKey:@"geo_enabled"] boolValue];
-    user.verified = [[dic objectForKey:@"verified"] boolValue];
-    user.remark = [dic objectForKey:@"remark"];
-    if ([dic objectForKey:@"status"] != nil) {
-        user.status = [WBStatus statusWithDict:[dic objectForKey:@"status"]];
+    user.coverImage = [dict objectForKey:@"cover_image"];
+    user.coverImagePhone = [dict objectForKey:@"cover_image_phone"];
+    user.name = [dict objectForKey:@"name"];
+    user.province = [dict objectForKey:@"province"];
+    user.city = [dict objectForKey:@"city"];
+    user.location = [dict objectForKey:@"location"];
+    user.desc = [dict objectForKey:@"description"];
+    user.url = [dict objectForKey:@"url"];
+    user.profileImageUrl = [dict objectForKey:@"profile_image_url"];
+    user.profileUrl = [dict objectForKey:@"profile_url"];
+    user.domain = [dict objectForKey:@"domain"];
+    user.gender = [dict objectForKey:@"gender"];
+    user.followersCount = [[dict objectForKey:@"followers_count"] intValue];
+    user.friendsCount = [[dict objectForKey:@"friends_count"] intValue];
+    user.statusesCount = [[dict objectForKey:@"statuses_count"] intValue];
+    user.favouritesCount = [[dict objectForKey:@"favourites_count"] intValue];
+    user.createdAt =  [NSDate USDateFromString:[dict objectForKey:@"created_at"]];
+    user.allowAllActMsg = [[dict objectForKey:@"allow_all_act_msg"] boolValue];
+    user.geoEnabled = [[dict objectForKey:@"geo_enabled"] boolValue];
+    user.verified = [[dict objectForKey:@"verified"] boolValue];
+    user.remark = [dict objectForKey:@"remark"];
+    if ([dict objectForKey:@"status"] != nil) {
+        user.status = [WBStatus statusWithDict:[dict objectForKey:@"status"]];
     }
-    user.statusId = [dic objectForKey:@"status_id"];
-    user.allowAllComment = [[dic objectForKey:@"allow_all_comment"] boolValue];
-    user.avatarLarge = [dic objectForKey:@"avatar_large"];
-    user.verifiedReason = [dic objectForKey:@"verified_reason"];
-    user.followMe = [[dic objectForKey:@"follow_me"] boolValue];
-    user.onlineStatus = [dic objectForKey:@"online_status"];
-    user.biFollowersCount = [[dic objectForKey:@"bi_followers_count"] intValue];
-    user.lang = [dic objectForKey:@"lang"];
+    user.statusId = [dict objectForKey:@"status_id"];
+    user.allowAllComment = [[dict objectForKey:@"allow_all_comment"] boolValue];
+    user.avatarLarge = [dict objectForKey:@"avatar_large"];
+    user.verifiedReason = [dict objectForKey:@"verified_reason"];
+    user.followMe = [[dict objectForKey:@"follow_me"] boolValue];
+    user.onlineStatus = [dict objectForKey:@"online_status"];
+    user.biFollowersCount = [[dict objectForKey:@"bi_followers_count"] intValue];
+    user.lang = [dict objectForKey:@"lang"];
     return user;
 }
 

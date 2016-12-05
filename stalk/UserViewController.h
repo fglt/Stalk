@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 @class WBUser;
 
-@interface UserViewController : UIViewController
+@interface UserViewController : UITableViewController
 @property (nonatomic, strong) WBUser *user;
 
 @end

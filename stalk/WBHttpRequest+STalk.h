@@ -50,15 +50,15 @@
 
 //获取转发微博列表
 + (void)requestForRepostStatusWithStatusID:(int64_t)statusID
-                                accessToke:(NSString *)accessToken
+                                accessToken:(NSString *)accessToken
                         andOtherProperties:(NSDictionary *)otherProperties
                                      queue:(NSOperationQueue*)queue
                      withCompletionHandler:(WBRequestHandler)handler;
 
 
 //获取微博评论列表
-+ (void)requestForCommentsWithAccessToken:(NSString *)accessToken
-                                statusID:(int64_t)statusID
++ (void)requestForCommentsWithStatusID:(int64_t)statusID
+                           accessToken:(NSString *)accessToken
                       andOtherProperties:(NSDictionary *)otherProperties
                                    queue:(NSOperationQueue*)queue
                    withCompletionHandler:(WBRequestHandler)handler;

@@ -77,7 +77,7 @@ NSString * const UserUrl = @"https://api.weibo.com/2/users/show.json";
 
 
 + (void)requestForRepostStatusWithStatusID:(int64_t)statusID
-                                accessToke:(NSString *)accessToken
+                                accessToken:(NSString *)accessToken
                         andOtherProperties:(NSDictionary *)otherProperties
                                      queue:(NSOperationQueue*)queue
                      withCompletionHandler:(WBRequestHandler)handler{
@@ -89,8 +89,8 @@ NSString * const UserUrl = @"https://api.weibo.com/2/users/show.json";
     [WBHttpRequest requestWithAccessToken:accessToken url:url httpMethod:@"get" params:params queue:queue withCompletionHandler:handler];
 }
 
-+ (void)requestForCommentsWithAccessToken:(NSString *)accessToken
-                                statusID:(int64_t)statusID
++ (void)requestForCommentsWithStatusID:(int64_t)statusID
+                                accessToken:(NSString *)accessToken
                       andOtherProperties:(NSDictionary *)otherProperties
                                    queue:(NSOperationQueue*)queue
                    withCompletionHandler:(WBRequestHandler)handler{

@@ -44,17 +44,19 @@
 		1741E6711DE1D44300C887D0 /* NSObject+runtime.m in Sources */ = {isa = PBXBuildFile; fileRef = 1741E6701DE1D44300C887D0 /* NSObject+runtime.m */; };
 		1741E6741DE1DEBD00C887D0 /* YYFPSLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 1741E6731DE1DEBD00C887D0 /* YYFPSLabel.m */; };
 		1743DCF01DEF16AB009D5298 /* NSDate+STalk.m in Sources */ = {isa = PBXBuildFile; fileRef = 1743DCEF1DEF16AB009D5298 /* NSDate+STalk.m */; };
-		1743DCF31DF05653009D5298 /* CommentsDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 1743DCF21DF05653009D5298 /* CommentsDataSource.m */; };
+		1743DCF31DF05653009D5298 /* MessageDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 1743DCF21DF05653009D5298 /* MessageDataSource.m */; };
 		1743DCFF1DF1488A009D5298 /* NSMutableAttributedString+emotion.m in Sources */ = {isa = PBXBuildFile; fileRef = 1743DCFE1DF1488A009D5298 /* NSMutableAttributedString+emotion.m */; };
 		1743DD021DF15529009D5298 /* WBBaseMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 1743DD011DF15529009D5298 /* WBBaseMessage.m */; };
 		1743DD051DF18704009D5298 /* WBStatusCellDelegateIMP.m in Sources */ = {isa = PBXBuildFile; fileRef = 1743DD041DF18704009D5298 /* WBStatusCellDelegateIMP.m */; };
-		1743DD071DF18C4F009D5298 /* UserDetailView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1743DD061DF18C4F009D5298 /* UserDetailView.xib */; };
 		1743DD0A1DF18EE4009D5298 /* UserDetailView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1743DD091DF18EE4009D5298 /* UserDetailView.m */; };
+		1743DD0D1DF26008009D5298 /* UINavigationBar+Awesome.m in Sources */ = {isa = PBXBuildFile; fileRef = 1743DD0C1DF26008009D5298 /* UINavigationBar+Awesome.m */; };
+		1743DD0F1DF29439009D5298 /* defaultCover.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 1743DD0E1DF29439009D5298 /* defaultCover.jpg */; };
+		1743DD121DF2AFDD009D5298 /* PersonalStatusDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 1743DD111DF2AFDD009D5298 /* PersonalStatusDataSource.m */; };
+		1743DD181DF411A6009D5298 /* STThemeManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 1743DD171DF411A6009D5298 /* STThemeManager.m */; };
+		1743DD1B1DF43109009D5298 /* TableHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1743DD1A1DF43109009D5298 /* TableHeaderView.m */; };
 		177B20F11DE43650005A1438 /* TopicController.m in Sources */ = {isa = PBXBuildFile; fileRef = 177B20F01DE43650005A1438 /* TopicController.m */; };
 		177B20F41DE43CB0005A1438 /* SendStatusViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 177B20F31DE43CB0005A1438 /* SendStatusViewController.m */; };
 		177B20FD1DE52CB0005A1438 /* WBPicture.m in Sources */ = {isa = PBXBuildFile; fileRef = 177B20FC1DE52CB0005A1438 /* WBPicture.m */; };
-		177B21021DE56F61005A1438 /* clear.png in Resources */ = {isa = PBXBuildFile; fileRef = 177B21011DE56F61005A1438 /* clear.png */; };
-		177B21041DE5797A005A1438 /* clear247.png in Resources */ = {isa = PBXBuildFile; fileRef = 177B21031DE5797A005A1438 /* clear247.png */; };
 		177B21451DE816E2005A1438 /* ResourceWeibo.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 177B21441DE816E2005A1438 /* ResourceWeibo.bundle */; };
 		177B21581DEA72F5005A1438 /* WBStatusHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 177B21571DEA72F5005A1438 /* WBStatusHelper.m */; };
 		177B215B1DEA7341005A1438 /* WBModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 177B215A1DEA7341005A1438 /* WBModel.m */; };
@@ -134,25 +136,31 @@
 		1741E6731DE1DEBD00C887D0 /* YYFPSLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YYFPSLabel.m; sourceTree = "<group>"; };
 		1743DCEE1DEF16AB009D5298 /* NSDate+STalk.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDate+STalk.h"; sourceTree = "<group>"; };
 		1743DCEF1DEF16AB009D5298 /* NSDate+STalk.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDate+STalk.m"; sourceTree = "<group>"; };
-		1743DCF11DF05653009D5298 /* CommentsDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommentsDataSource.h; sourceTree = "<group>"; };
-		1743DCF21DF05653009D5298 /* CommentsDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommentsDataSource.m; sourceTree = "<group>"; };
+		1743DCF11DF05653009D5298 /* MessageDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MessageDataSource.h; sourceTree = "<group>"; };
+		1743DCF21DF05653009D5298 /* MessageDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MessageDataSource.m; sourceTree = "<group>"; };
 		1743DCFD1DF1488A009D5298 /* NSMutableAttributedString+emotion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSMutableAttributedString+emotion.h"; sourceTree = "<group>"; };
 		1743DCFE1DF1488A009D5298 /* NSMutableAttributedString+emotion.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSMutableAttributedString+emotion.m"; sourceTree = "<group>"; };
 		1743DD001DF15529009D5298 /* WBBaseMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WBBaseMessage.h; sourceTree = "<group>"; };
 		1743DD011DF15529009D5298 /* WBBaseMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WBBaseMessage.m; sourceTree = "<group>"; };
 		1743DD031DF18704009D5298 /* WBStatusCellDelegateIMP.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WBStatusCellDelegateIMP.h; sourceTree = "<group>"; };
 		1743DD041DF18704009D5298 /* WBStatusCellDelegateIMP.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WBStatusCellDelegateIMP.m; sourceTree = "<group>"; };
-		1743DD061DF18C4F009D5298 /* UserDetailView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = UserDetailView.xib; sourceTree = "<group>"; };
 		1743DD081DF18EE4009D5298 /* UserDetailView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserDetailView.h; sourceTree = "<group>"; };
 		1743DD091DF18EE4009D5298 /* UserDetailView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserDetailView.m; sourceTree = "<group>"; };
+		1743DD0B1DF26008009D5298 /* UINavigationBar+Awesome.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UINavigationBar+Awesome.h"; sourceTree = "<group>"; };
+		1743DD0C1DF26008009D5298 /* UINavigationBar+Awesome.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UINavigationBar+Awesome.m"; sourceTree = "<group>"; };
+		1743DD0E1DF29439009D5298 /* defaultCover.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = defaultCover.jpg; sourceTree = "<group>"; };
+		1743DD101DF2AFDD009D5298 /* PersonalStatusDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PersonalStatusDataSource.h; sourceTree = "<group>"; };
+		1743DD111DF2AFDD009D5298 /* PersonalStatusDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PersonalStatusDataSource.m; sourceTree = "<group>"; };
+		1743DD161DF411A6009D5298 /* STThemeManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STThemeManager.h; sourceTree = "<group>"; };
+		1743DD171DF411A6009D5298 /* STThemeManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STThemeManager.m; sourceTree = "<group>"; };
+		1743DD191DF43109009D5298 /* TableHeaderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TableHeaderView.h; sourceTree = "<group>"; };
+		1743DD1A1DF43109009D5298 /* TableHeaderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TableHeaderView.m; sourceTree = "<group>"; };
 		177B20EF1DE43650005A1438 /* TopicController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TopicController.h; sourceTree = "<group>"; };
 		177B20F01DE43650005A1438 /* TopicController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TopicController.m; sourceTree = "<group>"; };
 		177B20F21DE43CB0005A1438 /* SendStatusViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SendStatusViewController.h; sourceTree = "<group>"; };
 		177B20F31DE43CB0005A1438 /* SendStatusViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SendStatusViewController.m; sourceTree = "<group>"; };
 		177B20FB1DE52CB0005A1438 /* WBPicture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WBPicture.h; sourceTree = "<group>"; };
 		177B20FC1DE52CB0005A1438 /* WBPicture.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WBPicture.m; sourceTree = "<group>"; };
-		177B21011DE56F61005A1438 /* clear.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = clear.png; sourceTree = "<group>"; };
-		177B21031DE5797A005A1438 /* clear247.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = clear247.png; sourceTree = "<group>"; };
 		177B21441DE816E2005A1438 /* ResourceWeibo.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = ResourceWeibo.bundle; sourceTree = "<group>"; };
 		177B21561DEA72F5005A1438 /* WBStatusHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WBStatusHelper.h; sourceTree = "<group>"; };
 		177B21571DEA72F5005A1438 /* WBStatusHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WBStatusHelper.m; sourceTree = "<group>"; };
@@ -227,13 +235,12 @@
 		171BCCA21DD4B6FF009FF89E /* stalk */ = {
 			isa = PBXGroup;
 			children = (
+				1743DD0E1DF29439009D5298 /* defaultCover.jpg */,
 				171BCCA61DD4B6FF009FF89E /* AppDelegate.h */,
 				171BCCA71DD4B6FF009FF89E /* AppDelegate.m */,
 				17DAF7C51DEC81A500D11191 /* AtMeTableViewController.h */,
 				17DAF7C61DEC81A500D11191 /* AtMeTableViewController.m */,
 				171BCD141DD70299009FF89E /* category */,
-				177B21011DE56F61005A1438 /* clear.png */,
-				177B21031DE5797A005A1438 /* clear247.png */,
 				171BCCF41DD696F5009FF89E /* constant.h */,
 				171BCCF71DD698F3009FF89E /* constant.m */,
 				177B215F1DEAD3A8005A1438 /* EmoticonWeibo.bundle */,
@@ -265,8 +272,10 @@
 				1741E66D1DE1AB6A00C887D0 /* WBRequestQueue.m */,
 				171BCCF91DD69BE3009FF89E /* WeiBoTabBarController.h */,
 				171BCCFA1DD69BE3009FF89E /* WeiBoTabBarController.m */,
-				1743DCF11DF05653009D5298 /* CommentsDataSource.h */,
-				1743DCF21DF05653009D5298 /* CommentsDataSource.m */,
+				1743DCF11DF05653009D5298 /* MessageDataSource.h */,
+				1743DCF21DF05653009D5298 /* MessageDataSource.m */,
+				1743DD101DF2AFDD009D5298 /* PersonalStatusDataSource.h */,
+				1743DD111DF2AFDD009D5298 /* PersonalStatusDataSource.m */,
 			);
 			path = stalk;
 			sourceTree = "<group>";
@@ -306,7 +315,6 @@
 		171BCD121DD7026D009FF89E /* view */ = {
 			isa = PBXGroup;
 			children = (
-				1743DD061DF18C4F009D5298 /* UserDetailView.xib */,
 				17DAF7C21DEC628D00D11191 /* PhotoBrowerView.h */,
 				17DAF7C31DEC628D00D11191 /* PhotoBrowerView.m */,
 				171BCD501DDB4D5E009FF89E /* STalkTextView.h */,
@@ -314,11 +322,13 @@
 				171BCD181DD7347D009FF89E /* WBStatusCell.h */,
 				171BCD191DD7347D009FF89E /* WBStatusCell.m */,
 				1741E6721DE1DEBD00C887D0 /* YYFPSLabel.h */,
-				1741E6731DE1DEBD00C887D0 /* YYFPSLabel.m */,
 				1743DD031DF18704009D5298 /* WBStatusCellDelegateIMP.h */,
 				1743DD041DF18704009D5298 /* WBStatusCellDelegateIMP.m */,
 				1743DD081DF18EE4009D5298 /* UserDetailView.h */,
 				1743DD091DF18EE4009D5298 /* UserDetailView.m */,
+				1741E6731DE1DEBD00C887D0 /* YYFPSLabel.m */,
+				1743DD191DF43109009D5298 /* TableHeaderView.h */,
+				1743DD1A1DF43109009D5298 /* TableHeaderView.m */,
 			);
 			name = view;
 			sourceTree = "<group>";
@@ -350,6 +360,8 @@
 				17DAF7C91DED506700D11191 /* WBTextStorage.m */,
 				1743DD001DF15529009D5298 /* WBBaseMessage.h */,
 				1743DD011DF15529009D5298 /* WBBaseMessage.m */,
+				1743DD161DF411A6009D5298 /* STThemeManager.h */,
+				1743DD171DF411A6009D5298 /* STThemeManager.m */,
 			);
 			name = modal;
 			sourceTree = "<group>";
@@ -357,6 +369,8 @@
 		171BCD141DD70299009FF89E /* category */ = {
 			isa = PBXGroup;
 			children = (
+				1743DD0B1DF26008009D5298 /* UINavigationBar+Awesome.h */,
+				1743DD0C1DF26008009D5298 /* UINavigationBar+Awesome.m */,
 				171BCCEE1DD61C57009FF89E /* WBAuthorizeResponse+copy.h */,
 				171BCCEF1DD61C57009FF89E /* WBAuthorizeResponse+copy.m */,
 				171BCD001DD7025A009FF89E /* NSString+Additions.h */,
@@ -446,12 +460,10 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1743DD071DF18C4F009D5298 /* UserDetailView.xib in Resources */,
 				171BCCB31DD4B6FF009FF89E /* LaunchScreen.storyboard in Resources */,
-				177B21021DE56F61005A1438 /* clear.png in Resources */,
-				177B21041DE5797A005A1438 /* clear247.png in Resources */,
 				171BCCB01DD4B6FF009FF89E /* Assets.xcassets in Resources */,
 				171BCCAE1DD4B6FF009FF89E /* Main.storyboard in Resources */,
+				1743DD0F1DF29439009D5298 /* defaultCover.jpg in Resources */,
 				177B21451DE816E2005A1438 /* ResourceWeibo.bundle in Resources */,
 				177B21601DEAD3A8005A1438 /* EmoticonWeibo.bundle in Resources */,
 			);
@@ -514,6 +526,7 @@
 			files = (
 				171BCCE71DD60245009FF89E /* WBStatus.m in Sources */,
 				171BCCFB1DD69BE3009FF89E /* WeiBoTabBarController.m in Sources */,
+				1743DD181DF411A6009D5298 /* STThemeManager.m in Sources */,
 				171BCD2C1DDADA38009FF89E /* Emotion.m in Sources */,
 				1741E66E1DE1AB6A00C887D0 /* WBRequestQueue.m in Sources */,
 				1741E6711DE1D44300C887D0 /* NSObject+runtime.m in Sources */,
@@ -536,10 +549,12 @@
 				1741E6741DE1DEBD00C887D0 /* YYFPSLabel.m in Sources */,
 				1743DD051DF18704009D5298 /* WBStatusCellDelegateIMP.m in Sources */,
 				17AFD3F71DDED732007C7DB9 /* StatusDetailViewController.m in Sources */,
-				1743DCF31DF05653009D5298 /* CommentsDataSource.m in Sources */,
+				1743DCF31DF05653009D5298 /* MessageDataSource.m in Sources */,
 				17DAF7C41DEC628D00D11191 /* PhotoBrowerView.m in Sources */,
 				171BCCEA1DD60E71009FF89E /* HomeTableViewController.m in Sources */,
+				1743DD1B1DF43109009D5298 /* TableHeaderView.m in Sources */,
 				171BCCFE1DD6C110009FF89E /* UserWeiBoTableViewController.m in Sources */,
+				1743DD121DF2AFDD009D5298 /* PersonalStatusDataSource.m in Sources */,
 				1743DD0A1DF18EE4009D5298 /* UserDetailView.m in Sources */,
 				171BCCA51DD4B6FF009FF89E /* main.m in Sources */,
 				17DAF7C71DEC81A500D11191 /* AtMeTableViewController.m in Sources */,
@@ -554,6 +569,7 @@
 				171BCD291DDAD6A5009FF89E /* STalkTextAttachment.m in Sources */,
 				177B21581DEA72F5005A1438 /* WBStatusHelper.m in Sources */,
 				17FA23091DE3DD8D00617651 /* StatusDataSource.m in Sources */,
+				1743DD0D1DF26008009D5298 /* UINavigationBar+Awesome.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

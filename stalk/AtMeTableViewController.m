@@ -7,25 +7,54 @@
 //
 
 #import "AtMeTableViewController.h"
+#import "WBStatusCellDelegateIMP.h"
 
 @interface AtMeTableViewController ()
 @property (nonatomic, strong) StatusDataSource *dataSource;
+@property (nonatomic, strong) WBStatusCellDelegateIMP *cellDelegate;
 @end
 
 @implementation AtMeTableViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    _cellDelegate = [WBStatusCellDelegateIMP new];
+    _cellDelegate.controller = self;
+    [self.tableView setSeparatorInset:UIEdgeInsetsZero];
+    [self.tableView setLayoutMargins:UIEdgeInsetsZero];
     self.tableView.delegate = self;
-//    [self.tableView registerClass:[WBStatusCell class] forCellReuseIdentifier:@"ALLStatusesCellID"];
-//    _dataSource = [[StatusDataSource alloc]initWithCellIdentifer:@"ALLStatusesCellID" block:^(id cell, id statusLayout) {
-//    }];
-//    self.tableView.dataSource = _dataSource;
-    // Uncomment the following line to preserve selection between presentations.
-    // self.clearsSelectionOnViewWillAppear = NO;
+    self.tableView.tableFooterView = UIView.new;
+    [self.tableView registerClass:[WBStatusCell class] forCellReuseIdentifier:@"AtMeStatusesCellID"];
+    _dataSource = [[StatusDataSource alloc]initWithCellIdentifer:@"AtMeStatusesCellID" block:^(id cell, id statusLayout) {
+        WBStatusCell *wbcell = (WBStatusCell *)cell;
+        wbcell.layout = (WBStatusLayout *) statusLayout;
+        wbcell.delegate = _cellDelegate;
+    }];
+    self.tableView.dataSource = _dataSource;
+
+    self.navigationController.view.userInteractionEnabled = NO;
+    UIActivityIndicatorView *indicator = [self activityIndicatorView];
+    [indicator startAnimating];
+    [self.view addSubview:indicator];
+    [self.dataSource loadAtMeStatusWithCompletion:^(void) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [indicator removeFromSuperview];
+            self.navigationController.view.userInteractionEnabled = YES;
+            [self.tableView reloadData];
+        });
+    }];
+
+}
+
+- (UIActivityIndicatorView *)activityIndicatorView{
+    UIActivityIndicatorView *indicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
+    indicator.size = CGSizeMake(50, 50);
+    indicator.center = CGPointMake(self.view.width / 2, self.view.height / 2);
+    indicator.backgroundColor = [UIColor colorWithWhite:0.000 alpha:0.670];
+    indicator.clipsToBounds = YES;
     
-    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
+    indicator.layer.cornerRadius = 6;
+    return indicator;
 }
 
 - (void)didReceiveMemoryWarning {
@@ -33,70 +62,10 @@
     // Dispose of any resources that can be recreated.
 }
 
-#pragma mark - Table view data source
-
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-#warning Incomplete implementation, return the number of sections
-    return 1;
-}
-
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-#warning Incomplete implementation, return the number of rows
-    return 0;
-}
-
-/*
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:<#@"reuseIdentifier"#> forIndexPath:indexPath];
+-(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     
-    // Configure the cell...
-    
-    return cell;
+    return [_dataSource objectAtIndex :indexPath.row].height + CellPadding;
 }
-*/
 
-/*
-// Override to support conditional editing of the table view.
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
-    // Return NO if you do not want the specified item to be editable.
-    return YES;
-}
-*/
-
-/*
-// Override to support editing the table view.
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (editingStyle == UITableViewCellEditingStyleDelete) {
-        // Delete the row from the data source
-        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-    } else if (editingStyle == UITableViewCellEditingStyleInsert) {
-        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-    }   
-}
-*/
-
-/*
-// Override to support rearranging the table view.
-- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath {
-}
-*/
-
-/*
-// Override to support conditional rearranging of the table view.
-- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath {
-    // Return NO if you do not want the item to be re-orderable.
-    return YES;
-}
-*/
-
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 @end

@@ -25,15 +25,12 @@
 }
 
 - (instancetype)initWithMessage:(WBBaseMessage *)message{
-    self = [super init];
-    _displaySource = NO;
-    _message = message;
-    return self;
+    return [self initWithMessage:message displaySource:NO];
 }
 
 - (void)layout{
     if(_displaySource){
-         _fromText = [NSString stringWithFormat:@"%@ 来自%@", [WBStatusHelper stringWithTimelineDate:_message.createdAt], [_message sourceForDisplay]];
+        _fromText = [NSString stringWithFormat:@"%@ 来自%@", [WBStatusHelper stringWithTimelineDate:_message.createdAt], [_message sourceForDisplay]];
     }else{
         _fromText = [self.dateFormatter stringFromDate:_message.createdAt];
     }
@@ -110,8 +107,8 @@
 
 - (void)layout
 {
-    CGFloat viewWidth = CELL_WIDTH - (PADDING<<1);
-    _imgWidth = (viewWidth - 2*SIZE_GAP_IMG)/3;
+    CGFloat viewWidth = CellWidth - (PADDING<<1);
+    _imgWidth = (viewWidth - 2*ImageGap)/3;
     _imgHeight = _imgWidth *0.75;
     CGFloat picHeight=0;
     UIFont *font = [UIFont systemFontOfSize:SIZE_FONT_CONTENT];
@@ -134,7 +131,7 @@
     //文字内容
     CGSize textSize = [self sizeWithText:attributedStr maxSize:CGSizeMake(viewWidth, MAXFLOAT)];
 
-    self.statusTextFrame = CGRectMake(PADDING, ICONWIDTH + PADDING, viewWidth, textSize.height);
+    self.statusTextFrame = CGRectMake(PADDING, IconWidth + PADDING, viewWidth, textSize.height);
     _statusViewHeight = CGRectGetMaxY(_statusTextFrame)+PADDING*2;
     
     if(_status.retweetedStatus){
@@ -155,9 +152,9 @@
         picHeight = [self heightForPic:_pictures.count];
         self.retweetPicFrame = CGRectMake(PADDING, CGRectGetMaxY(self.retweetTextFrame)+PADDING, viewWidth, picHeight);
         if(picHeight>0){
-            self.retweetContentFrame = CGRectMake(0, CGRectGetMaxY(self.statusTextFrame) + PADDING, CELL_WIDTH, retweetSize.height + PADDING + picHeight);
+            self.retweetContentFrame = CGRectMake(0, CGRectGetMaxY(self.statusTextFrame) + PADDING, CellWidth, retweetSize.height + PADDING + picHeight);
         }else{
-            self.retweetContentFrame = CGRectMake(0, CGRectGetMaxY(self.statusTextFrame) + PADDING, CELL_WIDTH, retweetSize.height);
+            self.retweetContentFrame = CGRectMake(0, CGRectGetMaxY(self.statusTextFrame) + PADDING, CellWidth, retweetSize.height);
         }
         _statusViewHeight += self.retweetContentFrame.size.height +PADDING;
     } else{
@@ -177,7 +174,7 @@
 
     _userLayout = [[WBUserLayout alloc] initWithMessage:_status displaySource:YES];
     _userLayout.nameFont = [UIFont systemFontOfSize:SIZE_FONT_CONTENT-2];
-    _userLayout.fromFont = [UIFont systemFontOfSize:SIZE_FONT_CONTENT-5];
+    _userLayout.fromFont = [UIFont systemFontOfSize:SIZE_FONT_CONTENT-5 weight:UIFontWeightLight];
     [_userLayout layout];
 }
 
@@ -188,7 +185,7 @@
         _imgHeight *= 1.5;
     }
     count--;
-    return (count/3 * _imgHeight +_imgHeight + count/3 *SIZE_GAP_IMG);
+    return (count/3 * _imgHeight +_imgHeight + count/3 *ImageGap);
 }
 
 @end
@@ -209,8 +206,8 @@
     [_userLayout layout];
     _commentText = [[NSMutableAttributedString alloc]initWithString:_comment.text attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:SIZE_FONT_CONTENT-3]}];
     [_commentText replaceEmotion];
-    _commentSize = [_commentText boundingRectWithSize:CGSizeMake(CellContentWidth-ICONWIDTH, 1000) options:NSStringDrawingUsesLineFragmentOrigin context:nil].size;
-    _cellHeight  = PADDING*3 + ICONWIDTH  + _commentSize.height;
+    _commentSize = [_commentText boundingRectWithSize:CGSizeMake(CellContentWidth-IconWidth, 1000) options:NSStringDrawingUsesLineFragmentOrigin context:nil].size;
+    _cellHeight  = PADDING*2 + IconWidth  + _commentSize.height;
 }
 
 + (NSMutableArray *)layoutsWithComments:(NSArray *)comments{
@@ -221,4 +218,38 @@
     }
     return layouts;
 }
+@end
+
+@implementation WBMessageLayout
+
+- (instancetype)initWithWBMessage:(WBBaseMessage *)message{
+    self = [super init];
+    _message = message;
+    _textFont = [UIFont systemFontOfSize:14];
+    return self;
+}
+
+- (void)layout{
+    _userLayout = [[WBUserLayout alloc] initWithMessage:_message];
+    _userLayout.nameFont = [UIFont systemFontOfSize:SIZE_FONT_CONTENT-4];
+    _userLayout.fromFont = [UIFont systemFontOfSize:SIZE_FONT_CONTENT-7];
+    [_userLayout layout];
+    _messageText = [[NSMutableAttributedString alloc]initWithString:_message.text attributes:@{NSFontAttributeName:_textFont}];
+    [_messageText replaceEmotion];
+    _textSize = [_messageText boundingRectWithSize:CGSizeMake(CellContentWidth-IconWidth, 1000) options:NSStringDrawingUsesLineFragmentOrigin context:nil].size;
+    _cellHeight  = PADDING*3 + IconWidth  + _textSize.height;
+}
+
++ (NSMutableArray *)layoutsWithWBMessages:(NSArray *)messages{
+    NSMutableArray *layouts= [NSMutableArray arrayWithCapacity:messages.count];
+    for(WBBaseMessage *message in messages){
+        WBMessageLayout *layout = [[WBMessageLayout alloc]initWithWBMessage:message];
+        layout.textFont =[UIFont systemFontOfSize:14];
+        [layout layout];
+        [layouts addObject:layout];
+    }
+    return layouts;
+}
+
+
 @end
