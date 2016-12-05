@@ -19,7 +19,7 @@
 @property (nonatomic, strong) MessageDataSource *commentDataSource;
 @property (nonatomic, strong) MessageDataSource *repostDataSrource;
 @property (nonatomic, strong) WBStatusCellDelegateIMP *cellDelegate;
-
+@property (nonatomic, strong) UIView *headerSectionView;
 @end
 
 @implementation StatusDetailViewController
@@ -28,18 +28,15 @@
     
     [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
         _statusCell.frame = CGRectMake(0, 0, CellWidth, _statusCell.frame.size.height);
+        _headerSectionView.subviews[0].left = (self.view.width - CellWidth)/2;
     } completion:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
     }];
 }
 
-//- (void)loadView{
-//    UITableView *tableView = [[UITableView alloc] initWithFrame:[UIScreen mainScreen].bounds style:UITableViewStylePlain];
-//    
-//    tableView.
-//}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    [self configureHeadreSectionView];
     
     _cellDelegate = [[WBStatusCellDelegateIMP alloc] initWithController:self];
 
@@ -71,53 +68,69 @@
 
 }
 
+
+- (void)configureHeadreSectionView{
+    UIFont *font = [UIFont systemFontOfSize:15];
+    UIView *view = [UIView new];
+    view.backgroundColor = [UIColor whiteColor];
+    view.frame = CGRectMake((self.view.width-CellWidth)/2, 0, CellWidth, font.lineHeight+10);
+    
+    UIButton *repostButton = [UIButton buttonWithType:UIButtonTypeSystem];
+    repostButton.titleLabel.font =font;
+    NSString *repostTitle = [NSString stringWithFormat:@"转发:%d", _layout.status.repostsCount];
+    CGSize textSize = [repostTitle boundingRectWithSize:view.frame.size options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName:font} context:nil].size;
+    [repostButton setTitle:repostTitle forState:UIControlStateNormal];
+    repostButton.frame = CGRectMake(0, 0, textSize.width, view.height);
+    repostButton.tag = 10;
+    repostButton.exclusiveTouch = YES;
+    
+    NSString *commentTitle =[NSString stringWithFormat:@"评论:%d", _layout.status.commentsCount];
+    textSize = [commentTitle boundingRectWithSize:view.frame.size options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName:font} context:nil].size;
+    UIButton *commentButton = [UIButton buttonWithType:UIButtonTypeSystem];
+    commentButton.titleLabel.font =font;
+    [commentButton setTitle:commentTitle forState:UIControlStateNormal];
+    commentButton.frame = CGRectMake(CGRectGetMaxX(repostButton.frame)+10, 0, textSize.width, view.height);
+    commentButton.tag = 11;
+    commentButton.exclusiveTouch = YES;
+    
+    [view addSubview:repostButton];
+    [view addSubview:commentButton];
+    [repostButton addTarget:self action:@selector(touchHeaderView:) forControlEvents:UIControlEventTouchUpInside];
+    [commentButton addTarget:self action:@selector(touchHeaderView:) forControlEvents:UIControlEventTouchUpInside];
+   
+    _headerSectionView = UIView.new;
+    _headerSectionView.frame = CGRectMake(0, 0, self.view.width, font.lineHeight+10);
+    [_headerSectionView addSubview:view];
+}
+
+- (void)touchHeaderView:(UIButton *)sender{
+    
+    MessageDataSource *dataSource = (MessageDataSource *)self.tableView.dataSource;
+    if(sender.tag == 10){
+        if(dataSource.type == MESSAGETYPECOMMENT){
+            self.tableView.dataSource = _repostDataSrource;
+            [self.tableView reloadData];
+        }
+    }else{
+        if(dataSource.type == MESSAGETYPEREPOST){
+            self.tableView.dataSource = _commentDataSource;
+            [self.tableView reloadData];
+        }
+    }
+}
+
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     return [((MessageDataSource *) tableView.dataSource) cellHeightAtIndex:indexPath.row];
 }
 
+
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section{
-    UIFont *font = [UIFont systemFontOfSize:17];
-    UIView *view = [UIView new];
-    view.backgroundColor = [UIColor whiteColor];
-    view.frame = CGRectMake(0, 0, CellWidth, font.lineHeight);
-    UIButton *repost = [UIButton buttonWithType:UIButtonTypeSystem];
-    repost.titleLabel.font =font;
-    NSString *repostTitle = [NSString stringWithFormat:@"转发:%d", _layout.status.repostsCount];
-    [repost setTitle:repostTitle forState:UIControlStateNormal];
-    repost.frame = CGRectMake(100, 0, 80, view.height);
-    NSString *commentTitle =[NSString stringWithFormat:@"评论:%d", _layout.status.commentsCount];
-    UIButton *comment = [UIButton buttonWithType:UIButtonTypeSystem];
-     comment.titleLabel.font =font;
-    [comment setTitle:commentTitle forState:UIControlStateNormal];
-    comment.frame = CGRectMake(200, 0, 80, view.height);
-    [view addSubview:repost];
-    [view addSubview:comment];
-    view.autoresizingMask  = UIViewAutoresizingFlexibleWidth |UIViewAutoresizingFlexibleHeight;
-    [repost addBlockForControlEvents:UIControlEventTouchUpInside block:^(id  _Nonnull sender) {
-        MessageDataSource *dataSource = (MessageDataSource *)self.tableView.dataSource;
-        
-        if(dataSource.type == MESSAGETYPECOMMENT){
-            dataSource.type = MESSAGETYPEREPOST;
-            self.tableView.dataSource = _repostDataSrource;
-            [tableView reloadData];
-        }
-    }];
-    
-    [comment addBlockForControlEvents:UIControlEventTouchUpInside block:^(id  _Nonnull sender) {
-        MessageDataSource *dataSource = (MessageDataSource *)self.tableView.dataSource;
-        
-        if(dataSource.type == MESSAGETYPEREPOST){
-            dataSource.type = MESSAGETYPECOMMENT;
-            self.tableView.dataSource = _commentDataSource;
-            [tableView reloadData];
-        }
-    }];
-    return view;
+    return _headerSectionView;
 }
 
 - (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
     UIFont *font = [UIFont systemFontOfSize:17];
-    return font.lineHeight;
+    return font.lineHeight+10;
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
