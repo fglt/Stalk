@@ -20,6 +20,7 @@
 @property (nonatomic, strong) MessageDataSource *repostDataSrource;
 @property (nonatomic, strong) WBStatusCellDelegateIMP *cellDelegate;
 @property (nonatomic, strong) UIView *headerSectionView;
+
 @end
 
 @implementation StatusDetailViewController
@@ -54,6 +55,8 @@
     [headerView addSubview:_statusCell];
     headerView.frame = CGRectMake(0, 0, self.tableView.width, size.height);
     self.tableView.tableHeaderView = headerView;
+    //[self.tableView addSubview:headerView];
+    
     self.tableView.delegate = self;
     self.tableView.dataSource = _commentDataSource;
     self.tableView.tableFooterView= UIView.new;
@@ -109,12 +112,15 @@
     if(sender.tag == 10){
         if(dataSource.type == MESSAGETYPECOMMENT){
             self.tableView.dataSource = _repostDataSrource;
+
             [self.tableView reloadData];
+            //self.tableView.contentOffset = CGPointMake(0, self.tableView.tableHeaderView.frame.size.height-64);
         }
     }else{
         if(dataSource.type == MESSAGETYPEREPOST){
             self.tableView.dataSource = _commentDataSource;
             [self.tableView reloadData];
+            //self.tableView.contentOffset = CGPointMake(0, self.tableView.tableHeaderView.frame.size.height-64);
         }
     }
 }

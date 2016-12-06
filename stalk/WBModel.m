@@ -42,9 +42,9 @@
 + (instancetype)commentWithDictionary:(NSDictionary *)dict{
     if(!dict) return nil;
     WBComment *comment = [WBComment new];
-    comment.lid = [dict[@"id"] longLongValue];
+    comment.lid = dict[@"id"];
     comment.createdAt = [NSDate USDateFromString:dict[@"created_at"]];
-    comment.mid = [dict[@"mid"] longLongValue];
+    comment.mid = dict[@"mid"];
     comment.text =dict[@"text"];
     comment.source =dict[@"source"];
     comment.user = [WBUser userWithDict:dict[@"user"]];

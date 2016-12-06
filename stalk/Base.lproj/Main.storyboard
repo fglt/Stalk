@@ -54,7 +54,7 @@
                                 <rect key="frame" x="0.0" y="28" width="375" height="60"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="fbp-UG-w6Q" id="0Ee-Iu-Tlf">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="59.5"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="59"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </tableViewCellContentView>
                             </tableViewCell>
@@ -181,7 +181,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="v74-Zg-Sbp" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1084" y="188"/>
+            <point key="canvasLocation" x="-798" y="223"/>
         </scene>
         <!--我-->
         <scene sceneID="VOC-EK-QhC">
@@ -226,7 +226,6 @@
         <!--Photo Brower View Controller-->
         <scene sceneID="s5e-Dt-KcH">
             <objects>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="hGN-jF-CAH" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <viewController storyboardIdentifier="PhotoBrowerViewController" hidesBottomBarWhenPushed="YES" id="Yld-Jb-iXl" customClass="PhotoBrowerViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="Eyd-dI-OXr"/>
@@ -303,6 +302,7 @@
                         <outlet property="photoGroup" destination="M0F-y7-p8v" id="5ps-F6-qeC"/>
                     </connections>
                 </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="hGN-jF-CAH" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
         </scene>
         <!--消息-->

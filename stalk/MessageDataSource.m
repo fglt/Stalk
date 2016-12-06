@@ -25,7 +25,7 @@
     return self;
 }
 
-- (void)loadMessagesForStatus:(int64_t)statusId withCompletion:(void(^)())completion{
+- (void)loadMessagesForStatus:(NSString *)statusId withCompletion:(void(^)())completion{
     if(_type == MESSAGETYPEREPOST){
         [self loadRepostsForStatus:statusId withCompletion:completion];
     }else{
@@ -33,7 +33,7 @@
     }
 }
 
-- (void)loadCommentsForStatus:(int64_t)statusId withCompletion:(void(^)())completion{
+- (void)loadCommentsForStatus:(NSString *)statusId withCompletion:(void(^)())completion{
     AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
     
     NSDictionary *parms = @{@"count":[NSString stringWithFormat:@"%d",100]};
@@ -45,7 +45,7 @@
     }];
 }
 
-- (void)loadRepostsForStatus:(int64_t)statusId withCompletion:(void(^)())completion{
+- (void)loadRepostsForStatus:(NSString *)statusId withCompletion:(void(^)())completion{
     AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
     
     NSDictionary *parms = @{@"count":[NSString stringWithFormat:@"%d",100]};

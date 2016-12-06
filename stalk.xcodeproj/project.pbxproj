@@ -51,7 +51,6 @@
 		1743DD0A1DF18EE4009D5298 /* UserDetailView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1743DD091DF18EE4009D5298 /* UserDetailView.m */; };
 		1743DD0D1DF26008009D5298 /* UINavigationBar+Awesome.m in Sources */ = {isa = PBXBuildFile; fileRef = 1743DD0C1DF26008009D5298 /* UINavigationBar+Awesome.m */; };
 		1743DD0F1DF29439009D5298 /* defaultCover.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 1743DD0E1DF29439009D5298 /* defaultCover.jpg */; };
-		1743DD121DF2AFDD009D5298 /* PersonalStatusDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 1743DD111DF2AFDD009D5298 /* PersonalStatusDataSource.m */; };
 		1743DD181DF411A6009D5298 /* STThemeManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 1743DD171DF411A6009D5298 /* STThemeManager.m */; };
 		1743DD1B1DF43109009D5298 /* TableHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1743DD1A1DF43109009D5298 /* TableHeaderView.m */; };
 		177B20F11DE43650005A1438 /* TopicController.m in Sources */ = {isa = PBXBuildFile; fileRef = 177B20F01DE43650005A1438 /* TopicController.m */; };
@@ -149,8 +148,6 @@
 		1743DD0B1DF26008009D5298 /* UINavigationBar+Awesome.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UINavigationBar+Awesome.h"; sourceTree = "<group>"; };
 		1743DD0C1DF26008009D5298 /* UINavigationBar+Awesome.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UINavigationBar+Awesome.m"; sourceTree = "<group>"; };
 		1743DD0E1DF29439009D5298 /* defaultCover.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = defaultCover.jpg; sourceTree = "<group>"; };
-		1743DD101DF2AFDD009D5298 /* PersonalStatusDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PersonalStatusDataSource.h; sourceTree = "<group>"; };
-		1743DD111DF2AFDD009D5298 /* PersonalStatusDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PersonalStatusDataSource.m; sourceTree = "<group>"; };
 		1743DD161DF411A6009D5298 /* STThemeManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STThemeManager.h; sourceTree = "<group>"; };
 		1743DD171DF411A6009D5298 /* STThemeManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STThemeManager.m; sourceTree = "<group>"; };
 		1743DD191DF43109009D5298 /* TableHeaderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TableHeaderView.h; sourceTree = "<group>"; };
@@ -274,8 +271,6 @@
 				171BCCFA1DD69BE3009FF89E /* WeiBoTabBarController.m */,
 				1743DCF11DF05653009D5298 /* MessageDataSource.h */,
 				1743DCF21DF05653009D5298 /* MessageDataSource.m */,
-				1743DD101DF2AFDD009D5298 /* PersonalStatusDataSource.h */,
-				1743DD111DF2AFDD009D5298 /* PersonalStatusDataSource.m */,
 			);
 			path = stalk;
 			sourceTree = "<group>";
@@ -554,7 +549,6 @@
 				171BCCEA1DD60E71009FF89E /* HomeTableViewController.m in Sources */,
 				1743DD1B1DF43109009D5298 /* TableHeaderView.m in Sources */,
 				171BCCFE1DD6C110009FF89E /* UserWeiBoTableViewController.m in Sources */,
-				1743DD121DF2AFDD009D5298 /* PersonalStatusDataSource.m in Sources */,
 				1743DD0A1DF18EE4009D5298 /* UserDetailView.m in Sources */,
 				171BCCA51DD4B6FF009FF89E /* main.m in Sources */,
 				17DAF7C71DEC81A500D11191 /* AtMeTableViewController.m in Sources */,

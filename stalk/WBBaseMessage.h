@@ -11,10 +11,10 @@
 
 @interface WBBaseMessage : NSObject
 @property (nonatomic, copy)NSDate *createdAt;
-@property (nonatomic) int64_t lid;
+@property (nonatomic) NSString *lid;
 @property (nonatomic, strong) WBUser *user;
 @property (nonatomic) NSString *text;
-@property (nonatomic) int64_t mid;
+@property (nonatomic) NSString *mid;
 @property (nonatomic) NSString *source;
 
 - (NSString *)sourceForDisplay;

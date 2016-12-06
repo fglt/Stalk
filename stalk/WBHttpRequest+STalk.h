@@ -49,7 +49,7 @@
                          withCompletionHandler:(WBRequestHandler)handler;
 
 //获取转发微博列表
-+ (void)requestForRepostStatusWithStatusID:(int64_t)statusID
++ (void)requestForRepostStatusWithStatusID:(NSString *)statusID
                                 accessToken:(NSString *)accessToken
                         andOtherProperties:(NSDictionary *)otherProperties
                                      queue:(NSOperationQueue*)queue
@@ -57,9 +57,17 @@
 
 
 //获取微博评论列表
-+ (void)requestForCommentsWithStatusID:(int64_t)statusID
++ (void)requestForCommentsWithStatusID:(NSString *)statusID
                            accessToken:(NSString *)accessToken
                       andOtherProperties:(NSDictionary *)otherProperties
                                    queue:(NSOperationQueue*)queue
                    withCompletionHandler:(WBRequestHandler)handler;
+
+//评论微博
++ (void)requestForCreateCommentForStatusID:(NSString *)statusID
+                               accessToken:(NSString *)accessToken
+                               commentText:(NSString *)comment
+                        andOtherProperties:(NSDictionary *)otherProperties
+                                     queue:(NSOperationQueue *)queue
+                     withCompletionHandler:(WBRequestHandler)handler;
 @end

@@ -20,45 +20,45 @@
 + (instancetype)statusWithDict:(NSDictionary *) dict {
     if(!dict) return nil;
     WBStatus *aStatus = [[WBStatus alloc] init];
-    aStatus.createdAt = [NSDate USDateFromString:[dict objectForKey:@"created_at"]];
-    aStatus.lid = [[dict objectForKey:@"id"] longLongValue];
-    aStatus.mid = [[dict objectForKey:@"mid"] longLongValue];
-    aStatus.text = [dict objectForKey:@"text"];
-    aStatus.source = [dict objectForKey:@"source"];
-    aStatus.favorited = [[dict objectForKey:@"favorited"] boolValue];
-    aStatus.truncated = [[dict objectForKey:@"truncated"] boolValue];
-    aStatus.inReply2StatusId = [dict objectForKey:@"in_reply_to_status_id"];
-    aStatus.inReply2UserId = [dict objectForKey:@"in_reply_to_user_id"];
-    aStatus.inReply2ScreenName = [dict objectForKey:@"in_reply_to_screen_name"];
+    aStatus.createdAt = [NSDate USDateFromString:dict[@"created_at"]];
+    aStatus.lid = [dict[@"id"] stringValue];
+    aStatus.mid = dict [@"mid"];
+    aStatus.text = dict[@"text"];
+    aStatus.source = dict[@"source"];
+    aStatus.favorited = [dict[@"favorited"] boolValue];
+    aStatus.truncated = [dict[@"truncated"] boolValue];
+    aStatus.inReply2StatusId = dict[@"in_reply_to_status_id"];
+    aStatus.inReply2UserId = dict[@"in_reply_to_user_id"];
+    aStatus.inReply2ScreenName = dict[@"in_reply_to_screen_name"];
 
     aStatus.thumbnailPic = [[NSMutableArray alloc] initWithCapacity:0];
-    NSMutableArray *imageArray = [dict objectForKey:@"pic_urls"];
+    NSMutableArray *imageArray = dict[@"pic_urls"];
     if ([imageArray count] != 0) {
         for (NSDictionary *imageDic in imageArray) {
-            [aStatus.thumbnailPic addObject:[imageDic objectForKey:@"thumbnail_pic"]];
+            [aStatus.thumbnailPic addObject:imageDic[@"thumbnail_pic"]];
         }
     }
     
     if ([dict objectForKey:@"bmiddle_pic"] != nil ) {
-        aStatus.bmiddlePic = [dict objectForKey:@"bmiddle_pic"];
+        aStatus.bmiddlePic = dict[@"bmiddle_pic"];
     }
     if ([dict objectForKey:@"original_pic"] != nil ) {
-        aStatus.originalPic = [dict objectForKey:@"original_pic"];
+        aStatus.originalPic = dict[@"original_pic"];
     }
     if ([dict objectForKey:@"user"] != nil) {
-        aStatus.user = [WBUser userWithDict:[dict objectForKey:@"user"]];
+        aStatus.user = [WBUser userWithDict:dict[@"user"]];
     }
 
     if ([dict objectForKey:@"retweeted_status"] != nil) {
-        aStatus.retweetedStatus = [WBStatus statusWithDict:[dict objectForKey:@"retweeted_status"]];
+        aStatus.retweetedStatus = [WBStatus statusWithDict:dict[@"retweeted_status"]];
     }
-    aStatus.repostsCount = [[dict objectForKey:@"reposts_count"] intValue];
-    aStatus.commentsCount = [[dict objectForKey:@"comments_count"] intValue];
-    aStatus.attitudesCount = [[dict objectForKey:@"attitudes_count"] intValue];
+    aStatus.repostsCount = [dict[@"reposts_count"] intValue];
+    aStatus.commentsCount = [dict[@"comments_count"] intValue];
+    aStatus.attitudesCount = [dict[@"attitudes_count"] intValue];
     aStatus.mlevel = [dict objectForKey:@"mlevel"];
-    NSDictionary *visibleDic = [dict objectForKey:@"visible"];
-    aStatus.visibleType = [visibleDic objectForKey:@"type"];
-    aStatus.visibleListId = [visibleDic objectForKey:@"list_id"];
+    NSDictionary *visibleDic = dict[@"visible"];
+    aStatus.visibleType = visibleDic[@"type"];
+    aStatus.visibleListId = visibleDic[@"list_id"];
     
     NSURL *middleBaseURL;
     NSURL *orginBaseURL;

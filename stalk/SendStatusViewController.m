@@ -10,6 +10,7 @@
 #import "AppDelegate.h"
 #import "WBRequestQueue.h"
 #import "WBStatus.h"
+#import "WBHttpRequest+STalk.h"
 
 
 @interface SendStatusViewController ()
@@ -48,11 +49,14 @@
         }
             break;
         case SendMessageTypeRepost:{
-            [WBHttpRequest requestForRepostAStatus:[NSString stringWithFormat:@"%lld",_status.lid] repostText:_statusTextView.text withAccessToken:appDelegate.wbAuthorizeResponse.accessToken andOtherProperties:nil queue:[WBRequestQueue queueForWBRequest] withCompletionHandler:^(WBHttpRequest *httpRequest, id result, NSError *error) {
+            [WBHttpRequest requestForRepostAStatus:_status.lid repostText:_statusTextView.text withAccessToken:appDelegate.wbAuthorizeResponse.accessToken andOtherProperties:nil queue:[WBRequestQueue queueForWBRequest] withCompletionHandler:^(WBHttpRequest *httpRequest, id result, NSError *error) {
                 NSLog(@"%@", result);
             }];
         }
         case SendMessageTypeComment:{
+            [WBHttpRequest requestForCreateCommentForStatusID:_status.lid accessToken:appDelegate.wbAuthorizeResponse.accessToken commentText:_statusTextView.text andOtherProperties:nil queue:[WBRequestQueue queueForWBRequest] withCompletionHandler:^(WBHttpRequest *httpRequest, id result, NSError *error) {
+                NSLog(@"%@", result);
+            }];
             
         }
             break;
