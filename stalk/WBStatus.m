@@ -22,11 +22,11 @@
     WBStatus *aStatus = [[WBStatus alloc] init];
     aStatus.createdAt = [NSDate USDateFromString:dict[@"created_at"]];
     aStatus.lid = [dict[@"id"] stringValue];
-    aStatus.mid = dict [@"mid"];
+    aStatus.mid = dict[@"mid"];
     aStatus.text = dict[@"text"];
     aStatus.source = dict[@"source"];
-    aStatus.favorited = [dict[@"favorited"] boolValue];
-    aStatus.truncated = [dict[@"truncated"] boolValue];
+    aStatus.favorited = dict[@"favorited"];
+    aStatus.truncated = dict[@"truncated"];
     aStatus.inReply2StatusId = dict[@"in_reply_to_status_id"];
     aStatus.inReply2UserId = dict[@"in_reply_to_user_id"];
     aStatus.inReply2ScreenName = dict[@"in_reply_to_screen_name"];
@@ -39,23 +39,23 @@
         }
     }
     
-    if ([dict objectForKey:@"bmiddle_pic"] != nil ) {
+    if (dict[@"bmiddle_pic"] != nil ) {
         aStatus.bmiddlePic = dict[@"bmiddle_pic"];
     }
-    if ([dict objectForKey:@"original_pic"] != nil ) {
+    if (dict[@"original_pic"] != nil ) {
         aStatus.originalPic = dict[@"original_pic"];
     }
-    if ([dict objectForKey:@"user"] != nil) {
+    if (dict[@"user"] != nil) {
         aStatus.user = [WBUser userWithDict:dict[@"user"]];
     }
 
-    if ([dict objectForKey:@"retweeted_status"] != nil) {
+    if (dict[@"retweeted_status"] != nil) {
         aStatus.retweetedStatus = [WBStatus statusWithDict:dict[@"retweeted_status"]];
     }
     aStatus.repostsCount = [dict[@"reposts_count"] intValue];
     aStatus.commentsCount = [dict[@"comments_count"] intValue];
     aStatus.attitudesCount = [dict[@"attitudes_count"] intValue];
-    aStatus.mlevel = [dict objectForKey:@"mlevel"];
+    aStatus.mlevel = dict[@"mlevel"];
     NSDictionary *visibleDic = dict[@"visible"];
     aStatus.visibleType = visibleDic[@"type"];
     aStatus.visibleListId = visibleDic[@"list_id"];
@@ -133,37 +133,37 @@
 //    aStatus.text = self.text;
 //    aStatus.source = self.source;
 //    aStatus.favorited = self.favorited;
-//    aStatus.truncated = [[dict objectForKey:@"truncated"] boolValue];
-//    aStatus.inReply2StatusId = [dict objectForKey:@"in_reply_to_status_id"];
-//    aStatus.inReply2UserId = [dict objectForKey:@"in_reply_to_user_id"];
-//    aStatus.inReply2ScreenName = [dict objectForKey:@"in_reply_to_screen_name"];
+//    aStatus.truncated = [dict[@"truncated"] boolValue];
+//    aStatus.inReply2StatusId = dict[@"in_reply_to_status_id"];
+//    aStatus.inReply2UserId = dict[@"in_reply_to_user_id"];
+//    aStatus.inReply2ScreenName = dict[@"in_reply_to_screen_name"];
 //    
 //    aStatus.thumbnailPic = [[NSMutableArray alloc] initWithCapacity:0];
-//    NSMutableArray *imageArray = [dict objectForKey:@"pic_urls"];
+//    NSMutableArray *imageArray = dict[@"pic_urls"];
 //    if ([imageArray count] != 0) {
 //        for (NSDictionary *imageDic in imageArray) {
 //            [aStatus.thumbnailPic addObject:[imageDic objectForKey:@"thumbnail_pic"]];
 //        }
 //    }
 //    
-//    if ([dict objectForKey:@"bmiddle_pic"] != nil ) {
-//        aStatus.bmiddlePic = [dict objectForKey:@"bmiddle_pic"];
+//    if (dict[@"bmiddle_pic"] != nil ) {
+//        aStatus.bmiddlePic = dict[@"bmiddle_pic"];
 //    }
-//    if ([dict objectForKey:@"original_pic"] != nil ) {
-//        aStatus.originalPic = [dict objectForKey:@"original_pic"];
+//    if (dict[@"original_pic"] != nil ) {
+//        aStatus.originalPic = dict[@"original_pic"];
 //    }
-//    if ([dict objectForKey:@"user"] != nil) {
-//        aStatus.user = [WBUser userWithDict:[dict objectForKey:@"user"]];
+//    if (dict[@"user"] != nil) {
+//        aStatus.user = [WBUser userWithDict:dict[@"user"]];
 //    }
-//    aStatus.userId = [dict objectForKey:@"user_id"];
-//    if ([dict objectForKey:@"retweeted_status"] != nil) {
-//        aStatus.retweetedStatus = [WBStatus statusWithDict:[dict objectForKey:@"retweeted_status"]];
+//    aStatus.userId = dict[@"user_id"];
+//    if (dict[@"retweeted_status"] != nil) {
+//        aStatus.retweetedStatus = [WBStatus statusWithDict:dict[@"retweeted_status"]];
 //    }
-//    aStatus.repostsCount = [[dict objectForKey:@"reposts_count"] intValue];
-//    aStatus.commentsCount = [[dict objectForKey:@"comments_count"] intValue];
-//    aStatus.attitudesCount = [[dict objectForKey:@"attitudes_count"] intValue];
-//    aStatus.mlevel = [dict objectForKey:@"mlevel"];
-//    NSDictionary *visibleDic = [dict objectForKey:@"visible"];
+//    aStatus.repostsCount = [dict[@"reposts_count"] intValue];
+//    aStatus.commentsCount = [dict[@"comments_count"] intValue];
+//    aStatus.attitudesCount = [dict[@"attitudes_count"] intValue];
+//    aStatus.mlevel = dict[@"mlevel"];
+//    NSDictionary *visibleDic = dict[@"visible"];
 //    aStatus.visibleType = [visibleDic objectForKey:@"type"];
 //    aStatus.visibleListId = [visibleDic objectForKey:@"list_id"];
 //}

@@ -47,7 +47,6 @@
 
 
 @property (nonatomic, copy)NSString *coverImage;
-
 @property (nonatomic, copy) NSString *coverImagePhone;
 
 /**

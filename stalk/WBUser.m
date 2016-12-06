@@ -45,7 +45,7 @@
     if (dict[@"status"] != nil) {
         user.status = [WBStatus statusWithDict:dict[@"status"]];
     }
-    user.statusId = dict[@"status_id"];
+    user.statusId = [dict[@"status_id"] stringValue];
     user.allowAllComment = [dict[@"allow_all_comment"] boolValue];
     user.avatarLarge = dict[@"avatar_large"];
     user.verifiedReason = dict[@"verified_reason"];
