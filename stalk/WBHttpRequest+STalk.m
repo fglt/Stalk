@@ -54,6 +54,17 @@ NSString * const UserUrl = @"https://api.weibo.com/2/users/show.json";
     [WBHttpRequest requestWithAccessToken:accessToken url:url httpMethod:@"get" params:params queue:queue withCompletionHandler:handler];
 }
 
++ (void)requestForPersonalStatusesWithAccessToken:(NSString *)accessToken
+                               andOtherProperties:(NSDictionary*)otherProperties
+                                            queue:(NSOperationQueue*)queue
+                            withCompletionHandler:(WBRequestHandler)handler{
+    NSString *url = @"https://api.weibo.com/2/statuses/user_timeline.json";
+    NSMutableDictionary *params = [[NSMutableDictionary alloc]initWithDictionary:otherProperties];
+    [params setObject:accessToken forKey:AccessTokenKey];
+    
+    [WBHttpRequest requestWithAccessToken:accessToken url:url httpMethod:@"get" params:params queue:queue withCompletionHandler:handler];
+}
+
 + (void)requestForStatusesAboutTopic:(NSString*)topic
                          accessToken:(NSString*)accessToken
                   andOtherProperties:(NSDictionary*)otherProperties

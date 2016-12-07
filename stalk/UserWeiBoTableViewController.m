@@ -7,15 +7,15 @@
 //
 
 #import "UserWeiBoTableViewController.h"
-#import "WBUser.h"
-#import "WBStatus.h"
-#import "AppDelegate.h"
 #import "WBStatusCell.h"
-#import "WBHttpRequest+STalk.h"
-#import "WBRequestQueue.h"
+#import "StatusDataSource.h"
+#import "SendStatusViewController.h"
+#import "WBStatusCellDelegateIMP.h"
+
 
 @interface UserWeiBoTableViewController ()
-@property (nonatomic, strong) NSArray *statuesList;
+@property (nonatomic, strong) StatusDataSource *dataSource;
+@property (nonatomic, strong) WBStatusCellDelegateIMP *cellDelegate;
 @end
 
 @implementation UserWeiBoTableViewController
@@ -23,19 +23,42 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    _cellDelegate = [WBStatusCellDelegateIMP new];
+    _cellDelegate.controller = self;
     [self.tableView setSeparatorInset:UIEdgeInsetsZero];
     [self.tableView setLayoutMargins:UIEdgeInsetsZero];
+    self.tableView.delegate = self;
+    _dataSource = [[StatusDataSource alloc]initWithCellIdentifer:@"MyStatusesCellID" block:^(id cell, id statusLayout) {
+        WBStatusCell *wbcell = (WBStatusCell *)cell;
+        wbcell.layout = (WBStatusLayout *) statusLayout;
+        wbcell.delegate = _cellDelegate;
+    }];
+    self.tableView.dataSource = _dataSource;
+    [self setRefresh];
     
-    AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
-    [WBHttpRequest requestForStatusesOfPath:@"user_timeline" accessToken:appDelegate.wbAuthorizeResponse.accessToken andOtherProperties:nil queue:[WBRequestQueue queueForWBRequest] withCompletionHandler:^(WBHttpRequest *httpRequest, id result, NSError *error) {
-        NSArray *dictes = [result objectForKey:@"statuses"];
-        
-        self.statuesList = [WBStatusLayout statusLayoutsWithStatuses:[WBStatus statuesWithArray:dictes]];
+    self.navigationController.view.userInteractionEnabled = NO;
+    UIActivityIndicatorView *indicator = [self activityIndicatorView];
+    [indicator startAnimating];
+    [self.view addSubview:indicator];
+    [self.dataSource loadMyStatusWithCompletion:^(void) {
         dispatch_async(dispatch_get_main_queue(), ^{
+            [indicator removeFromSuperview];
+            self.navigationController.view.userInteractionEnabled = YES;
             [self.tableView reloadData];
         });
-        
     }];
+
+}
+
+- (UIActivityIndicatorView *)activityIndicatorView{
+    UIActivityIndicatorView *indicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
+    indicator.size = CGSizeMake(50, 50);
+    indicator.center = CGPointMake(self.view.width / 2, self.view.height / 2);
+    indicator.backgroundColor = [UIColor colorWithWhite:0.000 alpha:0.670];
+    indicator.clipsToBounds = YES;
+    
+    indicator.layer.cornerRadius = 6;
+    return indicator;
 }
 
 - (void)didReceiveMemoryWarning {
@@ -43,37 +66,32 @@
     // Dispose of any resources that can be recreated.
 }
 
-//- (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
-//{
-//    for(WBStatusLayout *layout in self.statuesList){
-//        [layout resetFrame];
-//    }
-//    [self.tableView reloadData];
-//}
+- (void)setRefresh{
+    UIRefreshControl *rc = [ [UIRefreshControl alloc] init];
+    [rc addTarget:self action:@selector(refreshData) forControlEvents:UIControlEventValueChanged];
+    self.refreshControl = rc;
+}
+
+- (void)refreshData{
+    if(self.refreshControl.isRefreshing){
+        [_dataSource updateMyStatusesWithCompletion:^{
+            [self.tableView reloadData];
+            [self.refreshControl endRefreshing];
+        }];
+    }
+}
 
 #pragma mark - Table view data source
 
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-
-    return 1;
-}
-
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-
-    return self.statuesList.count;
-}
-
-
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    WBStatusCell * cell = [[WBStatusCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"ALLStatusesCellID"];
-    cell.layout = _statuesList[indexPath.row];
-    return cell;
-}
-
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     
-    WBStatusLayout *layout = _statuesList[indexPath.row];
-    return layout.height + CellPadding;
+    return [_dataSource cellHeightAtIndex:indexPath.row];
+}
+
+- (IBAction)sendStatus:(UIBarButtonItem *)sender {
+    SendStatusViewController *sendController = [SendStatusViewController new];
+    sendController.messageType = SendMessageTypeStatus;
+    [self.navigationController pushViewController:sendController animated:YES];
 }
 
 /*

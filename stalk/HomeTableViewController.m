@@ -7,38 +7,17 @@
 //
 
 #import "HomeTableViewController.h"
-#import "WBUser.h"
-#import "WBStatus.h"
-#import "AppDelegate.h"
 #import "WBStatusCell.h"
-#import "WBStatusLayout.h"
-#import "WBHttpRequest+STalk.h"
-#import "StatusDetailViewController.h"
-#import "MLLinkLabel.h"
-#import "WBHttpRequest+STalk.h"
-#import "UserViewController.h"
-#import <SafariServices/SafariServices.h>
-#import "WBRequestQueue.h"
-#import "NSObject+runtime.h"
-#import "YYFPSLabel.h"
 #import "StatusDataSource.h"
-#import "TopicController.h"
-#import "PhotoBrowerViewController.h"
-#import "WBStatusHelper.h"
-#import "PhotoBrowerView.h"
 #import "SendStatusViewController.h"
 #import "WBStatusCellDelegateIMP.h"
-#import "UINavigationBar+Awesome.h"
 
 @interface HomeTableViewController ()
 @property (nonatomic, strong) StatusDataSource *dataSource;
 @property (nonatomic, strong) WBStatusCellDelegateIMP *cellDelegate;
 @end
 
-@implementation HomeTableViewController{
-    YYFPSLabel *_fpsLabel;
-}
-
+@implementation HomeTableViewController
 
 
 - (void)viewDidLoad {
@@ -57,19 +36,11 @@
     self.tableView.dataSource = _dataSource;
     [self setRefresh];
 
-    _fpsLabel = [YYFPSLabel new];
-    [_fpsLabel sizeToFit];
-    _fpsLabel.bottom = self.view.height - 100;
-    _fpsLabel.left = 12;
-    _fpsLabel.alpha = 0;
-    [self.navigationController.navigationBar addSubview:_fpsLabel];
-    _fpsLabel.center = (CGPoint){self.navigationController.navigationBar.bounds.size.width/2,self.navigationController.navigationBar.bounds.size.height/2};
-    
     self.navigationController.view.userInteractionEnabled = NO;
     UIActivityIndicatorView *indicator = [self activityIndicatorView];
     [indicator startAnimating];
     [self.view addSubview:indicator];
-    [self.dataSource loadDataWithCompletion:^(void) {
+    [self.dataSource loadFrendsStatusWithCompletion:^(void) {
         dispatch_async(dispatch_get_main_queue(), ^{
             [indicator removeFromSuperview];
             self.navigationController.view.userInteractionEnabled = YES;
@@ -77,6 +48,18 @@
         });
     }];
 }
+
+//- (void)fpsConfigure{
+//
+//    _fpsLabel = [YYFPSLabel new];
+//    [_fpsLabel sizeToFit];
+//    _fpsLabel.bottom = self.view.height - 100;
+//    _fpsLabel.left = 12;
+//    _fpsLabel.alpha = 0;
+//    [self.navigationController.navigationBar addSubview:_fpsLabel];
+//    _fpsLabel.center = (CGPoint){self.navigationController.navigationBar.bounds.size.width/2,self.navigationController.navigationBar.bounds.size.height/2};
+//
+//}
 
 - (UIActivityIndicatorView *)activityIndicatorView{
     UIActivityIndicatorView *indicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
@@ -111,44 +94,44 @@
 
 #pragma mark - UITableViewDelegate
 
-- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView {
-    if (_fpsLabel.alpha == 0) {
-        [UIView animateWithDuration:0.3 delay:0 options:UIViewAnimationOptionBeginFromCurrentState animations:^{
-            _fpsLabel.alpha = 1;
-        } completion:NULL];
-    }
-}
-
-- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate {
-    if (!decelerate) {
-        if (_fpsLabel.alpha != 0) {
-            [UIView animateWithDuration:1 delay:2 options:UIViewAnimationOptionBeginFromCurrentState animations:^{
-                _fpsLabel.alpha = 0;
-            } completion:NULL];
-        }
-    }
-}
-
-- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
-    if (_fpsLabel.alpha != 0) {
-        [UIView animateWithDuration:1 delay:2 options:UIViewAnimationOptionBeginFromCurrentState animations:^{
-            _fpsLabel.alpha = 0;
-        } completion:NULL];
-    }
-}
-
-- (void)scrollViewDidScrollToTop:(UIScrollView *)scrollView {
-    if (_fpsLabel.alpha == 0) {
-        [UIView animateWithDuration:0.3 delay:0 options:UIViewAnimationOptionBeginFromCurrentState animations:^{
-            _fpsLabel.alpha = 1;
-        } completion:^(BOOL finished) {
-        }];
-    }
-}
+//- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView {
+//    if (_fpsLabel.alpha == 0) {
+//        [UIView animateWithDuration:0.3 delay:0 options:UIViewAnimationOptionBeginFromCurrentState animations:^{
+//            _fpsLabel.alpha = 1;
+//        } completion:NULL];
+//    }
+//}
+//
+//- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate {
+//    if (!decelerate) {
+//        if (_fpsLabel.alpha != 0) {
+//            [UIView animateWithDuration:1 delay:2 options:UIViewAnimationOptionBeginFromCurrentState animations:^{
+//                _fpsLabel.alpha = 0;
+//            } completion:NULL];
+//        }
+//    }
+//}
+//
+//- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
+//    if (_fpsLabel.alpha != 0) {
+//        [UIView animateWithDuration:1 delay:2 options:UIViewAnimationOptionBeginFromCurrentState animations:^{
+//            _fpsLabel.alpha = 0;
+//        } completion:NULL];
+//    }
+//}
+//
+//- (void)scrollViewDidScrollToTop:(UIScrollView *)scrollView {
+//    if (_fpsLabel.alpha == 0) {
+//        [UIView animateWithDuration:0.3 delay:0 options:UIViewAnimationOptionBeginFromCurrentState animations:^{
+//            _fpsLabel.alpha = 1;
+//        } completion:^(BOOL finished) {
+//        }];
+//    }
+//}
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
 
-    return [_dataSource objectAtIndex :indexPath.row].height + CellPadding;
+    return [_dataSource cellHeightAtIndex:indexPath.row];
 }
 
 - (IBAction)sendStatus:(UIBarButtonItem *)sender {

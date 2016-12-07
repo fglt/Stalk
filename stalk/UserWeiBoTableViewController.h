@@ -6,7 +6,6 @@
 //  Copyright © 2016 Coding. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
 
 @interface UserWeiBoTableViewController : UITableViewController
 

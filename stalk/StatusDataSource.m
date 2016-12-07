@@ -17,7 +17,7 @@ static NSString *const LastCachedStatues = @"LastCachedStatues";
 
 @interface StatusDataSource()
 @property (nonatomic, copy) NSString *identifer;
-@property (nonatomic, strong) NSMutableArray *statusLayoutList;
+@property (nonatomic, strong) NSMutableArray<WBStatusLayout *> *statusLayoutList;
 @property (nonatomic, copy) ConfigureCellBlock configureCellBlock;
 @end
 
@@ -30,7 +30,7 @@ static NSString *const LastCachedStatues = @"LastCachedStatues";
     return self;
 }
 
-- (void)loadDataWithCompletion:(void (^)())completion{
+- (void)loadFrendsStatusWithCompletion:(void (^)())completion{
 
     YYCache *statusCache = [[YYCache alloc] initWithName:StatusesCacheName];
     AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
@@ -55,6 +55,38 @@ static NSString *const LastCachedStatues = @"LastCachedStatues";
     NSDictionary *parms = @{@"count":[NSString stringWithFormat:@"%d",100]};
     [statusCache removeAllObjects];
     [WBHttpRequest requestForStatusesOfPath:@"friends_timeline" accessToken:appDelegate.wbAuthorizeResponse.accessToken andOtherProperties:parms queue:[WBRequestQueue queueForWBRequest] withCompletionHandler:^(WBHttpRequest *httpRequest, id result, NSError *error) {
+        NSArray *dicts = [result objectForKey:@"statuses"];
+        [statusCache setObject:dicts forKey:LastCachedStatues];
+        _statusLayoutList = [WBStatusLayout statusLayoutsWithStatuses:[WBStatus statuesWithArray:dicts]];
+        completion();
+    }];
+}
+
+- (void)loadMyStatusWithCompletion:(void(^)())completion{
+    YYCache *statusCache = [[YYCache alloc] initWithName:@"PersonalStatusesCache"];
+    AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+    NSArray *dicts = (NSArray *)[statusCache objectForKey:LastCachedStatues];
+    if(dicts){
+        _statusLayoutList = [WBStatusLayout statusLayoutsWithStatuses:[WBStatus statuesWithArray:dicts]];
+        completion();
+    }else{
+        NSDictionary *parms = @{@"count":[NSString stringWithFormat:@"%d",100]};
+        [WBHttpRequest requestForPersonalStatusesWithAccessToken:appDelegate.wbAuthorizeResponse.accessToken andOtherProperties:parms queue:[WBRequestQueue queueForWBRequest] withCompletionHandler:^(WBHttpRequest *httpRequest, id result, NSError *error) {
+            NSArray *dicts = [result objectForKey:@"statuses"];
+            [statusCache setObject:dicts forKey:LastCachedStatues];
+            _statusLayoutList = [WBStatusLayout statusLayoutsWithStatuses:[WBStatus statuesWithArray:dicts]];
+            completion();
+        }];
+    }
+}
+
+- (void)updateMyStatusesWithCompletion:(void (^)())completion{
+    AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+    YYCache *statusCache = [[YYCache alloc] initWithName:@"PersonalStatusesCache"];
+    NSDictionary *parms = @{@"count":[NSString stringWithFormat:@"%d",100]};
+    [statusCache removeAllObjects];
+
+    [WBHttpRequest requestForPersonalStatusesWithAccessToken:appDelegate.wbAuthorizeResponse.accessToken andOtherProperties:parms queue:[WBRequestQueue queueForWBRequest] withCompletionHandler:^(WBHttpRequest *httpRequest, id result, NSError *error) {
         NSArray *dicts = [result objectForKey:@"statuses"];
         [statusCache setObject:dicts forKey:LastCachedStatues];
         _statusLayoutList = [WBStatusLayout statusLayoutsWithStatuses:[WBStatus statuesWithArray:dicts]];
@@ -112,5 +144,8 @@ static NSString *const LastCachedStatues = @"LastCachedStatues";
     return cell;
 }
 
+- (CGFloat)cellHeightAtIndex:(NSInteger)index{
+   return [_statusLayoutList objectAtIndex:index].height + CellPadding;
+}
 
 @end

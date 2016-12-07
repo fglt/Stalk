@@ -35,6 +35,11 @@
                            queue:(NSOperationQueue*)queue
            withCompletionHandler:(WBRequestHandler)handler;
 
++ (void)requestForPersonalStatusesWithAccessToken:(NSString *)accessToken
+                               andOtherProperties:(NSDictionary*)otherProperties
+                                            queue:(NSOperationQueue*)queue
+                            withCompletionHandler:(WBRequestHandler)handler;
+
 #pragma mark - topicStatusRequest
 + (void)requestForStatusesAboutTopic:(NSString*)topic
                          accessToken:(NSString*)accessToken
