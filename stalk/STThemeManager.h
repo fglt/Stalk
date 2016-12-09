@@ -10,11 +10,11 @@
 
 @interface STThemeManager : NSObject
 @property (nonatomic, strong) STThemeManager *defaultManager;
-
-+ (UIFont *)MainUserNameFont;
-+ (UIFont *)MainSourceFont;
-+ (UIFont *)MainStatusTextFont;
-+ (UIFont *)MainRetweetTextFont;
+//
+//+ (UIFont *)MainUserNameFont;
+//+ (UIFont *)MainSourceFont;
+//+ (UIFont *)MainStatusTextFont;
+//+ (UIFont *)MainRetweetTextFont;
 
 
 @end

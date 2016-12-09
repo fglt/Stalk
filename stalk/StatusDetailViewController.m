@@ -8,19 +8,19 @@
 
 #import "StatusDetailViewController.h"
 #import "WBStatusCell.h"
-#import "MessageDataSource.h"
 #import "WBStatusCellDelegateIMP.h"
 #import "WBStatus.h"
 #import "TableHeaderView.h"
 #import "BFPaperButton.h"
 #import "UIColor+BFPaperColors.h"
 #import "WBMessageCellDelegateIMP.h"
+#import "CellDataSource.h"
 
 @interface StatusDetailViewController ()
 @property (nonatomic, strong) WBStatusCell *statusCell;
 @property (nonatomic, strong) UITableView *commentView;
-@property (nonatomic, strong) MessageDataSource *commentDataSource;
-@property (nonatomic, strong) MessageDataSource *repostDataSrource;
+@property (nonatomic, strong) CommentDataSource *commentDataSource;
+@property (nonatomic, strong) RepostStatusDataSource *repostDataSrource;
 @property (nonatomic, strong) WBMessageCellDelegateIMP *cellDelegate;
 @property (nonatomic, strong) UIView *headerSectionView;
 
@@ -49,10 +49,10 @@
     _cellDelegate = [WBMessageCellDelegateIMP new];
     _cellDelegate.controller = self;
    
-    _commentDataSource = [[MessageDataSource alloc]initWithMessageType:MESSAGETYPECOMMENT cellIdentifer:@"CommentIdentifer" block:^(id cell, id messageLayout) {
+    _commentDataSource = [[CommentDataSource alloc] initWithCellIdentifer:@"CommentIdentifer" block:^(id cell, id messageLayout) {
         [(WBMessageCell *)cell configWithLayout:messageLayout delegate:_cellDelegate];
     }];
-    _repostDataSrource = [[MessageDataSource alloc]initWithMessageType:MESSAGETYPEREPOST cellIdentifer:@"RepostIdentifer" block:^(id cell, id messageLayout) {
+    _repostDataSrource = [[RepostStatusDataSource alloc]initWithCellIdentifer:@"RepostIdentifer" block:^(id cell, id messageLayout) {
         [(WBMessageCell *)cell configWithLayout:messageLayout delegate:_cellDelegate];
     }];
    
@@ -69,17 +69,16 @@
     self.tableView.delegate = self;
     self.tableView.dataSource = _commentDataSource;
     self.tableView.tableFooterView= UIView.new;
-    [_commentDataSource loadMessagesForStatus:_layout.status.lid withCompletion:^{
+    [_commentDataSource loadCommentsForStatus:_layout.status.lid completion:^{
         dispatch_async(dispatch_get_main_queue(), ^{
             [self.tableView reloadData];
         });
         
     }];
     
-    [_repostDataSrource loadMessagesForStatus:_layout.status.lid withCompletion:nil];
+    [_repostDataSrource loadRepostsForStatus:_layout.status.lid completion:nil];
 
 }
-
 
 - (void)configureHeadreSectionView{
     UIFont *font = [UIFont fontWithName:@"HelveticaNeue-Light" size:15.f];
@@ -122,16 +121,17 @@
 - (void)touchHeaderView:(UIButton *)sender{
     
     [self screenshot];
-    MessageDataSource *dataSource = (MessageDataSource *)self.tableView.dataSource;
+    CellDataSource *dataSource = (CellDataSource *)self.tableView.dataSource;
+    
     if(sender.tag == 10){
-        if(dataSource.type == MESSAGETYPECOMMENT){
+        if([dataSource isKindOfClass:[CommentDataSource class]]){
             self.tableView.dataSource = _repostDataSrource;
 
             [self.tableView reloadData];
             //self.tableView.contentOffset = CGPointMake(0, self.tableView.tableHeaderView.frame.size.height-64);
         }
     }else{
-        if(dataSource.type == MESSAGETYPEREPOST){
+        if([dataSource isKindOfClass:[RepostStatusDataSource class]]){
             self.tableView.dataSource = _commentDataSource;
             [self.tableView reloadData];
             //self.tableView.contentOffset = CGPointMake(0, self.tableView.tableHeaderView.frame.size.height-64);
@@ -140,7 +140,7 @@
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-    return [((MessageDataSource *) tableView.dataSource) cellHeightAtIndex:indexPath.row];
+    return [((CellDataSource *) tableView.dataSource) cellHeightAtIndex:indexPath.row];
 }
 
 

@@ -18,7 +18,6 @@
 #import "WBRequestQueue.h"
 #import "NSObject+runtime.h"
 #import "YYFPSLabel.h"
-#import "StatusDataSource.h"
 #import "TopicController.h"
 #import "PhotoBrowerViewController.h"
 #import "WBStatusHelper.h"

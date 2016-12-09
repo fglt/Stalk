@@ -22,7 +22,6 @@
 #import "PhotoBrowerView.h"
 #import "SendStatusViewController.h"
 #import "AppDelegate.h"
-#import "MessageDataSource.h"
 
 @interface WBMessageCellDelegateIMP()<SFSafariViewControllerDelegate>
 

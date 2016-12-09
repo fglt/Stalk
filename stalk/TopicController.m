@@ -8,11 +8,11 @@
 
 
 #import "TopicController.h"
-#import "StatusDataSource.h"
 #import "WBStatusCell.h"
+#import "CellDataSource.h"
 
 @interface TopicController ()<WBStatusCellDelegate>
-@property (nonatomic, strong) StatusDataSource *dataSource;
+@property (nonatomic, strong) TopicStatusDataSource *dataSource;
 @end
 
 @implementation TopicController
@@ -23,7 +23,7 @@
     [self.tableView setSeparatorInset:UIEdgeInsetsZero];
     [self.tableView setLayoutMargins:UIEdgeInsetsZero];
     self.tableView.delegate = self;
-    _dataSource = [[StatusDataSource alloc]initWithCellIdentifer:@"TopicStatusesCellID" block:^(id cell, id statusLayout) {
+    _dataSource = [[TopicStatusDataSource alloc]initWithCellIdentifer:@"TopicStatusesCellID" block:^(id cell, id statusLayout) {
         WBStatusCell *wbcell = (WBStatusCell *)cell;
         wbcell.layout = (WBStatusLayout *) statusLayout;
         wbcell.delegate = self;
@@ -33,7 +33,7 @@
     UIActivityIndicatorView *indicator = [self activityIndicatorView];
     [indicator startAnimating];
     [self.view addSubview:indicator];
-    [self.dataSource loadDataAboutTopic:self.topic completion:^() {
+    [self.dataSource loadDatasAboutTopic:self.topic completion:^() {
         dispatch_async(dispatch_get_main_queue(), ^{
             [indicator removeFromSuperview];
             self.navigationController.view.userInteractionEnabled = YES;

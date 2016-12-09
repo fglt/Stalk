@@ -8,12 +8,12 @@
 
 #import "HomeTableViewController.h"
 #import "WBStatusCell.h"
-#import "StatusDataSource.h"
 #import "SendStatusViewController.h"
 #import "WBStatusCellDelegateIMP.h"
+#import "CellDataSource.h"
 
 @interface HomeTableViewController ()
-@property (nonatomic, strong) StatusDataSource *dataSource;
+@property (nonatomic, strong) HomeStatusDataSource *dataSource;
 @property (nonatomic, strong) WBStatusCellDelegateIMP *cellDelegate;
 @end
 
@@ -28,8 +28,8 @@
     [self.tableView setLayoutMargins:UIEdgeInsetsZero];
     self.tableView.delegate = self;
     [self.tableView registerClass:[WBStatusCell class] forCellReuseIdentifier:@"ALLStatusesCellID"];
-    _dataSource = [[StatusDataSource alloc]initWithCellIdentifer:@"ALLStatusesCellID" block:^(id cell, id statusLayout) {
-        [(WBStatusCell *)cell configWithLayout:statusLayout delegate:_cellDelegate];
+    _dataSource = [[HomeStatusDataSource alloc]initWithCellIdentifer:@"ALLStatusesCellID" block:^(id cell, id layout) {
+        [(WBStatusCell *)cell configWithLayout:layout delegate:_cellDelegate];
     }];
     self.tableView.dataSource = _dataSource;
     [self setRefresh];
@@ -38,7 +38,7 @@
     UIActivityIndicatorView *indicator = [self activityIndicatorView];
     [indicator startAnimating];
     [self.view addSubview:indicator];
-    [self.dataSource loadFrendsStatusWithCompletion:^(void) {
+    [self.dataSource loadDatasWithCompletion:^(void) {
         dispatch_async(dispatch_get_main_queue(), ^{
             [indicator removeFromSuperview];
             self.navigationController.view.userInteractionEnabled = YES;
@@ -83,7 +83,7 @@
 
 - (void)refreshData{
     if(self.refreshControl.isRefreshing){
-        [_dataSource updateStatusesWithCompletion:^{
+        [_dataSource updateDatasWithCompletion:^{
             [self.tableView reloadData];
             [self.refreshControl endRefreshing];
         }];

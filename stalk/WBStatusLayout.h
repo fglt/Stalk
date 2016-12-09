@@ -12,6 +12,10 @@
 @class WBStatus;
 @class WBComment;
 
+@interface CellLayout : NSObject
+@property (nonatomic) CGFloat height;
+@end
+
 @interface WeiboUserLayout : NSObject
 @property (nonatomic) CGFloat iconWidth;
 @property (nonatomic) UIFont *nameFont;
@@ -37,7 +41,7 @@
 - (void)layoutWithStatus:(WBStatus *)status;
 @end
 
-@interface WBStatusLayout : NSObject
+@interface WBStatusLayout : CellLayout
 
 @property (nonatomic, strong) WBStatus *status;
 @property (nonatomic, strong) NSMutableAttributedString *statusAttributedText;
@@ -55,7 +59,6 @@
 @property (nonatomic) int imgHeight;
 
 @property (nonatomic) int statusViewHeight;
-@property (nonatomic) CGFloat height;
 
 @property (nonatomic) WBToolbarLayout *toolbarLayout;
 @property (nonatomic, strong) NSArray *pictures;
@@ -67,23 +70,22 @@
 
 @class WBComment;
 
-@interface WBCommentLayout : NSObject
-@property (nonatomic, strong) WBComment *comment;
-@property (nonatomic, strong) WeiboUserLayout *userLayout;
-@property (nonatomic, strong) NSMutableAttributedString *commentText;
-@property (nonatomic) CGSize commentSize;
-@property (nonatomic) CGFloat cellHeight;
-- (instancetype)initWithComment:(WBComment *)comment;
-+ (NSMutableArray *)layoutsWithComments:(NSArray *)comments;
-@end
+//@interface WBCommentLayout : NSObject
+//@property (nonatomic, strong) WBComment *comment;
+//@property (nonatomic, strong) WeiboUserLayout *userLayout;
+//@property (nonatomic, strong) NSMutableAttributedString *commentText;
+//@property (nonatomic) CGSize commentSize;
+//@property (nonatomic) CGFloat cellHeight;
+//- (instancetype)initWithComment:(WBComment *)comment;
+//+ (NSMutableArray *)layoutsWithComments:(NSArray *)comments;
+//@end
 
-@interface WBMessageLayout : NSObject
+@interface WBMessageLayout : CellLayout
 @property (nonatomic, strong) WBBaseMessage *message;
 @property (nonatomic, strong) WeiboUserLayout *userLayout;
 @property (nonatomic, strong) UIFont *textFont;
 @property (nonatomic, strong) NSMutableAttributedString *messageText;
 @property (nonatomic) CGSize textSize;
-@property (nonatomic) CGFloat cellHeight;
 - (instancetype)initWithWBMessage:(WBBaseMessage *)message;
 + (NSMutableArray *)layoutsWithWBMessages:(NSArray *)messages;
 @end

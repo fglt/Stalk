@@ -32,7 +32,7 @@
 #import "UIColor+BFPaperColors.h"
 
 
-@interface BFPaperButton ()
+@interface BFPaperButton ()<CAAnimationDelegate>
 @property CGRect downRect;
 @property CGRect upRect;
 @property CGRect fadeAndClippingMaskRect;

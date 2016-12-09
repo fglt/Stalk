@@ -7,7 +7,6 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "StatusDataSource.h"
 
 @interface AtMeTableViewController : UITableViewController
 

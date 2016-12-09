@@ -8,9 +8,10 @@
 
 #import "AtMeTableViewController.h"
 #import "WBStatusCellDelegateIMP.h"
+#import "CellDataSource.h"
 
 @interface AtMeTableViewController ()
-@property (nonatomic, strong) StatusDataSource *dataSource;
+@property (nonatomic, strong) AtMeStatusDataSource *dataSource;
 @property (nonatomic, strong) WBStatusCellDelegateIMP *cellDelegate;
 @end
 
@@ -25,7 +26,7 @@
     self.tableView.delegate = self;
     self.tableView.tableFooterView = UIView.new;
     [self.tableView registerClass:[WBStatusCell class] forCellReuseIdentifier:@"AtMeStatusesCellID"];
-    _dataSource = [[StatusDataSource alloc]initWithCellIdentifer:@"AtMeStatusesCellID" block:^(id cell, id statusLayout) {
+    _dataSource = [[AtMeStatusDataSource alloc]initWithCellIdentifer:@"AtMeStatusesCellID" block:^(id cell, id statusLayout) {
         WBStatusCell *wbcell = (WBStatusCell *)cell;
         wbcell.layout = (WBStatusLayout *) statusLayout;
         wbcell.delegate = _cellDelegate;
@@ -36,7 +37,7 @@
     UIActivityIndicatorView *indicator = [self activityIndicatorView];
     [indicator startAnimating];
     [self.view addSubview:indicator];
-    [self.dataSource loadAtMeStatusWithCompletion:^(void) {
+    [self.dataSource loadDatasWithCompletion:^(void) {
         dispatch_async(dispatch_get_main_queue(), ^{
             [indicator removeFromSuperview];
             self.navigationController.view.userInteractionEnabled = YES;

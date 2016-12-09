@@ -14,6 +14,10 @@
 #import "WBStatusHelper.h"
 #import "NSMutableAttributedString+emotion.h"
 
+@implementation CellLayout
+
+@end
+
 @implementation WeiboUserLayout
 
 - (instancetype)initWithMessage:(WBBaseMessage *)message displaySource:(BOOL)displaySource{
@@ -165,7 +169,7 @@
         }
     }
     _statusViewHeight = ceil(_statusViewHeight);
-    _height = _statusViewHeight + ToolbarHeight;
+    self.height = _statusViewHeight + ToolbarHeight;
 
     _toolbarLayout = [WBToolbarLayout new];
     [_toolbarLayout layoutWithStatus:_status];
@@ -189,35 +193,35 @@
 
 @end
 
-@implementation WBCommentLayout
-
-- (instancetype)initWithComment:(WBComment *)comment{
-    self = [super init];
-    _comment = comment;
-    [self layout];
-    return self;
-}
-
-- (void)layout{
-    _userLayout = [[WeiboUserLayout alloc] initWithMessage:_comment];
-    _userLayout.nameFont = [UIFont systemFontOfSize:SIZE_FONT_CONTENT-4];
-    _userLayout.fromFont = [UIFont systemFontOfSize:SIZE_FONT_CONTENT-7];
-    [_userLayout layout];
-    _commentText = [[NSMutableAttributedString alloc]initWithString:_comment.text attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:SIZE_FONT_CONTENT-3]}];
-    [_commentText replaceEmotion];
-    _commentSize = [_commentText boundingRectWithSize:CGSizeMake(CellContentWidth-IconWidth, 1000) options:NSStringDrawingUsesLineFragmentOrigin context:nil].size;
-    _cellHeight  = PADDING*2 + IconWidth  + _commentSize.height;
-}
-
-+ (NSMutableArray *)layoutsWithComments:(NSArray *)comments{
-    NSMutableArray *layouts= [NSMutableArray arrayWithCapacity:comments.count];
-    for(WBComment *comment in comments){
-        WBCommentLayout *layout = [[WBCommentLayout alloc]initWithComment:comment];
-        [layouts addObject:layout];
-    }
-    return layouts;
-}
-@end
+//@implementation WBCommentLayout
+//
+//- (instancetype)initWithComment:(WBComment *)comment{
+//    self = [super init];
+//    _comment = comment;
+//    [self layout];
+//    return self;
+//}
+//
+//- (void)layout{
+//    _userLayout = [[WeiboUserLayout alloc] initWithMessage:_comment];
+//    _userLayout.nameFont = [UIFont systemFontOfSize:SIZE_FONT_CONTENT-4];
+//    _userLayout.fromFont = [UIFont systemFontOfSize:SIZE_FONT_CONTENT-7];
+//    [_userLayout layout];
+//    _commentText = [[NSMutableAttributedString alloc]initWithString:_comment.text attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:SIZE_FONT_CONTENT-3]}];
+//    [_commentText replaceEmotion];
+//    _commentSize = [_commentText boundingRectWithSize:CGSizeMake(CellContentWidth-IconWidth, 1000) options:NSStringDrawingUsesLineFragmentOrigin context:nil].size;
+//    _cellHeight  = PADDING*2 + IconWidth  + _commentSize.height;
+//}
+//
+//+ (NSMutableArray *)layoutsWithComments:(NSArray *)comments{
+//    NSMutableArray *layouts= [NSMutableArray arrayWithCapacity:comments.count];
+//    for(WBComment *comment in comments){
+//        WBCommentLayout *layout = [[WBCommentLayout alloc]initWithComment:comment];
+//        [layouts addObject:layout];
+//    }
+//    return layouts;
+//}
+//@end
 
 @implementation WBMessageLayout
 
@@ -249,7 +253,7 @@
     [_messageText addAttributes:attributes range:NSMakeRange(0, _messageText.length)];
 
     _textSize = [_messageText boundingRectWithSize:CGSizeMake(CellContentWidth, 1000) options:NSStringDrawingUsesLineFragmentOrigin context:nil].size;
-    _cellHeight  = PADDING*3 + IconWidth  + _textSize.height;
+    self.height  = PADDING*3 + IconWidth  + _textSize.height;
 }
 
 + (NSMutableArray *)layoutsWithWBMessages:(NSArray *)messages{

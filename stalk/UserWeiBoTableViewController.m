@@ -8,13 +8,13 @@
 
 #import "UserWeiBoTableViewController.h"
 #import "WBStatusCell.h"
-#import "StatusDataSource.h"
 #import "SendStatusViewController.h"
 #import "WBStatusCellDelegateIMP.h"
+#import "CellDataSource.h"
 
 
 @interface UserWeiBoTableViewController ()
-@property (nonatomic, strong) StatusDataSource *dataSource;
+@property (nonatomic, strong) MyStatusDataSource *dataSource;
 @property (nonatomic, strong) WBStatusCellDelegateIMP *cellDelegate;
 @end
 
@@ -28,7 +28,7 @@
     [self.tableView setSeparatorInset:UIEdgeInsetsZero];
     [self.tableView setLayoutMargins:UIEdgeInsetsZero];
     self.tableView.delegate = self;
-    _dataSource = [[StatusDataSource alloc]initWithCellIdentifer:@"MyStatusesCellID" block:^(id cell, id statusLayout) {
+    _dataSource = [[MyStatusDataSource alloc]initWithCellIdentifer:@"MyStatusesCellID" block:^(id cell, id statusLayout) {
         WBStatusCell *wbcell = (WBStatusCell *)cell;
         wbcell.layout = (WBStatusLayout *) statusLayout;
         wbcell.delegate = _cellDelegate;
@@ -40,14 +40,13 @@
     UIActivityIndicatorView *indicator = [self activityIndicatorView];
     [indicator startAnimating];
     [self.view addSubview:indicator];
-    [self.dataSource loadMyStatusWithCompletion:^(void) {
+    [self.dataSource loadDatasWithCompletion:^(void) {
         dispatch_async(dispatch_get_main_queue(), ^{
             [indicator removeFromSuperview];
             self.navigationController.view.userInteractionEnabled = YES;
             [self.tableView reloadData];
         });
     }];
-
 }
 
 - (UIActivityIndicatorView *)activityIndicatorView{
@@ -74,7 +73,7 @@
 
 - (void)refreshData{
     if(self.refreshControl.isRefreshing){
-        [_dataSource updateMyStatusesWithCompletion:^{
+        [_dataSource updateDatasWithCompletion:^{
             [self.tableView reloadData];
             [self.refreshControl endRefreshing];
         }];

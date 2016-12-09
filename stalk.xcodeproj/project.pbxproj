@@ -41,7 +41,6 @@
 		1741E6711DE1D44300C887D0 /* NSObject+runtime.m in Sources */ = {isa = PBXBuildFile; fileRef = 1741E6701DE1D44300C887D0 /* NSObject+runtime.m */; };
 		1741E6741DE1DEBD00C887D0 /* YYFPSLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 1741E6731DE1DEBD00C887D0 /* YYFPSLabel.m */; };
 		1743DCF01DEF16AB009D5298 /* NSDate+STalk.m in Sources */ = {isa = PBXBuildFile; fileRef = 1743DCEF1DEF16AB009D5298 /* NSDate+STalk.m */; };
-		1743DCF31DF05653009D5298 /* MessageDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 1743DCF21DF05653009D5298 /* MessageDataSource.m */; };
 		1743DCFF1DF1488A009D5298 /* NSMutableAttributedString+emotion.m in Sources */ = {isa = PBXBuildFile; fileRef = 1743DCFE1DF1488A009D5298 /* NSMutableAttributedString+emotion.m */; };
 		1743DD021DF15529009D5298 /* WBBaseMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 1743DD011DF15529009D5298 /* WBBaseMessage.m */; };
 		1743DD051DF18704009D5298 /* WBStatusCellDelegateIMP.m in Sources */ = {isa = PBXBuildFile; fileRef = 1743DD041DF18704009D5298 /* WBStatusCellDelegateIMP.m */; };
@@ -69,7 +68,6 @@
 		17DAF7C71DEC81A500D11191 /* AtMeTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 17DAF7C61DEC81A500D11191 /* AtMeTableViewController.m */; };
 		17DAF7CA1DED506700D11191 /* WBTextStorage.m in Sources */ = {isa = PBXBuildFile; fileRef = 17DAF7C91DED506700D11191 /* WBTextStorage.m */; };
 		17FA23001DE3CE0C00617651 /* WBHttpRequest+STalk.m in Sources */ = {isa = PBXBuildFile; fileRef = 17FA22FF1DE3CE0C00617651 /* WBHttpRequest+STalk.m */; };
-		17FA23091DE3DD8D00617651 /* StatusDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 17FA23081DE3DD8D00617651 /* StatusDataSource.m */; };
 		94EB5C9CEFE6D90560C4BBA6 /* libPods-stalk.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A428582C3D25FA0ACB23CE58 /* libPods-stalk.a */; };
 /* End PBXBuildFile section */
 
@@ -130,8 +128,6 @@
 		1741E6731DE1DEBD00C887D0 /* YYFPSLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YYFPSLabel.m; sourceTree = "<group>"; };
 		1743DCEE1DEF16AB009D5298 /* NSDate+STalk.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDate+STalk.h"; sourceTree = "<group>"; };
 		1743DCEF1DEF16AB009D5298 /* NSDate+STalk.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDate+STalk.m"; sourceTree = "<group>"; };
-		1743DCF11DF05653009D5298 /* MessageDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MessageDataSource.h; sourceTree = "<group>"; };
-		1743DCF21DF05653009D5298 /* MessageDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MessageDataSource.m; sourceTree = "<group>"; };
 		1743DCFD1DF1488A009D5298 /* NSMutableAttributedString+emotion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSMutableAttributedString+emotion.h"; sourceTree = "<group>"; };
 		1743DCFE1DF1488A009D5298 /* NSMutableAttributedString+emotion.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSMutableAttributedString+emotion.m"; sourceTree = "<group>"; };
 		1743DD001DF15529009D5298 /* WBBaseMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WBBaseMessage.h; sourceTree = "<group>"; };
@@ -183,8 +179,6 @@
 		17DAF7C91DED506700D11191 /* WBTextStorage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WBTextStorage.m; sourceTree = "<group>"; };
 		17FA22FE1DE3CE0C00617651 /* WBHttpRequest+STalk.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "WBHttpRequest+STalk.h"; sourceTree = "<group>"; };
 		17FA22FF1DE3CE0C00617651 /* WBHttpRequest+STalk.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "WBHttpRequest+STalk.m"; sourceTree = "<group>"; };
-		17FA23071DE3DD8D00617651 /* StatusDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StatusDataSource.h; sourceTree = "<group>"; };
-		17FA23081DE3DD8D00617651 /* StatusDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StatusDataSource.m; sourceTree = "<group>"; };
 		87E2433D0244AA4FB3BC3E1D /* Pods-stalk.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-stalk.debug.xcconfig"; path = "Pods/Target Support Files/Pods-stalk/Pods-stalk.debug.xcconfig"; sourceTree = "<group>"; };
 		A428582C3D25FA0ACB23CE58 /* libPods-stalk.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-stalk.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		DD42CF7E439995A5093D552A /* Pods-stalk.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-stalk.release.xcconfig"; path = "Pods/Target Support Files/Pods-stalk/Pods-stalk.release.xcconfig"; sourceTree = "<group>"; };
@@ -257,8 +251,6 @@
 				177B21441DE816E2005A1438 /* ResourceWeibo.bundle */,
 				177B20F21DE43CB0005A1438 /* SendStatusViewController.h */,
 				177B20F31DE43CB0005A1438 /* SendStatusViewController.m */,
-				17FA23071DE3DD8D00617651 /* StatusDataSource.h */,
-				17FA23081DE3DD8D00617651 /* StatusDataSource.m */,
 				17AFD3F51DDED731007C7DB9 /* StatusDetailViewController.h */,
 				17AFD3F61DDED732007C7DB9 /* StatusDetailViewController.m */,
 				177B20EF1DE43650005A1438 /* TopicController.h */,
@@ -272,8 +264,6 @@
 				1741E66D1DE1AB6A00C887D0 /* WBRequestQueue.m */,
 				171BCCF91DD69BE3009FF89E /* WeiBoTabBarController.h */,
 				171BCCFA1DD69BE3009FF89E /* WeiBoTabBarController.m */,
-				1743DCF11DF05653009D5298 /* MessageDataSource.h */,
-				1743DCF21DF05653009D5298 /* MessageDataSource.m */,
 			);
 			path = stalk;
 			sourceTree = "<group>";
@@ -550,7 +540,6 @@
 				1741E6741DE1DEBD00C887D0 /* YYFPSLabel.m in Sources */,
 				1743DD051DF18704009D5298 /* WBStatusCellDelegateIMP.m in Sources */,
 				17AFD3F71DDED732007C7DB9 /* StatusDetailViewController.m in Sources */,
-				1743DCF31DF05653009D5298 /* MessageDataSource.m in Sources */,
 				17DAF7C41DEC628D00D11191 /* PhotoBrowerView.m in Sources */,
 				171BCCEA1DD60E71009FF89E /* HomeTableViewController.m in Sources */,
 				1743DD1B1DF43109009D5298 /* TableHeaderView.m in Sources */,
@@ -568,7 +557,6 @@
 				1741E6621DDF165D00C887D0 /* UserViewController.m in Sources */,
 				171BCD291DDAD6A5009FF89E /* STalkTextAttachment.m in Sources */,
 				177B21581DEA72F5005A1438 /* WBStatusHelper.m in Sources */,
-				17FA23091DE3DD8D00617651 /* StatusDataSource.m in Sources */,
 				1743DD0D1DF26008009D5298 /* UINavigationBar+Awesome.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
