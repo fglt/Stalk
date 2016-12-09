@@ -14,14 +14,19 @@
 #import "WBStatusLayout.h"
 #import "WBStatusCell.h"
 
+@interface MessageDataSource()
+@property (nonatomic, copy) ConfigCellBlock configBlock;
+@end
+
 @implementation MessageDataSource{
     NSString *_identifer;
 }
 
-- (instancetype)initWithMessageType:(MESSAGETYPE)type cellIdentifer:(NSString *)identifer;{
+- (instancetype)initWithMessageType:(MESSAGETYPE)type cellIdentifer:(NSString *)identifer block:(ConfigCellBlock)configCellBlock{
     self = [super init];
     _identifer = identifer;
     _type = type;
+    _configBlock = configCellBlock;
     return self;
 }
 
@@ -79,7 +84,7 @@
     if(!cell){
         cell = [[WBMessageCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:_identifer];
     }
-    [cell setLayout:_messageLayoutList[indexPath.row]];
+    _configBlock(cell, _messageLayoutList[indexPath.row]);
     return cell;
 }
 

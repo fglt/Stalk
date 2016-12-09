@@ -7,9 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
-@class WBUser;
+@class WeiboUser;
 
 @interface UserViewController : UITableViewController
-@property (nonatomic, strong) WBUser *user;
+@property (nonatomic, strong) WeiboUser *user;
 
 @end

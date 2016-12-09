@@ -10,7 +10,7 @@
 #import "WBPicture.h"
 #import "WBBaseMessage.h"
 
-@class WBUser;
+@class WeiboUser;
 
 @interface WBStatus : WBBaseMessage
 /**

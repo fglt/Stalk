@@ -14,6 +14,7 @@
 @class MLLink;
 @class MLLinkLabel;
 @class MLLabel;
+@class WBMessageCell;
 
 #define CellPadding 10;
 
@@ -30,11 +31,18 @@
 
 @end
 
-@interface WBUserView : UIView
+@protocol WBMessageCellDelegate <NSObject>
+@optional
+- (void)cell:(WBMessageCell *)cell didClickLink:(MLLink *)link;
+- (void)cellDidClick:(WBMessageCell *)cell;
+- (void)cellDidClickUser:(WBMessageCell *)cell;
+@end
+
+@interface WeiboUserView : UIView
 @property (nonatomic, strong) UIImageView *icon;
 @property (nonatomic, strong) UILabel *name;
 @property (nonatomic, strong) UILabel *from;
-- (void)setWithLayout:(WBUserLayout *)layout;
+- (void)setWithLayout:(WeiboUserLayout *)layout;
 @end
 
 @interface WBToolbarView : UIView
@@ -62,7 +70,7 @@
 @interface WBStatusView : UIView
 
 @property (nonatomic, strong) UIView *contentView;
-@property (nonatomic, strong) WBUserView *userView;
+@property (nonatomic, strong) WeiboUserView *userView;
 @property (nonatomic, strong) MLLinkLabel *statusText;
 @property (nonatomic, strong) UIView *pictureHolder;
 @property (nonatomic, strong) UIView *retweetPictureHolder;
@@ -82,14 +90,17 @@
 + (instancetype)cellWithTableView:(UITableView *)tableView identifier:(NSString *)identifier;
 @end
 
-@interface WBCommentCell : UITableViewCell
-@property (nonatomic, strong) WBUserView *userView;
-@property (nonatomic, strong) MLLinkLabel *commentTextLabel;
-@property (nonatomic, strong) WBCommentLayout *layout;
+@interface WBStatusCell (config)
+- (void)configWithLayout:(WBStatusLayout *)layout delegate:(id<WBStatusCellDelegate>) delegate;
 @end
 
 @interface WBMessageCell : UITableViewCell
-@property (nonatomic, strong) WBUserView *userView;
+@property (nonatomic, strong) WeiboUserView *userView;
 @property (nonatomic, strong) MLLinkLabel *messageLabel;
 @property (nonatomic, strong) WBMessageLayout *layout;
+@property (nonatomic, weak) id<WBMessageCellDelegate> delegate;
+@end
+
+@interface WBMessageCell (config)
+- (void)configWithLayout:(WBMessageLayout *)layout delegate:(id<WBMessageCellDelegate>) delegate;
 @end

@@ -7,7 +7,6 @@
 //
 
 #import "UserViewController.h"
-#import "WBUser.h"
 #import "WBRequestQueue.h"
 #import "AppDelegate.h"
 #import "WBHttpRequest+STalk.h"

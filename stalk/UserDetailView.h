@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@class WBUser;
+@class WeiboUser;
 @class UserDetailView;
 
 @interface UserDetailView : UIView
@@ -17,12 +17,12 @@
 @property (strong, nonatomic) UILabel *locatioin;
 @property (strong, nonatomic) UILabel *descriptions;
 
-- (void)layoutWithUser:(WBUser *)user;
+- (void)layoutWithUser:(WeiboUser *)user;
 
 @end
 
 @interface UserHeaderView : UIView
 @property (nonatomic, strong) UIImageView *coverView;
 @property (nonatomic, strong) UserDetailView *userView;
-- (void)layoutWithUser:(WBUser *)user;
+- (void)layoutWithUser:(WeiboUser *)user;
 @end

@@ -8,7 +8,6 @@
 
 #import "WBModel.h"
 #import "WBStatus.h"
-#import "WBUser.h"
 #import "NSDate+STalk.h"
 
 @implementation WBEmoticon
@@ -47,7 +46,7 @@
     comment.mid = dict[@"mid"];
     comment.text =dict[@"text"];
     comment.source =dict[@"source"];
-    comment.user = [WBUser userWithDict:dict[@"user"]];
+    comment.user = [WeiboUser userWithDictionary:dict[@"user"]];
     comment.status = [WBStatus statusWithDict:dict[@"status"]];
     /**
      要先判断dict[@"replay_comment"]是否存在；否则导致大量系统资源被占用名，导致错误

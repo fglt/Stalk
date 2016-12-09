@@ -7,7 +7,6 @@
 //
 
 #import "UserDetailView.h"
-#import "WBUser.h"
 #import "WBStatusLayout.h"
 #import "WBStatusHelper.h"
 
@@ -34,9 +33,9 @@
     return self;
 }
 
-- (void)layoutWithUser:(WBUser *)user{
+- (void)layoutWithUser:(WeiboUser *)user{
     self.width = CellContentWidth;
-    [_iconView setImageWithURL:[NSURL URLWithString:user.avatarLarge]
+    [_iconView setImageWithURL:[NSURL URLWithString:user.avatarLargeUrl]
                placeholder:nil
                    options:kNilOptions
                    manager:[WBStatusHelper avatarImageManager]
@@ -48,7 +47,7 @@
     _name.frame = CGRectMake(0, _iconView.bottom +10, self.width, _name.font.lineHeight);
     
     _descriptions.font = [UIFont systemFontOfSize:15];
-    CGSize descSize = [ user.desc boundingRectWithSize:CGSizeMake(self.width,2000) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName:_descriptions.font} context:nil].size;
+    CGSize descSize = [ user.userDescription boundingRectWithSize:CGSizeMake(self.width,2000) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName:_descriptions.font} context:nil].size;
     
     _locatioin.font = [UIFont systemFontOfSize:15];
     _locatioin.top = _name.bottom +10;
@@ -58,7 +57,7 @@
     
     _descriptions.width = self.width;
     _descriptions.height = descSize.height;
-    _descriptions.text = user.desc;
+    _descriptions.text = user.userDescription;
     _descriptions.top = _locatioin.bottom +20;
     
     self.height = CGRectGetMaxY(_descriptions.frame);
@@ -77,17 +76,17 @@
     return self;
 }
 
-- (void)layoutWithUser:(WBUser *)user{
+- (void)layoutWithUser:(WeiboUser *)user{
     if(self.width ==0){
         self.width = [UIScreen mainScreen].bounds.size.width;
     }
     _coverView.top = -64;
     _coverView.width = self.width;
     _coverView.height = 254;
-    if(user.coverImage){
-        _coverView.imageURL = [NSURL URLWithString:user.coverImage];
+    if(user.coverImageUrl){
+        _coverView.imageURL = [NSURL URLWithString:user.coverImageUrl];
     }else{
-        _coverView.imageURL = [NSURL URLWithString:user.coverImagePhone];
+        _coverView.imageURL = [NSURL URLWithString:user.coverImageForPhoneUrl];
     }
     [_userView layoutWithUser:user];
     _userView.left = (self.width - _userView.width)/2;

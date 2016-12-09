@@ -7,7 +7,6 @@
 //
 
 #import "WBStatus.h"
-#import "WBUser.h"
 #import "NSDate+STalk.h"
 
 @implementation WBStatus
@@ -46,7 +45,7 @@
         aStatus.originalPic = dict[@"original_pic"];
     }
     if (dict[@"user"] != nil) {
-        aStatus.user = [WBUser userWithDict:dict[@"user"]];
+        aStatus.user = [WeiboUser userWithDictionary:dict[@"user"]];
     }
 
     if (dict[@"retweeted_status"] != nil) {

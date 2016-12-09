@@ -1,12 +1,12 @@
 //
-//  WBStatusCellDelegateIMP.m
+//  WBMessageCellDelegateIMP.m
 //  stalk
 //
-//  Created by Coding on 02/12/2016.
+//  Created by Coding on 09/12/2016.
 //  Copyright © 2016 Coding. All rights reserved.
 //
 
-#import "WBStatusCellDelegateIMP.h"
+#import "WBMessageCellDelegateIMP.h"
 #import "WBStatusCell.h"
 #import "WBStatusLayout.h"
 #import "WBHttpRequest+STalk.h"
@@ -17,64 +17,20 @@
 #import <SafariServices/SafariServices.h>
 #import "WBRequestQueue.h"
 #import "NSObject+runtime.h"
-#import "YYFPSLabel.h"
-#import "StatusDataSource.h"
 #import "TopicController.h"
-#import "PhotoBrowerViewController.h"
 #import "WBStatusHelper.h"
 #import "PhotoBrowerView.h"
 #import "SendStatusViewController.h"
 #import "AppDelegate.h"
+#import "MessageDataSource.h"
 
-@interface WBStatusCellDelegateIMP()<SFSafariViewControllerDelegate>
+@interface WBMessageCellDelegateIMP()<SFSafariViewControllerDelegate>
 
 @end
-@implementation WBStatusCellDelegateIMP
 
-- (instancetype)initWithController:(UIViewController *)controller{
-    self = [super init];
-    _controller = controller;
-    return self;
-}
+@implementation WBMessageCellDelegateIMP
 
-- (void)cell:(WBStatusCell *)cell didClickImageAt:(NSUInteger)index{
-    UIView *fromView = nil;
-    NSMutableArray *items = [NSMutableArray new];
-    
-    WBStatus *status = cell.layout.status;
-    
-    NSArray *picviews;
-    if(status.retweetedStatus){
-        status = cell.layout.status.retweetedStatus;
-        picviews = cell.statusView.retweetPictureHolder.subviews;
-    }else{
-        picviews = cell.statusView.pictureHolder.subviews;
-    }
-    
-    for (NSUInteger i = 0, max = picviews.count; i < max; i++) {
-        UIView *imgView = picviews[i];
-        
-        YYPhotoGroupItem *item = [YYPhotoGroupItem new];
-        item.fromView = imgView;
-        item.largeImageURL = [WBStatusHelper defaultURLForImageURL:status.pictures[i].original.url];
-        [items addObject:item];
-        if (i == index) {
-            fromView = imgView;
-        }
-    }
-    
-    //    PhotoBrowerViewController *brower = [[PhotoBrowerViewController alloc]init];
-    //    brower.fromView = fromView;
-    //    brower.groupItems = items;
-    //    [brower show];
-    
-    PhotoBrowerView *brower = [[PhotoBrowerView alloc] initWithItems:items];
-    brower.fromView = fromView;
-    [brower showWithAnimate:YES];
-}
-
-- (void)cell:(WBStatusCell *)cell didClickLink:(MLLink *)link
-{
+- (void)cell:(WBMessageCell *)cell didClickLink:(MLLink *)link{
     AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
     
     switch (link.linkType) {
@@ -123,46 +79,19 @@
         default:
             break;
     }
+
 }
 
-- (void)cellDidClick:(WBStatusCell *)cell;{
-    StatusDetailViewController *detailViewController = [[StatusDetailViewController alloc] initWithStyle:UITableViewStylePlain];
-    detailViewController.layout = cell.layout;
-    detailViewController.title = @"微博正文";
-    [self.controller.navigationController pushViewController:detailViewController animated:YES];
-}
-
-- (void)cellDidClickRetweet:(WBStatusCell *)cell;{
-    StatusDetailViewController *detailViewController = [[StatusDetailViewController alloc] initWithStyle:UITableViewStylePlain];
-    WBStatus *status = cell.layout.status.retweetedStatus;
-    detailViewController.layout = [[WBStatusLayout alloc] initWithStatus:status];
-    detailViewController.title = @"微博正文";
-    [self.controller.navigationController pushViewController:detailViewController animated:YES];
+- (void)cellDidClick:(WBMessageCell *)cell{
     
 }
-- (void)cellDidClickUser:(WBStatusCell *)cell{
+
+- (void)cellDidClickUser:(WBMessageCell *)cell{
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
     UserViewController *userViewController = [storyboard instantiateViewControllerWithIdentifier:@"UserViewController"];
-    userViewController.user =  cell.layout.status.user;
+    userViewController.user =  cell.layout.message.user;
+    userViewController.hidesBottomBarWhenPushed = YES;
     [self.controller.navigationController pushViewController:userViewController animated:YES];
-}
-
-- (void)cellDidClickRepost:(WBStatusCell *)cell{
-    SendStatusViewController *sendController = [SendStatusViewController new];
-    sendController.messageType = SendMessageTypeRepost;
-    sendController.status = cell.layout.status;
-    [self.controller.navigationController pushViewController:sendController animated:YES];
-}
-
-- (void)cellDidClickComment:(WBStatusCell *)cell{
-    SendStatusViewController *sendController = [SendStatusViewController new];
-    sendController.messageType = SendMessageTypeComment;
-    sendController.status = cell.layout.status;
-    [self.controller.navigationController pushViewController:sendController animated:YES];
-}
-
-- (void)cellDidClickLike:(WBStatusCell *)cell{
-    
 }
 
 - (UIAlertController *)alertControllerWithTitle:(NSString *)title message:(NSAttributedString *)message

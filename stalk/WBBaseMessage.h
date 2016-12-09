@@ -7,12 +7,12 @@
 //
 
 #import <Foundation/Foundation.h>
-#import"WBUser.h"
+#import"WeiboUser.h"
 
 @interface WBBaseMessage : NSObject
 @property (nonatomic, copy)NSDate *createdAt;
 @property (nonatomic) NSString *lid;
-@property (nonatomic, strong) WBUser *user;
+@property (nonatomic, strong) WeiboUser *user;
 @property (nonatomic) NSString *text;
 @property (nonatomic) NSString *mid;
 @property (nonatomic) NSString *source;

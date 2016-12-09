@@ -29,9 +29,7 @@
     self.tableView.delegate = self;
     [self.tableView registerClass:[WBStatusCell class] forCellReuseIdentifier:@"ALLStatusesCellID"];
     _dataSource = [[StatusDataSource alloc]initWithCellIdentifer:@"ALLStatusesCellID" block:^(id cell, id statusLayout) {
-        WBStatusCell *wbcell = (WBStatusCell *)cell;
-        wbcell.layout = (WBStatusLayout *) statusLayout;
-        wbcell.delegate = _cellDelegate;
+        [(WBStatusCell *)cell configWithLayout:statusLayout delegate:_cellDelegate];
     }];
     self.tableView.dataSource = _dataSource;
     [self setRefresh];
@@ -140,4 +138,36 @@
     [self.navigationController pushViewController:sendController animated:YES];
 }
 
+- (IBAction)account:(id)sender {
+    [self screenshot];
+}
+
+- (void)screenshot
+{
+
+    UIView *view = UIApplication.sharedApplication.keyWindow;
+    UIView *tabbar = self.tabBarController.tabBar;
+    
+    UIGraphicsBeginImageContextWithOptions(tabbar.size, 1,0);
+    
+    [tabbar.layer renderInContext:UIGraphicsGetCurrentContext()];
+    
+    UIImage *tabbarImage = UIGraphicsGetImageFromCurrentImageContext();
+    
+    UIGraphicsEndImageContext();
+    
+    
+    UIGraphicsBeginImageContextWithOptions(view.size, 1,0);
+    
+    [view.layer renderInContext:UIGraphicsGetCurrentContext()];
+    [tabbarImage drawAtPoint:CGPointMake(0, view.height-tabbarImage.size.height)];
+    
+    UIImage *viewImage = UIGraphicsGetImageFromCurrentImageContext();
+    
+    UIGraphicsEndImageContext();
+    
+    UIImageWriteToSavedPhotosAlbum(viewImage, nil, nil, nil);
+    NSString *dir = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject];
+    NSLog(@"%@",dir);
+}
 @end

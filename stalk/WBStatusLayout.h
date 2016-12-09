@@ -12,7 +12,7 @@
 @class WBStatus;
 @class WBComment;
 
-@interface WBUserLayout : NSObject
+@interface WeiboUserLayout : NSObject
 @property (nonatomic) CGFloat iconWidth;
 @property (nonatomic) UIFont *nameFont;
 @property (nonatomic) UIFont *fromFont;
@@ -43,7 +43,7 @@
 @property (nonatomic, strong) NSMutableAttributedString *statusAttributedText;
 @property (nonatomic, strong) NSMutableAttributedString *retweetAttributedText;
 
-@property (nonatomic, strong) WBUserLayout *userLayout;
+@property (nonatomic, strong) WeiboUserLayout *userLayout;
 
 @property (nonatomic) CGRect statusTextFrame;
 @property (nonatomic) CGRect statusPictureFrame;
@@ -69,7 +69,7 @@
 
 @interface WBCommentLayout : NSObject
 @property (nonatomic, strong) WBComment *comment;
-@property (nonatomic, strong) WBUserLayout *userLayout;
+@property (nonatomic, strong) WeiboUserLayout *userLayout;
 @property (nonatomic, strong) NSMutableAttributedString *commentText;
 @property (nonatomic) CGSize commentSize;
 @property (nonatomic) CGFloat cellHeight;
@@ -79,7 +79,7 @@
 
 @interface WBMessageLayout : NSObject
 @property (nonatomic, strong) WBBaseMessage *message;
-@property (nonatomic, strong) WBUserLayout *userLayout;
+@property (nonatomic, strong) WeiboUserLayout *userLayout;
 @property (nonatomic, strong) UIFont *textFont;
 @property (nonatomic, strong) NSMutableAttributedString *messageText;
 @property (nonatomic) CGSize textSize;

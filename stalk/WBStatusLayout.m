@@ -10,12 +10,11 @@
 //#import "UIScreen+Additions.h"
 #import "NSString+Additions.h"
 #import "WBStatus.h"
-#import "WBUser.h"
 #import "STalkTextAttachment.h"
 #import "WBStatusHelper.h"
 #import "NSMutableAttributedString+emotion.h"
 
-@implementation WBUserLayout
+@implementation WeiboUserLayout
 
 - (instancetype)initWithMessage:(WBBaseMessage *)message displaySource:(BOOL)displaySource{
     self = [super init];
@@ -172,7 +171,7 @@
     [_toolbarLayout layoutWithStatus:_status];
     
 
-    _userLayout = [[WBUserLayout alloc] initWithMessage:_status displaySource:YES];
+    _userLayout = [[WeiboUserLayout alloc] initWithMessage:_status displaySource:YES];
     _userLayout.nameFont = [UIFont systemFontOfSize:SIZE_FONT_CONTENT-2];
     _userLayout.fromFont = [UIFont systemFontOfSize:SIZE_FONT_CONTENT-5 weight:UIFontWeightLight];
     [_userLayout layout];
@@ -200,7 +199,7 @@
 }
 
 - (void)layout{
-    _userLayout = [[WBUserLayout alloc] initWithMessage:_comment];
+    _userLayout = [[WeiboUserLayout alloc] initWithMessage:_comment];
     _userLayout.nameFont = [UIFont systemFontOfSize:SIZE_FONT_CONTENT-4];
     _userLayout.fromFont = [UIFont systemFontOfSize:SIZE_FONT_CONTENT-7];
     [_userLayout layout];
@@ -230,13 +229,26 @@
 }
 
 - (void)layout{
-    _userLayout = [[WBUserLayout alloc] initWithMessage:_message];
+    _userLayout = [[WeiboUserLayout alloc] initWithMessage:_message];
     _userLayout.nameFont = [UIFont systemFontOfSize:SIZE_FONT_CONTENT-4];
     _userLayout.fromFont = [UIFont systemFontOfSize:SIZE_FONT_CONTENT-7];
     [_userLayout layout];
-    _messageText = [[NSMutableAttributedString alloc]initWithString:_message.text attributes:@{NSFontAttributeName:_textFont}];
+    
+    NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
+    style.alignment = NSTextAlignmentLeft;
+    style.minimumLineHeight = _textFont.lineHeight;
+    style.maximumLineHeight = _textFont.lineHeight;
+    style.lineBreakMode = NSLineBreakByWordWrapping;
+    style.lineSpacing = 5;
+    style.lineHeightMultiple = 0.0;
+    style.lineBreakMode = NSLineBreakByCharWrapping;
+    NSDictionary* attributes =@{NSFontAttributeName:_textFont, NSParagraphStyleAttributeName: style};
+
+    _messageText = [[NSMutableAttributedString alloc] initWithString:_message.text attributes:nil];
     [_messageText replaceEmotion];
-    _textSize = [_messageText boundingRectWithSize:CGSizeMake(CellContentWidth-IconWidth, 1000) options:NSStringDrawingUsesLineFragmentOrigin context:nil].size;
+    [_messageText addAttributes:attributes range:NSMakeRange(0, _messageText.length)];
+
+    _textSize = [_messageText boundingRectWithSize:CGSizeMake(CellContentWidth, 1000) options:NSStringDrawingUsesLineFragmentOrigin context:nil].size;
     _cellHeight  = PADDING*3 + IconWidth  + _textSize.height;
 }
 

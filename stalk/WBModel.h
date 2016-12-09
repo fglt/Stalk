@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "WBBaseMessage.h"
 
-@class WBUser;
+@class WeiboUser;
 @class WBEmoticonGroup;
 @class WBStatus;
 

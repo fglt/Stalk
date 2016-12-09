@@ -24,7 +24,6 @@
 		171BCCDC1DD4B8AB009FF89E /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 171BCCDB1DD4B8AB009FF89E /* CoreGraphics.framework */; };
 		171BCCDE1DD4B8B6009FF89E /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 171BCCDD1DD4B8B6009FF89E /* libsqlite3.tbd */; };
 		171BCCE01DD4B8CF009FF89E /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 171BCCDF1DD4B8CF009FF89E /* libz.tbd */; };
-		171BCCE41DD60210009FF89E /* WBUser.m in Sources */ = {isa = PBXBuildFile; fileRef = 171BCCE31DD60210009FF89E /* WBUser.m */; };
 		171BCCE71DD60245009FF89E /* WBStatus.m in Sources */ = {isa = PBXBuildFile; fileRef = 171BCCE61DD60245009FF89E /* WBStatus.m */; };
 		171BCCEA1DD60E71009FF89E /* HomeTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 171BCCE91DD60E71009FF89E /* HomeTableViewController.m */; };
 		171BCCF01DD61C57009FF89E /* WBAuthorizeResponse+copy.m in Sources */ = {isa = PBXBuildFile; fileRef = 171BCCEF1DD61C57009FF89E /* WBAuthorizeResponse+copy.m */; };
@@ -36,9 +35,7 @@
 		171BCD1A1DD7347D009FF89E /* WBStatusCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 171BCD191DD7347D009FF89E /* WBStatusCell.m */; };
 		171BCD1D1DD7F666009FF89E /* WBStatusLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 171BCD1C1DD7F666009FF89E /* WBStatusLayout.m */; };
 		171BCD291DDAD6A5009FF89E /* STalkTextAttachment.m in Sources */ = {isa = PBXBuildFile; fileRef = 171BCD281DDAD6A5009FF89E /* STalkTextAttachment.m */; };
-		171BCD2C1DDADA38009FF89E /* Emotion.m in Sources */ = {isa = PBXBuildFile; fileRef = 171BCD2B1DDADA38009FF89E /* Emotion.m */; };
 		171BCD521DDB4D5E009FF89E /* STalkTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 171BCD511DDB4D5E009FF89E /* STalkTextView.m */; };
-		171BCD5A1DDBFC1F009FF89E /* EmotionHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 171BCD591DDBFC1F009FF89E /* EmotionHelper.m */; };
 		1741E6621DDF165D00C887D0 /* UserViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1741E6611DDF165D00C887D0 /* UserViewController.m */; };
 		1741E66E1DE1AB6A00C887D0 /* WBRequestQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 1741E66D1DE1AB6A00C887D0 /* WBRequestQueue.m */; };
 		1741E6711DE1D44300C887D0 /* NSObject+runtime.m in Sources */ = {isa = PBXBuildFile; fileRef = 1741E6701DE1D44300C887D0 /* NSObject+runtime.m */; };
@@ -53,6 +50,10 @@
 		1743DD0F1DF29439009D5298 /* defaultCover.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 1743DD0E1DF29439009D5298 /* defaultCover.jpg */; };
 		1743DD181DF411A6009D5298 /* STThemeManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 1743DD171DF411A6009D5298 /* STThemeManager.m */; };
 		1743DD1B1DF43109009D5298 /* TableHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1743DD1A1DF43109009D5298 /* TableHeaderView.m */; };
+		1743DD231DFAE241009D5298 /* BFPaperButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 1743DD201DFAE241009D5298 /* BFPaperButton.m */; };
+		1743DD241DFAE241009D5298 /* UIColor+BFPaperColors.m in Sources */ = {isa = PBXBuildFile; fileRef = 1743DD221DFAE241009D5298 /* UIColor+BFPaperColors.m */; };
+		1743DD271DFAED8B009D5298 /* WBMessageCellDelegateIMP.m in Sources */ = {isa = PBXBuildFile; fileRef = 1743DD261DFAED8B009D5298 /* WBMessageCellDelegateIMP.m */; };
+		1743DD2A1DFAF294009D5298 /* CellDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 1743DD291DFAF294009D5298 /* CellDataSource.m */; };
 		177B20F11DE43650005A1438 /* TopicController.m in Sources */ = {isa = PBXBuildFile; fileRef = 177B20F01DE43650005A1438 /* TopicController.m */; };
 		177B20F41DE43CB0005A1438 /* SendStatusViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 177B20F31DE43CB0005A1438 /* SendStatusViewController.m */; };
 		177B20FD1DE52CB0005A1438 /* WBPicture.m in Sources */ = {isa = PBXBuildFile; fileRef = 177B20FC1DE52CB0005A1438 /* WBPicture.m */; };
@@ -95,8 +96,6 @@
 		171BCCDD1DD4B8B6009FF89E /* libsqlite3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.tbd; path = usr/lib/libsqlite3.tbd; sourceTree = SDKROOT; };
 		171BCCDF1DD4B8CF009FF89E /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
 		171BCCE11DD4B93B009FF89E /* stalk-prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "stalk-prefix.pch"; sourceTree = "<group>"; };
-		171BCCE21DD60210009FF89E /* WBUser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WBUser.h; sourceTree = "<group>"; };
-		171BCCE31DD60210009FF89E /* WBUser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WBUser.m; sourceTree = "<group>"; };
 		171BCCE51DD60245009FF89E /* WBStatus.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WBStatus.h; sourceTree = "<group>"; };
 		171BCCE61DD60245009FF89E /* WBStatus.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WBStatus.m; sourceTree = "<group>"; };
 		171BCCE81DD60E71009FF89E /* HomeTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HomeTableViewController.h; sourceTree = "<group>"; };
@@ -119,12 +118,8 @@
 		171BCD1C1DD7F666009FF89E /* WBStatusLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WBStatusLayout.m; sourceTree = "<group>"; };
 		171BCD271DDAD6A5009FF89E /* STalkTextAttachment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STalkTextAttachment.h; sourceTree = "<group>"; };
 		171BCD281DDAD6A5009FF89E /* STalkTextAttachment.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STalkTextAttachment.m; sourceTree = "<group>"; };
-		171BCD2A1DDADA38009FF89E /* Emotion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Emotion.h; sourceTree = "<group>"; };
-		171BCD2B1DDADA38009FF89E /* Emotion.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Emotion.m; sourceTree = "<group>"; };
 		171BCD501DDB4D5E009FF89E /* STalkTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = STalkTextView.h; sourceTree = "<group>"; };
 		171BCD511DDB4D5E009FF89E /* STalkTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STalkTextView.m; sourceTree = "<group>"; };
-		171BCD581DDBFC1F009FF89E /* EmotionHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EmotionHelper.h; sourceTree = "<group>"; };
-		171BCD591DDBFC1F009FF89E /* EmotionHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EmotionHelper.m; sourceTree = "<group>"; };
 		1741E6601DDF165D00C887D0 /* UserViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserViewController.h; sourceTree = "<group>"; };
 		1741E6611DDF165D00C887D0 /* UserViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserViewController.m; sourceTree = "<group>"; };
 		1741E66C1DE1AB6A00C887D0 /* WBRequestQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WBRequestQueue.h; sourceTree = "<group>"; };
@@ -152,6 +147,14 @@
 		1743DD171DF411A6009D5298 /* STThemeManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = STThemeManager.m; sourceTree = "<group>"; };
 		1743DD191DF43109009D5298 /* TableHeaderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TableHeaderView.h; sourceTree = "<group>"; };
 		1743DD1A1DF43109009D5298 /* TableHeaderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TableHeaderView.m; sourceTree = "<group>"; };
+		1743DD1F1DFAE241009D5298 /* BFPaperButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BFPaperButton.h; sourceTree = "<group>"; };
+		1743DD201DFAE241009D5298 /* BFPaperButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BFPaperButton.m; sourceTree = "<group>"; };
+		1743DD211DFAE241009D5298 /* UIColor+BFPaperColors.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+BFPaperColors.h"; sourceTree = "<group>"; };
+		1743DD221DFAE241009D5298 /* UIColor+BFPaperColors.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+BFPaperColors.m"; sourceTree = "<group>"; };
+		1743DD251DFAED8B009D5298 /* WBMessageCellDelegateIMP.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WBMessageCellDelegateIMP.h; sourceTree = "<group>"; };
+		1743DD261DFAED8B009D5298 /* WBMessageCellDelegateIMP.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WBMessageCellDelegateIMP.m; sourceTree = "<group>"; };
+		1743DD281DFAF294009D5298 /* CellDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CellDataSource.h; sourceTree = "<group>"; };
+		1743DD291DFAF294009D5298 /* CellDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CellDataSource.m; sourceTree = "<group>"; };
 		177B20EF1DE43650005A1438 /* TopicController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TopicController.h; sourceTree = "<group>"; };
 		177B20F01DE43650005A1438 /* TopicController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TopicController.m; sourceTree = "<group>"; };
 		177B20F21DE43CB0005A1438 /* SendStatusViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SendStatusViewController.h; sourceTree = "<group>"; };
@@ -310,6 +313,8 @@
 		171BCD121DD7026D009FF89E /* view */ = {
 			isa = PBXGroup;
 			children = (
+				1743DD1F1DFAE241009D5298 /* BFPaperButton.h */,
+				1743DD201DFAE241009D5298 /* BFPaperButton.m */,
 				17DAF7C21DEC628D00D11191 /* PhotoBrowerView.h */,
 				17DAF7C31DEC628D00D11191 /* PhotoBrowerView.m */,
 				171BCD501DDB4D5E009FF89E /* STalkTextView.h */,
@@ -324,6 +329,8 @@
 				1741E6731DE1DEBD00C887D0 /* YYFPSLabel.m */,
 				1743DD191DF43109009D5298 /* TableHeaderView.h */,
 				1743DD1A1DF43109009D5298 /* TableHeaderView.m */,
+				1743DD251DFAED8B009D5298 /* WBMessageCellDelegateIMP.h */,
+				1743DD261DFAED8B009D5298 /* WBMessageCellDelegateIMP.m */,
 			);
 			name = view;
 			sourceTree = "<group>";
@@ -335,18 +342,12 @@
 				17DAF7C01DEBBC9900D11191 /* PhotoBrowerAnimator.m */,
 				177B21561DEA72F5005A1438 /* WBStatusHelper.h */,
 				177B21571DEA72F5005A1438 /* WBStatusHelper.m */,
-				171BCCE21DD60210009FF89E /* WBUser.h */,
-				171BCCE31DD60210009FF89E /* WBUser.m */,
 				171BCCE51DD60245009FF89E /* WBStatus.h */,
 				171BCCE61DD60245009FF89E /* WBStatus.m */,
 				171BCD1B1DD7F666009FF89E /* WBStatusLayout.h */,
 				171BCD1C1DD7F666009FF89E /* WBStatusLayout.m */,
-				171BCD2A1DDADA38009FF89E /* Emotion.h */,
-				171BCD2B1DDADA38009FF89E /* Emotion.m */,
 				171BCD271DDAD6A5009FF89E /* STalkTextAttachment.h */,
 				171BCD281DDAD6A5009FF89E /* STalkTextAttachment.m */,
-				171BCD581DDBFC1F009FF89E /* EmotionHelper.h */,
-				171BCD591DDBFC1F009FF89E /* EmotionHelper.m */,
 				177B20FB1DE52CB0005A1438 /* WBPicture.h */,
 				177B20FC1DE52CB0005A1438 /* WBPicture.m */,
 				177B21591DEA7341005A1438 /* WBModel.h */,
@@ -357,6 +358,8 @@
 				1743DD011DF15529009D5298 /* WBBaseMessage.m */,
 				1743DD161DF411A6009D5298 /* STThemeManager.h */,
 				1743DD171DF411A6009D5298 /* STThemeManager.m */,
+				1743DD281DFAF294009D5298 /* CellDataSource.h */,
+				1743DD291DFAF294009D5298 /* CellDataSource.m */,
 			);
 			name = modal;
 			sourceTree = "<group>";
@@ -364,6 +367,8 @@
 		171BCD141DD70299009FF89E /* category */ = {
 			isa = PBXGroup;
 			children = (
+				1743DD211DFAE241009D5298 /* UIColor+BFPaperColors.h */,
+				1743DD221DFAE241009D5298 /* UIColor+BFPaperColors.m */,
 				1743DD0B1DF26008009D5298 /* UINavigationBar+Awesome.h */,
 				1743DD0C1DF26008009D5298 /* UINavigationBar+Awesome.m */,
 				171BCCEE1DD61C57009FF89E /* WBAuthorizeResponse+copy.h */,
@@ -519,10 +524,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1743DD241DFAE241009D5298 /* UIColor+BFPaperColors.m in Sources */,
 				171BCCE71DD60245009FF89E /* WBStatus.m in Sources */,
 				171BCCFB1DD69BE3009FF89E /* WeiBoTabBarController.m in Sources */,
 				1743DD181DF411A6009D5298 /* STThemeManager.m in Sources */,
-				171BCD2C1DDADA38009FF89E /* Emotion.m in Sources */,
 				1741E66E1DE1AB6A00C887D0 /* WBRequestQueue.m in Sources */,
 				1741E6711DE1D44300C887D0 /* NSObject+runtime.m in Sources */,
 				171BCCAB1DD4B6FF009FF89E /* LoginViewController.m in Sources */,
@@ -531,7 +536,6 @@
 				177B20F11DE43650005A1438 /* TopicController.m in Sources */,
 				1743DCF01DEF16AB009D5298 /* NSDate+STalk.m in Sources */,
 				177B20FD1DE52CB0005A1438 /* WBPicture.m in Sources */,
-				171BCCE41DD60210009FF89E /* WBUser.m in Sources */,
 				171BCD521DDB4D5E009FF89E /* STalkTextView.m in Sources */,
 				177B215B1DEA7341005A1438 /* WBModel.m in Sources */,
 				17DAF7C11DEBBC9900D11191 /* PhotoBrowerAnimator.m in Sources */,
@@ -539,6 +543,8 @@
 				17FA23001DE3CE0C00617651 /* WBHttpRequest+STalk.m in Sources */,
 				171BCCA81DD4B6FF009FF89E /* AppDelegate.m in Sources */,
 				177B21661DEB03AB005A1438 /* PhotoBrowerViewController.m in Sources */,
+				1743DD231DFAE241009D5298 /* BFPaperButton.m in Sources */,
+				1743DD271DFAED8B009D5298 /* WBMessageCellDelegateIMP.m in Sources */,
 				171BCCF01DD61C57009FF89E /* WBAuthorizeResponse+copy.m in Sources */,
 				171BCD0D1DD7025A009FF89E /* UIScreen+Additions.m in Sources */,
 				1741E6741DE1DEBD00C887D0 /* YYFPSLabel.m in Sources */,
@@ -552,12 +558,12 @@
 				1743DD0A1DF18EE4009D5298 /* UserDetailView.m in Sources */,
 				171BCCA51DD4B6FF009FF89E /* main.m in Sources */,
 				17DAF7C71DEC81A500D11191 /* AtMeTableViewController.m in Sources */,
+				1743DD2A1DFAF294009D5298 /* CellDataSource.m in Sources */,
 				171BCD1A1DD7347D009FF89E /* WBStatusCell.m in Sources */,
 				1743DCFF1DF1488A009D5298 /* NSMutableAttributedString+emotion.m in Sources */,
 				171BCCF81DD698F3009FF89E /* constant.m in Sources */,
 				17DAF7BE1DEBBAB600D11191 /* PhotoBrowerControllerAnimatedDelegate.m in Sources */,
 				171BCD1D1DD7F666009FF89E /* WBStatusLayout.m in Sources */,
-				171BCD5A1DDBFC1F009FF89E /* EmotionHelper.m in Sources */,
 				1743DD021DF15529009D5298 /* WBBaseMessage.m in Sources */,
 				1741E6621DDF165D00C887D0 /* UserViewController.m in Sources */,
 				171BCD291DDAD6A5009FF89E /* STalkTextAttachment.m in Sources */,

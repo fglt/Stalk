@@ -7,20 +7,15 @@
 //
 
 #import "WBStatusCell.h"
-//#import "UIScreen+Additions.h"
-//#import "NSString+Additions.h"
 #import "WBStatus.h"
-#import "WBUser.h"
 #import "WBStatusLayout.h"
 #import "STalkTextAttachment.h"
-#import "Emotion.h"
 #import "AppDelegate.h"
-#import "EmotionHelper.h"
 #import "MLLinkLabel.h"
 #import "AppDelegate.h"
 #import "WBStatusHelper.h"
 
-@implementation WBUserView
+@implementation WeiboUserView
 
 - (instancetype)init{
     self= [super init];
@@ -47,9 +42,9 @@
     return self;
 }
 
-- (void)setWithLayout:(WBUserLayout *)layout{
+- (void)setWithLayout:(WeiboUserLayout *)layout{
     self.width = MAX(layout.nameWidth, layout.fromWidth) + IconWidth + PADDING*2;
-    [_icon setImageWithURL:[NSURL URLWithString:layout.message.user.avatarLarge] //profileImageURL
+    [_icon setImageWithURL:[NSURL URLWithString:layout.message.user.avatarLargeUrl] //profileImageURL
                placeholder:nil
                    options:kNilOptions
                    manager:[WBStatusHelper avatarImageManager]
@@ -211,7 +206,7 @@
     self.width = CellWidth;
     _contentView.width = CellWidth;
  
-    _userView = [WBUserView new];
+    _userView = [WeiboUserView new];
     [self.contentView addSubview:_userView];
     //内容
     _statusText = [[MLLinkLabel alloc] init];
@@ -449,11 +444,6 @@
 @end
 
 
-
-@interface WBStatusCell ()
-
-@end
-
 @implementation WBStatusCell
 
 - (void)setFrame:(CGRect)frame {
@@ -503,51 +493,12 @@
 
 @end
 
-@implementation WBCommentCell
-
-- (instancetype)init{
-    self = [super init];
-    _userView = [WBUserView new];
-    
-    _commentTextLabel = [MLLinkLabel new];
-    
-    [self.contentView addSubview:_userView];
-    [self.contentView addSubview:_commentTextLabel];
-    
-    return self;
+@implementation WBStatusCell (config)
+- (void)configWithLayout:(WBStatusLayout *)layout delegate:(id<WBStatusCellDelegate>) delegate{
+    self.layout = layout;
+    self.delegate = delegate;
 }
-
-- (void)setFrame:(CGRect)frame {
-    CGFloat startX = ( [UIScreen mainScreen].bounds.size.width-CellWidth)/2;
-    frame.origin.x += startX;
-    frame.size.width -= 2 * startX;
-    [super setFrame:frame];
-}
-
-- (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
-{
-    self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
-    if(!self) return nil;
-  
-    self.selectionStyle = UITableViewCellSelectionStyleNone;
-    _userView  = [[WBUserView alloc] init];
-    _commentTextLabel = [MLLinkLabel new];
-    
-    [self.contentView addSubview:_userView];
-    [self.contentView addSubview:_commentTextLabel];
-    
-    return self;
-}
-
-- (void)setLayout:(WBCommentLayout *)layout{
-    [_userView setWithLayout:layout.userLayout];
-    _commentTextLabel.frame = CGRectMake(PADDING, CGRectGetMaxY(self.userView.frame)+PADDING, layout.commentSize.width, layout.commentSize.height);
-    _commentTextLabel.numberOfLines = 0;
-    _commentTextLabel.attributedText = layout.commentText;
-}
-
 @end
-
 
 @implementation WBMessageCell
 
@@ -565,7 +516,7 @@
     if(!self) return nil;
     
     self.selectionStyle = UITableViewCellSelectionStyleNone;
-    _userView  = [[WBUserView alloc] init];
+    _userView  = [[WeiboUserView alloc] init];
     _messageLabel = [MLLinkLabel new];
     _messageLabel.dataDetectorTypes = MLDataDetectorTypeURL |MLDataDetectorTypeHashtag|MLDataDetectorTypeUserHandle ;
     
@@ -576,10 +527,50 @@
 }
 
 - (void)setLayout:(WBMessageLayout *)layout{
+    _layout = layout;
     [_userView setWithLayout:layout.userLayout];
     _messageLabel.frame = CGRectMake(PADDING, CGRectGetMaxY(self.userView.frame)+PADDING, layout.textSize.width, layout.textSize.height);
     _messageLabel.numberOfLines = 0;
     _messageLabel.attributedText = layout.messageText;
+    __weak typeof(self) weakSelf = self;
+    
+    [_messageLabel setDidClickLinkBlock:^(MLLink *link, NSString *linkText, MLLinkLabel *label) {
+        
+        [weakSelf.delegate cell:weakSelf didClickLink:link];
+    }];
+}
+@end
+
+@implementation WBMessageCell(config)
+
+- (void)configWithLayout:(WBMessageLayout *)layout delegate:(id<WBMessageCellDelegate>) delegate{
+    self.layout = layout;
+    self.delegate = delegate;
+}
+
+- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
+    [self performSelector:@selector(setBackgroundColor:) withObject:kWBCellHighlightColor afterDelay:0.15];
+}
+
+- (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
+    [self touchesRestoreBackgroundColor];
+    UITouch *touch = touches.anyObject;
+    CGPoint location = [touch locationInView:self];
+    [self touchesRestoreBackgroundColor];
+    if(CGRectContainsPoint(_userView.frame, location)){
+        [_delegate cellDidClickUser:self];
+    }else{
+        [_delegate cellDidClick:self];
+    }
+}
+
+- (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event {
+    [self touchesRestoreBackgroundColor];
+}
+
+- (void)touchesRestoreBackgroundColor {
+    [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(setBackgroundColor:) object:kWBCellHighlightColor];
+    self.backgroundColor = [UIColor whiteColor];
 }
 
 @end
